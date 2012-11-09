@@ -98,6 +98,12 @@ namespace InspectR.Controllers
             {
                 requests = new List<RequestInfo>();
             }
+
+            // keep only last 50 requests for now, cleanup at 100+
+            if (requests.Count >= 100)
+            {
+                requests = requests.Skip(requests.Count - 50).Take(50).ToList();
+            }
             requests.Add(request);
             cache.Insert("inspectR" + inspector.Id, requests, null, Cache.NoAbsoluteExpiration, TimeSpan.FromDays(1));
             
