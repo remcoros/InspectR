@@ -1,0 +1,73 @@
+﻿#inspectorurl_container {
+    position: relative; /*  to get ZeroClipboard working */
+}
+
+.hero-unit {
+    padding-top: 30px;
+}
+
+.hero-unit img {
+    position: relative;
+    float: right;
+    margin-left: 20px;
+    margin-right: -30px;
+    height: 280px;
+}
+
+.lower
+{
+    margin-top: 20px;
+}
+
+.lower-more
+{
+    margin-top: 40px;
+}
+
+.httprequest .tab-content
+{
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.httprequest-section {
+    
+}
+.httprequest-section .nav {
+    margin-bottom: 5px;
+}
+
+.property-list li {
+    
+}
+
+.property-list li div {
+    color: gray;
+    font-weight: bold;
+    display: inline;
+}
+    .property-list li div:after
+    {
+        content: ":"
+    }    
+
+.header-list li
+{
+    margin-left: 150px;
+}
+
+    .header-list li div
+    {
+        float: left;
+        width: 140px;
+        margin-left: -150px;
+        text-align: right;
+        color: gray;
+        font-weight: bold;        
+    }
+    
+    .header-list li div:after
+    {
+        content: ":"
+    }    
