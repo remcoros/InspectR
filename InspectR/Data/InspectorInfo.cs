@@ -12,12 +12,11 @@ namespace InspectR.Data
 
         public DateTime DateCreated { get; protected set; }
 
-        public InspectorInfo(bool isPrivate = false)
+        public InspectorInfo()
         {
             Id = Guid.NewGuid();
             UniqueKey = Id.ToString().GetHashCode().ToString("x");
             DateCreated = DateTime.Now;
-            IsPrivate = isPrivate;
         }
     }
 }
