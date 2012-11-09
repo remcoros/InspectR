@@ -281,6 +281,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\closure.map" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\screenshot1.png" />
     <Content Include="Scripts\bootstrap.js" />
@@ -292,6 +293,8 @@
     <Content Include="Scripts\jquery-ui-1.9.0.min.js" />
     <Content Include="Scripts\jquery.signalR-1.0.0-alpha1.js" />
     <Content Include="Scripts\jquery.signalR-1.0.0-alpha1.min.js" />
+    <Content Include="Scripts\jquery.syntaxhighlighter.js" />
+    <Content Include="Scripts\jquery.syntaxhighlighter.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -304,6 +307,9 @@
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\resources\core.console.js" />
+    <Content Include="Scripts\resources\jquery.appendscriptstyle.js" />
+    <Content Include="Scripts\resources\jquery.syntaxhighlighter.js" />
     <Content Include="Scripts\ZeroClipboard.js" />
     <Content Include="Content\ZeroClipboard.swf" />
     <Content Include="Content\ZeroClipboard10.swf" />

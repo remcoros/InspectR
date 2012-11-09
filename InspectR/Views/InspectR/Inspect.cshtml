@@ -87,9 +87,9 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" data-bind="attr: {id: 'content-' + $index()}">
-                        <textarea data-bind="text: Content" class="input-xxlarge">
+                        <pre class="highlight" data-bind="text: Content">
 
-                        </textarea>
+                        </pre>
                     </div>
                     <div class="tab-pane" data-bind="attr: {id: 'headers-' + $index()}">
                         <ul class="header-list unstyled" data-bind="foreach: Headers">
@@ -110,6 +110,7 @@
 </script>
 @section scripts
 {
+    @Scripts.Render("~/bundles/syntaxhighlighter")
     @Scripts.Render("~/bundles/zeroclipboard")
     @Scripts.Render("~/bundles/signalr")
     <script src="~/signalr/hubs" type="text/javascript"></script>
