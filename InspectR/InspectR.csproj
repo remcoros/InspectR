@@ -193,6 +193,10 @@
     <Compile Include="Migrations\201211082352151_requestinfo_entry.Designer.cs">
       <DependentUpon>201211082352151_requestinfo_entry.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201211091526417_inspector_datecreated.cs" />
+    <Compile Include="Migrations\201211091526417_inspector_datecreated.Designer.cs">
+      <DependentUpon>201211091526417_inspector_datecreated.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\InspectRViewModel.cs" />
@@ -356,6 +360,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201211082352151_requestinfo_entry.resx">
       <DependentUpon>201211082352151_requestinfo_entry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201211091526417_inspector_datecreated.resx">
+      <DependentUpon>201211091526417_inspector_datecreated.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
