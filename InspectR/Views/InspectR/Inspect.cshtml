@@ -1,0 +1,134 @@
+﻿@model InspectR.Models.InspectRViewModel
+@{
+    var FullUrl = Url.Action("Log", "InspectR", new {id = Model.InspectorInfo.UniqueKey}, Request.Url.Scheme);
+}
+@section menu {
+    <form class="nav navbar-form">
+    <div class="input-append" id="inspectorurl_container" style="position: relative">
+        <input class="span4" type="text" value="@FullUrl" readonly="readonly" id="inspectorurl" style="cursor: text">
+        <button id="copyinspectorurl" class="btn" type="button">Copy</button>            
+        <a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">Visit</a>
+    </div>
+    </form>
+}
+<div class="row">
+    <div class="span8">
+        <h2>Incoming HTTP requests</h2>
+        <p>
+            Search, filter and configure your InspectR using the controls in the sidebar.
+        </p>
+        <hr />
+        <div class="" data-bind="template: { name:'http-request', foreach: RequestList }"></div>
+    </div>
+    <div class="span4">
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header">Sidebar</li>
+                <li>
+                    <a href="#" data-bind="click: clearRecentRequests">Clear recent requests</a></li>
+                <li>
+                    <a href="#">Link</a></li>
+                <li class="nav-header">Sidebar</li>
+                <li>
+                    <a href="#">Link</a></li>
+                <li class="nav-header">Sidebar</li>
+                <li class="active">
+                    <a href="#">Link</a></li>
+            </ul>
+        </div>
+        <!--/.well -->
+    </div>
+</div>
+<script type="text/html" id="http-request">
+    <div class="well httprequest">
+        <div class="httprequest-section">
+            <div class="label label-info" data-bind="text:HttpMethod"></div>
+            <a data-bind="text: RawUrl, attr: {href:'#htr-hide-' + $index()}" data-toggle="collapse"></a>
+            <div class="pull-right">
+                <div class="label label-warning" data-bind="visible: ContentType && ContentType.length > 0, text:ContentType"></div>
+                <div class="label label-warning" data-bind="visible: !(ContentType && ContentType.length > 0)">No ContentType</div>
+            </div>
+        </div>            
+        <div class="httprequest-section clearfix">
+            <div class="pull-left">
+                <span data-bind="text: $parent.formatDate(DateCreated)"></span>
+                <span data-bind="text: $parent.formatTime(DateCreated)"></span>
+            </div>
+            <div class="pull-right">
+                <ul class="property-list unstyled">
+                    <li>
+                        <div>Client</div>
+                        <span data-bind="text: Client.HostAddress"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div data-bind="attr: {id:'htr-hide-' + $index()}" class="collapse in">
+            <div class="httprequest-section">
+                <ul class="property-list unstyled">
+                    <li>
+                        <div>Referrer</div>
+                        <span data-bind="text: UrlReferrer"></span>
+                    </li>
+                    <li>
+                        <div>Client Hostname</div>
+                        <span data-bind="text: Client.HostName"></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="httprequest-section">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" data-bind="attr: {href: '#content-' + $index()}">Content</a></li>
+                    <li>
+                        <a data-toggle="tab" data-bind="attr: {href: '#headers-' + $index()}">Headers</a></li>
+                    <li>
+                        <a data-toggle="tab" data-bind="attr: {href: '#other-' + $index()}">Other</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" data-bind="attr: {id: 'content-' + $index()}">
+                        <textarea data-bind="text: Content" class="input-xxlarge">
+
+                        </textarea>
+                    </div>
+                    <div class="tab-pane" data-bind="attr: {id: 'headers-' + $index()}">
+                        <ul class="header-list unstyled" data-bind="foreach: Headers">
+                            <li>
+                                <div data-bind="text: Key"></div>
+                                <span data-bind="text: Value"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" data-bind="attr: {id: 'other-' + $index()}">
+                        <span data-bind="text: Client.Agent"></span>
+                        <span data-bind="text: RawUrl"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+@section scripts
+{
+    @Scripts.Render("~/bundles/zeroclipboard")
+    @Scripts.Render("~/bundles/signalr")
+    <script src="~/signalr/hubs" type="text/javascript"></script>
+
+    @Scripts.Render("~/bundles/inspectr")
+    <script type="text/javascript">
+        ZeroClipboard.setMoviePath('@Url.Content("~/Content/ZeroClipboard10.swf")');
+        var clip = new ZeroClipboard.Client();
+        clip.setHandCursor(true);
+        clip.setText($('#inspectorurl').val());
+        clip.glue('copyinspectorurl', 'inspectorurl_container');
+        clip.addEventListener('onComplete', function () {
+            $('#copyinspectorurl').html('Copied!');
+        });
+        // document load
+        $(function () {
+            $.inspectR.start({
+                inspector: '@Model.InspectorInfo.UniqueKey'
+            });
+        });
+    </script>
+}
