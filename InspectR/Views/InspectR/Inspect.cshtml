@@ -87,7 +87,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" data-bind="attr: {id: 'content-' + $index()}">
-                        <pre class="highlight" data-bind="text: Content">
+                        <pre class="highlight" data-bind="text: Content, syntaxhighlight: {}" style="width: 99%">
 
                         </pre>
                     </div>
@@ -117,6 +117,7 @@
 
     @Scripts.Render("~/bundles/inspectr")
     <script type="text/javascript">
+        // clipboard copy
         ZeroClipboard.setMoviePath('@Url.Content("~/Content/ZeroClipboard10.swf")');
         var clip = new ZeroClipboard.Client();
         clip.setHandCursor(true);
@@ -125,11 +126,20 @@
         clip.addEventListener('onComplete', function () {
             $('#copyinspectorurl').html('Copied!');
         });
+        
+        // syntax highlighter
+        $.SyntaxHighlighter.init({
+            'lineNumbers': false,
+            'wrapLines': true,
+            'theme': 'balupton',
+            'baseUrl': '@Url.Content("~/Scripts/syntaxhighlighter/")'
+        });
+        
         // document load
         $(function () {
             $.inspectR.start({
                 inspector: '@Model.InspectorInfo.UniqueKey'
-            });
+            });            
         });
     </script>
 }
