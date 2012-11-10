@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
+using InspectR.Controllers;
 
 namespace InspectR.App_Start
 {
@@ -21,11 +22,18 @@ namespace InspectR.App_Start
             //    defaults: new {controller = "InspectR", action = "Inspect"}
             //    );
 
-            routes.MapRoute(
-                name: "log",
-                url: "{id}",
-                defaults: new { controller = "InspectR", action = "Log", inspect = false }
-            );
+            routes.Add("log", new Route("{id}", new RouteValueDictionary(new
+                {
+                    // Altough this action does not exists, need these default values for nice url's
+                    controller = "InspectR",
+                    action = "Log"
+                }), new InspectRRouteHandler()));
+
+            //routes.MapRoute(
+            //    name: "log",
+            //    url: "{id}",
+            //    defaults: new { controller = "InspectR", action = "Log", inspect = false }
+            //);
 
             routes.MapRoute(
                 name: "Default",

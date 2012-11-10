@@ -17,12 +17,12 @@
 
         public static string Inspect(this UrlHelperExtensions.InspectRUrlHelper url, string key)
         {
-            return url.Url.Action("Log", "InspectR", new { id = key }) + "?inspect";
+            return url.Url.RouteUrl("log", new { id = key }) + "?inspect";
         }
         
         public static string Log(this UrlHelperExtensions.InspectRUrlHelper url, string key)
         {
-            return url.Url.Action("Log", "InspectR", new { id = key });
+            return url.Url.RouteUrl("log", new { id = key });
         }
     }
 }

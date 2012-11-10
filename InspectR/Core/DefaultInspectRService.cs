@@ -13,11 +13,13 @@ namespace InspectR.Controllers
 {
     public class DefaultInspectRService : IInspectRService
     {
-        private readonly HttpContextBase _httpContext;
+        private readonly Func<HttpContextWrapper> _httpContext;
         private IRequestCollector collector = new DefaultRequestCollector();
         private IRequestCache _requestCache;
 
-        public DefaultInspectRService(IRequestCache requestCache, HttpContextBase httpContext)
+        protected HttpContextBase HttpContext { get { return _httpContext(); } }
+
+        public DefaultInspectRService(IRequestCache requestCache, Func<HttpContextWrapper> httpContext)
         {
             _requestCache = requestCache;
             _httpContext = httpContext;
@@ -74,7 +76,7 @@ namespace InspectR.Controllers
         private RequestInfo CreateRequestInfo(InspectorInfo inspector)
         {
             var info = new RequestInfo();
-            collector.Collect(info, inspector, _httpContext);
+            collector.Collect(info, inspector, HttpContext);
             return info;
         }
     }

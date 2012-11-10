@@ -16,11 +16,13 @@ namespace InspectR.Core
 
     public class RequestCache : IRequestCache
     {
-        protected Cache Cache { get; set; }
+        protected Cache Cache
+        {
+            get { return HttpContext.Current.Cache; }
+        }
 
         public RequestCache()
         {
-            Cache = HttpContext.Current.Cache;
         }
 
         public void Store(InspectorInfo inspector, RequestInfo request)
@@ -34,7 +36,7 @@ namespace InspectR.Core
             }
             requests.Add(request);
             Cache.Insert("inspectR" + inspector.Id, requests, null, Cache.NoAbsoluteExpiration, TimeSpan.FromDays(1));
-            
+
             //using (var context = new InspectRContext())
             //{
             //    context.Requests.Add(new RequestInfoEntry(inspector, request));
@@ -45,12 +47,12 @@ namespace InspectR.Core
         private IList<RequestInfo> GetInternal(InspectorInfo inspector)
         {
             if (inspector == null) throw new ArgumentNullException("inspector");
-            var requests = Cache["inspectR" + inspector] as IList<RequestInfo>;
+            var requests = Cache["inspectR" + inspector.Id] as IList<RequestInfo>;
             if (requests == null)
             {
                 requests = new List<RequestInfo>();
             }
-            return requests;            
+            return requests;
         }
 
         public IEnumerable<RequestInfo> Get(InspectorInfo inspector)

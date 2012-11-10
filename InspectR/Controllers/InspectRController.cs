@@ -19,7 +19,7 @@ namespace InspectR.Controllers
         public InspectRController()
         {
             _requestCache = new RequestCache();
-            _inspectR = new DefaultInspectRService(_requestCache, new HttpContextWrapper(System.Web.HttpContext.Current));
+            _inspectR = new DefaultInspectRService(_requestCache, ()=>new HttpContextWrapper(System.Web.HttpContext.Current));
         }
 
         public ActionResult Index()
@@ -49,27 +49,27 @@ namespace InspectR.Controllers
                 });
         }
 
-        [AcceptVerbs(HttpVerbs.Delete | HttpVerbs.Get | HttpVerbs.Head | HttpVerbs.Options | HttpVerbs.Patch | HttpVerbs.Post | HttpVerbs.Put)]
-        public ActionResult Log(string id)
-        {
-            if (Request.QueryString.ToString().ToLowerInvariant().StartsWith("inspect"))
-            {
-                return Inspect(id);
-            }
+        //[AcceptVerbs(HttpVerbs.Delete | HttpVerbs.Get | HttpVerbs.Head | HttpVerbs.Options | HttpVerbs.Patch | HttpVerbs.Post | HttpVerbs.Put)]
+        //public ActionResult Log(string id)
+        //{
+        //    if (Request.QueryString.ToString().ToLowerInvariant().StartsWith("inspect"))
+        //    {
+        //        return Inspect(id);
+        //    }
 
-            InspectorInfo inspectorInfo = _inspectR.GetInspectorInfoByKey(id);
+        //    InspectorInfo inspectorInfo = _inspectR.GetInspectorInfoByKey(id);
 
-            if (inspectorInfo == null)
-                return HttpNotFound();
+        //    if (inspectorInfo == null)
+        //        return HttpNotFound();
 
-            // TODO: check private
+        //    // TODO: check private
 
-            _inspectR.LogRequest(inspectorInfo);
+        //    _inspectR.LogRequest(inspectorInfo);
 
-            return Json(new
-            {
-                result = "ok"
-            }, JsonRequestBehavior.AllowGet);            
-        }
+        //    return Json(new
+        //    {
+        //        result = "ok"
+        //    }, JsonRequestBehavior.AllowGet);            
+        //}
     }
 }
