@@ -293,6 +293,35 @@
     <Content Include="Scripts\jquery-ui-1.9.0.min.js" />
     <Content Include="Scripts\jquery.signalR-1.0.0-alpha1.js" />
     <Content Include="Scripts\jquery.signalR-1.0.0-alpha1.min.js" />
+    <Content Include="Scripts\lightbox\css\lightbox.css" />
+    <Content Include="Scripts\lightbox\css\screen.css" />
+    <Content Include="Scripts\lightbox\images\bg-checker.png" />
+    <Content Include="Scripts\lightbox\images\box.png" />
+    <Content Include="Scripts\lightbox\images\bullet.gif" />
+    <Content Include="Scripts\lightbox\images\close.png" />
+    <Content Include="Scripts\lightbox\images\donate.png" />
+    <Content Include="Scripts\lightbox\images\examples\image-1.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\image-2.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\image-3.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\image-4.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\image-5.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\image-6.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\thumb-1.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\thumb-2.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\thumb-3.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\thumb-4.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\thumb-5.jpg" />
+    <Content Include="Scripts\lightbox\images\examples\thumb-6.jpg" />
+    <Content Include="Scripts\lightbox\images\favicon.gif" />
+    <Content Include="Scripts\lightbox\images\loading.gif" />
+    <Content Include="Scripts\lightbox\images\next.png" />
+    <Content Include="Scripts\lightbox\images\prev.png" />
+    <Content Include="Scripts\lightbox\images\speech-bubbles.png" />
+    <Content Include="Scripts\lightbox\index.html" />
+    <Content Include="Scripts\lightbox\js\jquery-1.7.2.min.js" />
+    <Content Include="Scripts\lightbox\js\jquery-ui-1.8.18.custom.min.js" />
+    <Content Include="Scripts\lightbox\js\jquery.smooth-scroll.min.js" />
+    <Content Include="Scripts\lightbox\js\lightbox.js" />
     <Content Include="Scripts\syntaxhighlighter\jquery.syntaxhighlighter.js" />
     <Content Include="Scripts\syntaxhighlighter\jquery.syntaxhighlighter.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -359,6 +388,9 @@
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\_RemoveExternalLoginsPartial.cshtml" />
     <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
+    <Content Include="Scripts\lightbox\images\.DS_Store" />
+    <Content Include="Scripts\lightbox\js\.DS_Store" />
+    <Content Include="Scripts\lightbox\README.markdown" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -395,7 +427,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52651</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:53992/</IISUrl>
+          <IISUrl>http://localhost:53993/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

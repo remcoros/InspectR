@@ -28,8 +28,26 @@ namespace InspectR.Controllers
             return list;
         }
     }
+
+    public static class ContentDecoders
+    {
+        static ContentDecoders()
+        {
+            Decoders = new Dictionary<string, Func<string, string>>();
+
+            Decoders.Add("application/x-www-form-urlencoded", HttpUtility.UrlDecode);
+        }
+
+        public static IDictionary<string, Func<string, string>> Decoders { get; set; }
+    }
+
     public class DefaultRequestCollector : IRequestCollector
     {
+ 
+        public DefaultRequestCollector()
+        {
+        }
+
         public void Collect(RequestInfo info, InspectorInfo inspector, HttpContextBase controller)
         {
             var req = controller.Request;
@@ -60,11 +78,19 @@ namespace InspectR.Controllers
                 info.UrlReferrer = req.UrlReferrer.ToString();
             }
 
-            // TODO: nicer way of getting body
+            // TODO: nicer way of getting body?
             req.InputStream.Position = 0;
             using (var rdr = new StreamReader(req.InputStream))
             {
                 info.Content = rdr.ReadToEnd();
+            }
+            if (ContentDecoders.Decoders.ContainsKey(req.ContentType))
+            {
+                var contentDecoder = ContentDecoders.Decoders[req.ContentType];
+                if (contentDecoder != null)
+                {
+                    info.Content = contentDecoder(info.Content);
+                }                
             }
         }
     }
