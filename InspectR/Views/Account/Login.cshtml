@@ -3,46 +3,67 @@
 @{
     ViewBag.Title = "Log in";
 }
-
+<div class="row">
 <hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
+	<h1>@ViewBag.Title.</h1>
 </hgroup>
+</div>
+<hr/>
 
-<section id="loginForm">
-<h2>Use a local account to log in.</h2>
-@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
+<section id="loginForm" class="row">
+	@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))
+	{
+		@Html.AntiForgeryToken()
+		@Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>Log in Form</legend>
-        <ol>
-            <li>
-                @Html.LabelFor(m => m.UserName)
-                @Html.TextBoxFor(m => m.UserName)
-                @Html.ValidationMessageFor(m => m.UserName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.Password)
-                @Html.PasswordFor(m => m.Password)
-                @Html.ValidationMessageFor(m => m.Password)
-            </li>
-            <li>
-                @Html.CheckBoxFor(m => m.RememberMe)
-                @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
-            </li>
-        </ol>
-        <input type="submit" value="Log in" />
-    </fieldset>
-    <p>
-        @Html.ActionLink("Register", "Register") if you don't have an account.
-    </p>
-}
+		<fieldset>
+			<div class="span8 offset2 well">
+				<h3>Use a local account to log in.</h3>
+                <hr/>
+				<div class="control-group">
+					@Html.LabelFor(m => m.UserName, new { @class = "control-label" })
+					<div class="controls">
+						@Html.TextBoxFor(m => m.UserName)
+                        @Html.ValidationMessageFor(m => m.UserName)
+					</div>
+					
+				</div>
+				<div class="control-group">
+					@Html.LabelFor(m => m.Password, new { @class = "control-label" })
+					<div class="controls">
+						@Html.PasswordFor(m => m.Password)
+                        @Html.ValidationMessageFor(m => m.Password)
+					</div>
+					
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<label class="checkbox">
+							@Html.CheckBoxFor(m => m.RememberMe)Remember me 
+						</label>
+						<p>
+							<small>@Html.ActionLink("Register", "Register") if you don't have an account.</small>
+						</p>
+					</div>
+				</div>
+
+				<input type="submit" value="Log me in" class="btn btn-primary pull-right" />
+			</div>
+		</fieldset>
+    
+	}
 </section>
 
-<section class="social" id="socialLoginForm">
-    <h2>Use another service to log in.</h2>
-    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
+<hr/>
+
+<section class="social row" id="socialLoginForm">
+
+<div class="span8 offset2 well">
+	<h3>Use another service to log in.</h3>
+    <hr class="higher"/>
+	@Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
+</div>
+
 </section>
 
 @section Scripts {
