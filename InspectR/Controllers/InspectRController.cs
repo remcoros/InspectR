@@ -52,7 +52,7 @@ namespace InspectR.Controllers
         [AcceptVerbs(HttpVerbs.Delete | HttpVerbs.Get | HttpVerbs.Head | HttpVerbs.Options | HttpVerbs.Patch | HttpVerbs.Post | HttpVerbs.Put)]
         public ActionResult Log(string id)
         {
-            if (Request.QueryString.ToString().ToLowerInvariant() == "inspect")
+            if (Request.QueryString.ToString().ToLowerInvariant().StartsWith("inspect"))
             {
                 return Inspect(id);
             }
