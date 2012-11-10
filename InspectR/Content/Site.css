@@ -1,7 +1,12 @@
 ﻿.CodeMirror {
     background-color: white;
 }
-
+.CodeMirror-scroll {
+  height: auto;
+    max-height: 260px;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
 #inspectorurl_container {
     position: relative; /*  to get ZeroClipboard working */
 }
