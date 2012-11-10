@@ -7,6 +7,14 @@ namespace InspectR.App_Start
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
+            // lightbox
+            bundles.Add(new ScriptBundle("~/bundles/lightbox").Include(
+            "~/Scripts/lightbox/js/lightbox.js"));
+
+            bundles.Add(new StyleBundle("~/bundles/lightbox").Include(
+            "~/Scripts/lightbox/css/lightbox.css"));
+
+            // syntax
             bundles.Add(new ScriptBundle("~/bundles/syntaxhighlighter").Include(
                         "~/Scripts/syntaxhighlighter/jquery.syntaxhighlighter.*"));
 

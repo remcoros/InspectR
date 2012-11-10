@@ -1,39 +1,40 @@
-﻿@model InspectR.Models.InspectRViewModel
+﻿@using InspectR.Helpers
+@model InspectR.Models.InspectRViewModel
 @{
-    var FullUrl = Url.Action("Log", "InspectR", new {id = Model.InspectorInfo.UniqueKey}, Request.Url.Scheme);
+    var FullUrl = Url.Action("Log", "InspectR", new { id = Model.InspectorInfo.UniqueKey }, Request.Url.Scheme);
 }
 @section menu {
-    <form class="nav navbar-form">
+    <form class="nav navbar-form" action="@Url.InspectR().Log(Model.InspectorInfo.UniqueKey)">
     <div class="input-append" id="inspectorurl_container" style="position: relative">
         <input class="span4" type="text" value="@FullUrl" readonly="readonly" id="inspectorurl" style="cursor: text">
-        <button id="copyinspectorurl" class="btn" type="button">Copy</button>            
+        <button id="copyinspectorurl" class="btn" type="button">Copy</button>
         <a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">Visit</a>
+        @*<a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">POST</a>*@
     </div>
     </form>
 }
 <div class="row">
     <div class="span8">
-        <h2>Incoming HTTP requests</h2>
         <p>
-            Search, filter and configure your InspectR using the controls in the sidebar.
+            Use your inspectbin url in your http client or set is as the target of your webhook. 
+            @*Click the images to show how you can easily test this using your own github repository.*@
         </p>
+@*        <img rel="lightbox[inspectgithub]" src="~/Images/inspectgithub1.png" alt="screenshot" title="InspectBin screenshot" />
+        <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub2.png" alt="screenshot" title="InspectBin screenshot" />
+        <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub3.png" alt="screenshot" title="InspectBin Github screenshot" />*@
+        <h2>Incoming HTTP requests</h2>
         <hr />
+        <div class="" data-bind="invisible: RequestList && RequestList.length > 0">
+            No http requests inspected yet.
+        </div>
         <div class="" data-bind="template: { name:'http-request', foreach: RequestList }"></div>
     </div>
     <div class="span4">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
-                <li class="nav-header">Sidebar</li>
+                <li class="nav-header">Actions</li>
                 <li>
                     <a href="#" data-bind="click: clearRecentRequests">Clear recent requests</a></li>
-                <li>
-                    <a href="#">Link</a></li>
-                <li class="nav-header">Sidebar</li>
-                <li>
-                    <a href="#">Link</a></li>
-                <li class="nav-header">Sidebar</li>
-                <li class="active">
-                    <a href="#">Link</a></li>
             </ul>
         </div>
         <!--/.well -->
@@ -48,7 +49,7 @@
                 <div class="label label-warning" data-bind="visible: ContentType && ContentType.length > 0, text:ContentType"></div>
                 <div class="label label-warning" data-bind="visible: !(ContentType && ContentType.length > 0)">No ContentType</div>
             </div>
-        </div>            
+        </div>
         <div class="httprequest-section clearfix">
             <div class="pull-left">
                 <span data-bind="text: $parent.formatDate(DateCreated)"></span>
@@ -141,20 +142,25 @@
         clip.addEventListener('onComplete', function () {
             $('#copyinspectorurl').html('Copied!');
         });
-        
+
         // syntax highlighter
 @*        $.SyntaxHighlighter.init({
             'lineNumbers': false,
             'wrapLines': true,
             'theme': 'balupton',
             'baseUrl': '@Url.Content("~/Scripts/syntaxhighlighter/")'
+<<<<<<< HEAD
         });*@
         
+=======
+        });
+
+>>>>>>> cleanup_ui
         // document load
         $(function () {
             $.inspectR.start({
                 inspector: '@Model.InspectorInfo.UniqueKey'
-            });            
+            });
         });
     </script>
 }

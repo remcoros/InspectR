@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/bundles/lightbox")
+    @Styles.Render("~/Content/css")
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -23,7 +25,7 @@
             padding-bottom: 40px;
         }
     </style>
-    @Styles.Render("~/Content/css")
+    
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
@@ -78,6 +80,7 @@
             <p>&copy; InspectB.in 2012</p>
         </footer>
 
+<<<<<<< HEAD
     </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
@@ -85,4 +88,14 @@
 
     @RenderSection("scripts", required: false)
 </body>
+=======
+        </div>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/knockout")
+        @Scripts.Render("~/bundles/lightbox")
+        
+        @RenderSection("scripts", required: false)
+    </body>
+>>>>>>> cleanup_ui
 </html>

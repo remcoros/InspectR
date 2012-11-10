@@ -19,5 +19,10 @@
         {
             return url.Url.Action("Log", "InspectR", new { id = key }) + "?inspect";
         }
+        
+        public static string Log(this UrlHelperExtensions.InspectRUrlHelper url, string key)
+        {
+            return url.Url.Action("Log", "InspectR", new { id = key });
+        }
     }
 }
