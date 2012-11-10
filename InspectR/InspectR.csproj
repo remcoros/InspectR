@@ -200,6 +200,10 @@
     <Compile Include="Migrations\201211091526417_inspector_datecreated.Designer.cs">
       <DependentUpon>201211091526417_inspector_datecreated.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201211100429021_remove_requests.cs" />
+    <Compile Include="Migrations\201211100429021_remove_requests.Designer.cs">
+      <DependentUpon>201211100429021_remove_requests.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\InspectRViewModel.cs" />
@@ -540,6 +544,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201211091526417_inspector_datecreated.resx">
       <DependentUpon>201211091526417_inspector_datecreated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201211100429021_remove_requests.resx">
+      <DependentUpon>201211100429021_remove_requests.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -16,7 +16,5 @@ namespace InspectR.Data
         }
 
         public DbSet<InspectorInfo> Inspectors { get; set; }
-
-        public DbSet<RequestInfoEntry> Requests { get; set; }
     }
 }
