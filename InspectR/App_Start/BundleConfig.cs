@@ -8,8 +8,8 @@ namespace InspectR.App_Start
         public static void RegisterBundles(BundleCollection bundles)
         {
             // lightbox
-            bundles.Add(new ScriptBundle("~/bundles/lightbox").Include(
-            "~/Scripts/lightbox/js/lightbox.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/lightbox").Include(
+            //"~/Scripts/lightbox/js/lightbox.js"));
 
             bundles.Add(new StyleBundle("~/bundles/lightbox").Include(
             "~/Scripts/lightbox/css/lightbox.css"));

@@ -456,18 +456,6 @@
     <Content Include="Scripts\jquery-ui-1.9.0.min.js" />
     <Content Include="Scripts\jquery.signalR-1.0.0-alpha1.js" />
     <Content Include="Scripts\jquery.signalR-1.0.0-alpha1.min.js" />
-    <Content Include="Scripts\lightbox\css\lightbox.css" />
-    <Content Include="Scripts\lightbox\images\bg-checker.png" />
-    <Content Include="Scripts\lightbox\images\box.png" />
-    <Content Include="Scripts\lightbox\images\bullet.gif" />
-    <Content Include="Scripts\lightbox\images\close.png" />
-    <Content Include="Scripts\lightbox\images\donate.png" />
-    <Content Include="Scripts\lightbox\images\favicon.gif" />
-    <Content Include="Scripts\lightbox\images\loading.gif" />
-    <Content Include="Scripts\lightbox\images\next.png" />
-    <Content Include="Scripts\lightbox\images\prev.png" />
-    <Content Include="Scripts\lightbox\images\speech-bubbles.png" />
-    <Content Include="Scripts\lightbox\js\lightbox.js" />
     <Content Include="Scripts\syntaxhighlighter\jquery.syntaxhighlighter.js" />
     <Content Include="Scripts\syntaxhighlighter\jquery.syntaxhighlighter.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -534,7 +522,6 @@
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\_RemoveExternalLoginsPartial.cshtml" />
     <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
-    <Content Include="Scripts\lightbox\README.markdown" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
