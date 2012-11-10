@@ -1,4 +1,8 @@
-﻿#inspectorurl_container {
+﻿.CodeMirror {
+    background-color: white;
+}
+
+#inspectorurl_container {
     position: relative; /*  to get ZeroClipboard working */
 }
 
