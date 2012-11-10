@@ -68,6 +68,32 @@
                 + d.getSeconds() + '.'
                 + d.getMilliseconds();
         };
+
+        self.createCodeMirror = function (viewmodel, property) {
+            viewmodel[property + 'CodeMirrorMode'] = ko.observable();
+            viewmodel[property + 'CodeMirror'] = null;
+            viewmodel[property + 'CodeMirrorUtil'] = {
+                Format: function () {
+                    var cm = viewmodel[property + 'CodeMirror'];
+                    CodeMirror.commands["selectAll"](cm);
+
+                    function getSelectedRange() {
+                        return { from: cm.getCursor(true), to: cm.getCursor(false) };
+                    }
+
+                    var range = getSelectedRange();
+                    cm.autoFormatRange(range.from, range.to);
+                }
+            };
+            return viewmodel;
+        };
+        
+        self.P = function (property, data) {
+            if (!ko.isObservable(data[property])) {
+                data[property] = ko.observable();
+            }
+            return data[property];
+        };
         
         client.requestLogged = function (inspector, request) {
             // console.log('http request');

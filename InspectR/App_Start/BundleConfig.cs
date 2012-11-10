@@ -7,6 +7,9 @@ namespace InspectR.App_Start
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.Add(new ScriptBundle("~/bundles/syntaxhighlighter").Include(
+                        "~/Scripts/syntaxhighlighter/jquery.syntaxhighlighter.*"));
+
             bundles.Add(new ScriptBundle("~/bundles/zeroclipboard").Include(
                         "~/Scripts/zeroclipboard.*"));
 
@@ -24,7 +27,8 @@ namespace InspectR.App_Start
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                         "~/Scripts/knockout-{version}.js",
-                        "~/Scripts/knockout.mapping-{version}.js"));
+                        "~/Scripts/knockout.mapping-{version}.js",
+                        "~/Scripts/knockout.extra.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js"));

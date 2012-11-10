@@ -87,9 +87,15 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" data-bind="attr: {id: 'content-' + $index()}">
-                        <textarea data-bind="text: Content" class="input-xxlarge">
-
-                        </textarea>
+                        <div data-bind="with: $root.createCodeMirror($data, 'Content')">
+                            <div class="input-append">
+                                <select data-bind="options: ko.utils.arrayMap(CodeMirror.listMIMEs(), function(m) { return m.mime; }), value: ContentCodeMirrorMode">
+                                </select>
+                                <button class="btn" data-bind="click: ContentCodeMirrorUtil.Format">Format</button>
+                            </div>
+                            <textarea class="" data-bind="text: Content, codeMirror: 'Content'" style="width: 99%">
+                            </textarea>
+                        </div>
                     </div>
                     <div class="tab-pane" data-bind="attr: {id: 'headers-' + $index()}">
                         <ul class="header-list unstyled" data-bind="foreach: Headers">
@@ -110,12 +116,23 @@
 </script>
 @section scripts
 {
+    @Styles.Render("~/Scripts/codemirror/lib/codemirror.css")
+    @Scripts.Render("~/Scripts/codemirror/lib/codemirror.js")
+    
+    @Scripts.Render("~/Scripts/codemirror/mode/xml/xml.js")
+@Scripts.Render("~/Scripts/codemirror/mode/htmlmixed/htmlmixed.js")
+    @Scripts.Render("~/Scripts/codemirror/mode/properties/properties.js")
+    @Scripts.Render("~/Scripts/codemirror/mode/css/css.js")
+    @Scripts.Render("~/Scripts/codemirror/mode/javascript/javascript.js")
+    @Scripts.Render("~/Scripts/codemirror/lib/util/formatting.js")
+
     @Scripts.Render("~/bundles/zeroclipboard")
     @Scripts.Render("~/bundles/signalr")
     <script src="~/signalr/hubs" type="text/javascript"></script>
 
     @Scripts.Render("~/bundles/inspectr")
     <script type="text/javascript">
+        // clipboard copy
         ZeroClipboard.setMoviePath('@Url.Content("~/Content/ZeroClipboard10.swf")');
         var clip = new ZeroClipboard.Client();
         clip.setHandCursor(true);
@@ -124,11 +141,20 @@
         clip.addEventListener('onComplete', function () {
             $('#copyinspectorurl').html('Copied!');
         });
+        
+        // syntax highlighter
+@*        $.SyntaxHighlighter.init({
+            'lineNumbers': false,
+            'wrapLines': true,
+            'theme': 'balupton',
+            'baseUrl': '@Url.Content("~/Scripts/syntaxhighlighter/")'
+        });*@
+        
         // document load
         $(function () {
             $.inspectR.start({
                 inspector: '@Model.InspectorInfo.UniqueKey'
-            });
+            });            
         });
     </script>
 }
