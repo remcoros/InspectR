@@ -24,7 +24,7 @@
         <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub3.png" alt="screenshot" title="InspectBin Github screenshot" />*@
         <h2>Incoming HTTP requests</h2>
         <hr />
-        <div class="" data-bind="invisible: RequestList && RequestList.length > 0">
+        <div class="" data-bind="visible: !RequestList() || RequestList().length == 0">
             No http requests inspected yet.
         </div>
         <div class="" data-bind="template: { name:'http-request', foreach: RequestList }"></div>
