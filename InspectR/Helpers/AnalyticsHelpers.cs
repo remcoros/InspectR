@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -30,6 +31,9 @@ namespace InspectR.Helpers
         {
             var account = ConfigurationManager.AppSettings["ga.account"];
             var domain = ConfigurationManager.AppSettings["ga.domain"];
+            if (string.IsNullOrEmpty(account))
+                return new HtmlString(String.Empty);
+
             //TODO: maybe a 'ga.push' seperated by comma?
             return Analytics(htmlHelper, account, domain);
         }
