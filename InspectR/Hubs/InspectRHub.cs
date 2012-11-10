@@ -15,9 +15,8 @@ namespace InspectR.Hubs
 
         public InspectRHub()
         {
-            // REVIEW: there must be a nicer way...
             _requestCache = new RequestCache();
-            _service = new DefaultInspectRService(_requestCache, ()=>new HttpContextWrapper(HttpContext.Current));            
+            _service = new DefaultInspectRService();
         }
         public void StartInspect(string inspector)
         {

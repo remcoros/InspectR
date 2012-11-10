@@ -19,7 +19,7 @@ namespace InspectR.Controllers
         public InspectRController()
         {
             _requestCache = new RequestCache();
-            _inspectR = new DefaultInspectRService(_requestCache, ()=>new HttpContextWrapper(System.Web.HttpContext.Current));
+            _inspectR = new DefaultInspectRService();
         }
 
         public ActionResult Index()

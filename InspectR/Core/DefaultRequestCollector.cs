@@ -1,45 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
+﻿using System.IO;
 using System.Web;
 using InspectR.Data;
 
 namespace InspectR.Core
 {
-    public static class NameValueCollectionExtensions
-    {
-        public static IList<KeyValuePair<String, String>> AsKeyValuePairList(this NameValueCollection nvc)
-        {
-            var list = new List<KeyValuePair<String, String>>();
-            for (int i = 0; i < nvc.Keys.Count; i++)
-            {
-                var key = nvc.GetKey(i);
-                var values = nvc.GetValues(i);
-                if (values != null)
-                {
-                    foreach (var value in values)
-                    {
-                        list.Add(new KeyValuePair<string, string>(key, value));
-                    }                    
-                }
-            }
-            return list;
-        }
-    }
-
-    public static class ContentDecoders
-    {
-        static ContentDecoders()
-        {
-            Decoders = new Dictionary<string, Func<string, string>>();
-
-            Decoders.Add("application/x-www-form-urlencoded", HttpUtility.UrlDecode);
-        }
-
-        public static IDictionary<string, Func<string, string>> Decoders { get; set; }
-    }
-
     public class DefaultRequestCollector : IRequestCollector
     {
  
@@ -47,9 +11,10 @@ namespace InspectR.Core
         {
         }
 
-        public void Collect(RequestInfo info, InspectorInfo inspector, HttpContextBase controller)
+        public void Collect(RequestInfo info, InspectorInfo inspector)
         {
-            var req = controller.Request;
+            var context = HttpContext.Current;
+            var req = context.Request;
 
             info.Client.HostAddress = req.UserHostAddress;
             info.Client.HostName = req.UserHostName;
@@ -67,10 +32,7 @@ namespace InspectR.Core
             info.RequestType = req.RequestType;
 
             info.RawUrl = req.RawUrl;
-            if (req.Url != null)
-            {
-                info.QueryString = req.Url.Query;
-            }
+            info.QueryString = req.Url.Query;
 
             if (req.UrlReferrer != null)
             {

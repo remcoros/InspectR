@@ -11,7 +11,5 @@ namespace InspectR.Core
         InspectorInfo GetInspectorInfo(Guid id);
 
         InspectorInfo GetInspectorInfoByKey(string uniquekey);
-
-        void LogRequest(InspectorInfo inspector);
     }
 }
