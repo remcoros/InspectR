@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 using InspectR.Controllers;
+using InspectR.Core;
 
 namespace InspectR.App_Start
 {

@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace InspectR.Controllers
+namespace InspectR.Core
 {
     public class InspectRRouteHandler : MvcRouteHandler
     {

@@ -1,10 +1,9 @@
 ﻿using System;
-using InspectR.Core;
 using InspectR.Data;
 using InspectR.Hubs;
 using Microsoft.AspNet.SignalR;
 
-namespace InspectR.Controllers
+namespace InspectR.Core
 {
     public class RequestLogger
     {

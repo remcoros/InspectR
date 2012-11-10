@@ -1,9 +1,8 @@
 ﻿using System.Web;
 using System.Web.Routing;
-using InspectR.Core;
 using InspectR.Data;
 
-namespace InspectR.Controllers
+namespace InspectR.Core
 {
     public class InspectRHandlerHttpHandler : IHttpHandler
     {

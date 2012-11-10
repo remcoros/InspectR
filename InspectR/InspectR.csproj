@@ -178,9 +178,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\InspectRHandlerHttpHandler.cs" />
-    <Compile Include="Controllers\InspectRRouteHandler.cs" />
-    <Compile Include="Controllers\RequestLogger.cs" />
+    <Compile Include="Core\InspectRHandlerHttpHandler.cs" />
+    <Compile Include="Core\InspectRRouteHandler.cs" />
+    <Compile Include="Core\RequestLogger.cs" />
     <Compile Include="Core\ContentDecoders.cs" />
     <Compile Include="Core\DefaultInspectRService.cs" />
     <Compile Include="Core\DefaultRequestCollector.cs" />
@@ -205,7 +205,6 @@
     <Compile Include="Data\ClientRequestInfo.cs" />
     <Compile Include="Controllers\InspectRController.cs" />
     <Compile Include="Data\RequestInfo.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

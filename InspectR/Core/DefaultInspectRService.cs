@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Caching;
-using System.Web.Mvc;
-using InspectR.Core;
 using InspectR.Data;
-using InspectR.Hubs;
-using Microsoft.AspNet.SignalR;
 
-namespace InspectR.Controllers
+namespace InspectR.Core
 {
     public class DefaultInspectRService : IInspectRService
     {
