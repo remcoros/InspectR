@@ -19,7 +19,7 @@
             Use your inspectbin url in your http client or set is as the target of your webhook. 
             @*Click the images to show how you can easily test this using your own github repository.*@
         </p>
-@*        <img rel="lightbox[inspectgithub]" src="~/Images/inspectgithub1.png" alt="screenshot" title="InspectBin screenshot" />
+        @*        <img rel="lightbox[inspectgithub]" src="~/Images/inspectgithub1.png" alt="screenshot" title="InspectBin screenshot" />
         <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub2.png" alt="screenshot" title="InspectBin screenshot" />
         <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub3.png" alt="screenshot" title="InspectBin Github screenshot" />*@
         <h2>Incoming HTTP requests</h2>
@@ -119,9 +119,9 @@
 {
     @Styles.Render("~/Scripts/codemirror/lib/codemirror.css")
     @Scripts.Render("~/Scripts/codemirror/lib/codemirror.js")
-    
+
     @Scripts.Render("~/Scripts/codemirror/mode/xml/xml.js")
-@Scripts.Render("~/Scripts/codemirror/mode/htmlmixed/htmlmixed.js")
+    @Scripts.Render("~/Scripts/codemirror/mode/htmlmixed/htmlmixed.js")
     @Scripts.Render("~/Scripts/codemirror/mode/properties/properties.js")
     @Scripts.Render("~/Scripts/codemirror/mode/css/css.js")
     @Scripts.Render("~/Scripts/codemirror/mode/javascript/javascript.js")
@@ -149,13 +149,8 @@
             'wrapLines': true,
             'theme': 'balupton',
             'baseUrl': '@Url.Content("~/Scripts/syntaxhighlighter/")'
-<<<<<<< HEAD
         });*@
-        
-=======
-        });
 
->>>>>>> cleanup_ui
         // document load
         $(function () {
             $.inspectR.start({
