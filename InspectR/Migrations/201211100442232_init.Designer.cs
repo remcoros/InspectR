@@ -5,13 +5,13 @@ namespace InspectR.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    public sealed partial class inspector_datecreated : IMigrationMetadata
+    public sealed partial class init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(inspector_datecreated));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
         
         string IMigrationMetadata.Id
         {
-            get { return "201211091526417_inspector_datecreated"; }
+            get { return "201211100442232_init"; }
         }
         
         string IMigrationMetadata.Source

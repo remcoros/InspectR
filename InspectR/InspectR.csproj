@@ -188,21 +188,9 @@
     <Compile Include="Helpers\InspectRUrlHelperExtensions.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Data\InspectRContext.cs" />
-    <Compile Include="Migrations\201211080412343_Initial.cs" />
-    <Compile Include="Migrations\201211080412343_Initial.Designer.cs">
-      <DependentUpon>201211080412343_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201211082352151_requestinfo_entry.cs" />
-    <Compile Include="Migrations\201211082352151_requestinfo_entry.Designer.cs">
-      <DependentUpon>201211082352151_requestinfo_entry.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201211091526417_inspector_datecreated.cs" />
-    <Compile Include="Migrations\201211091526417_inspector_datecreated.Designer.cs">
-      <DependentUpon>201211091526417_inspector_datecreated.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201211100429021_remove_requests.cs" />
-    <Compile Include="Migrations\201211100429021_remove_requests.Designer.cs">
-      <DependentUpon>201211100429021_remove_requests.cs</DependentUpon>
+    <Compile Include="Migrations\201211100442232_init.cs" />
+    <Compile Include="Migrations\201211100442232_init.Designer.cs">
+      <DependentUpon>201211100442232_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -536,17 +524,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201211080412343_Initial.resx">
-      <DependentUpon>201211080412343_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201211082352151_requestinfo_entry.resx">
-      <DependentUpon>201211082352151_requestinfo_entry.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201211091526417_inspector_datecreated.resx">
-      <DependentUpon>201211091526417_inspector_datecreated.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201211100429021_remove_requests.resx">
-      <DependentUpon>201211100429021_remove_requests.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201211100442232_init.resx">
+      <DependentUpon>201211100442232_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
