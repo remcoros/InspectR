@@ -31,6 +31,10 @@
         height: 280px;
     }
 
+.higher {
+	margin-top: 0px;
+}
+
 .lower
 {
     margin-top: 20px;
@@ -92,3 +96,42 @@
         {
             content: ":";
         }
+
+#loginForm .well,
+#socialLoginForm .well {
+	background-color: #FDFDFD;
+	margin-top: 20px;
+}
+#loginForm .well hr {
+	margin-top: 0px;
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #e80c4d;
+    font-weight: bold;
+	display: block;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #e80c4d;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #e80c4d;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
