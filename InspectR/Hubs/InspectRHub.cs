@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using InspectR.Controllers;
+using InspectR.Core;
 using InspectR.Data;
 using Microsoft.AspNet.SignalR.Hubs;
 
@@ -8,7 +10,14 @@ namespace InspectR.Hubs
 {
     public class InspectRHub : Hub
     {
-        private IInspectRService _service = new DefaultInspectRService(new HttpContextWrapper(HttpContext.Current));
+        private IRequestCache _requestCache;
+        private IInspectRService _service;
+
+        public InspectRHub()
+        {
+            _requestCache = new RequestCache();
+            _service = new DefaultInspectRService(_requestCache, new HttpContextWrapper(HttpContext.Current));
+        }
 
         public void StartInspect(string inspector)
         {
@@ -22,15 +31,14 @@ namespace InspectR.Hubs
         public IEnumerable<RequestInfo> GetRecentRequests(string inspector)
         {
             InspectorInfo inspectorInfo = _service.GetInspectorInfoByKey(inspector);
-            IEnumerable<RequestInfo> recentRequests = _service.GetRecentRequests(inspectorInfo.Id);
-
+            var recentRequests = _requestCache.Get(inspectorInfo).OrderByDescending(x=>x.DateCreated).Take(20);
             return recentRequests;
         }
 
         public void ClearRecentRequests(string inspector)
         {
             InspectorInfo inspectorInfo = _service.GetInspectorInfoByKey(inspector);
-            _service.ClearRecentRequests(inspectorInfo.Id);            
+            _requestCache.RemoveAll(inspectorInfo);
         }
 
         public override System.Threading.Tasks.Task OnConnected()

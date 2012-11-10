@@ -178,9 +178,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\DefaultInspectRService.cs" />
-    <Compile Include="Controllers\DefaultRequestCollector.cs" />
-    <Compile Include="Controllers\IInspectRService.cs" />
+    <Compile Include="Core\DefaultInspectRService.cs" />
+    <Compile Include="Core\DefaultRequestCollector.cs" />
+    <Compile Include="Core\IInspectRService.cs" />
+    <Compile Include="Core\IRequestCache.cs" />
+    <Compile Include="Core\IRequestLogger.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Helpers\AnalyticsHelpers.cs" />
     <Compile Include="Helpers\InspectRUrlHelperExtensions.cs" />
@@ -201,7 +203,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\InspectRViewModel.cs" />
-    <Compile Include="Controllers\IRequestCollector.cs" />
+    <Compile Include="Core\IRequestCollector.cs" />
     <Compile Include="Data\InspectorInfo.cs" />
     <Compile Include="Data\ClientRequestInfo.cs" />
     <Compile Include="Controllers\InspectRController.cs" />

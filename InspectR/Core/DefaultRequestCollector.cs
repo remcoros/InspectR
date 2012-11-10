@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Web;
-using System.Web.Mvc;
 using InspectR.Data;
 
-namespace InspectR.Controllers
+namespace InspectR.Core
 {
     public static class NameValueCollectionExtensions
     {

@@ -1,8 +1,7 @@
 ﻿using System.Web;
-using System.Web.Mvc;
 using InspectR.Data;
 
-namespace InspectR.Controllers
+namespace InspectR.Core
 {
     public interface IRequestCollector
     {

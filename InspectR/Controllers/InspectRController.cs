@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using InspectR.Core;
 using InspectR.Data;
 using InspectR.Filters;
 using InspectR.Helpers;
@@ -12,7 +13,14 @@ namespace InspectR.Controllers
     [InitializeSimpleMembership]
     public class InspectRController : Controller
     {
-        private IInspectRService _inspectR = new DefaultInspectRService(new HttpContextWrapper(System.Web.HttpContext.Current));
+        private IRequestCache _requestCache;
+        private IInspectRService _inspectR;
+
+        public InspectRController()
+        {
+            _requestCache = new RequestCache();
+            _inspectR = new DefaultInspectRService(_requestCache, new HttpContextWrapper(System.Web.HttpContext.Current));
+        }
 
         public ActionResult Index()
         {
@@ -21,7 +29,7 @@ namespace InspectR.Controllers
 
         public ActionResult Create(bool isprivate)
         {
-            InspectorInfo inspectorInfo = _inspectR.Create(isprivate);
+            InspectorInfo inspectorInfo = _inspectR.CreateInspector(isprivate);
 
             return Redirect(Url.InspectR().Inspect(inspectorInfo.UniqueKey));
         }
@@ -29,7 +37,7 @@ namespace InspectR.Controllers
         public ActionResult Inspect(string id)
         {
             InspectorInfo inspectorInfo = _inspectR.GetInspectorInfoByKey(id);
-            IEnumerable<RequestInfo> recentRequests = _inspectR.GetRecentRequests(inspectorInfo.Id);
+            var recentRequests = _requestCache.Get(inspectorInfo).OrderByDescending(x => x.DateCreated).Take(20);
 
             if (inspectorInfo == null)
                 return HttpNotFound();
@@ -56,7 +64,7 @@ namespace InspectR.Controllers
 
             // TODO: check private
 
-            _inspectR.LogRequest(id);
+            _inspectR.LogRequest(inspectorInfo);
 
             return Json(new
             {
