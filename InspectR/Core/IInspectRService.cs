@@ -8,8 +8,6 @@ namespace InspectR.Core
     {
         InspectorInfo CreateInspector(bool isprivate);
 
-        InspectorInfo GetInspectorInfo(Guid id);
-
-        InspectorInfo GetInspectorInfoByKey(string uniquekey);
+        void AddInspectorToUser(string userName, InspectorInfo info);
     }
 }

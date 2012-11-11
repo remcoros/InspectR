@@ -1,7 +1,9 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 using InspectR.Controllers;
+using InspectR.Controllers.RequestLogger;
 using InspectR.Core;
+using InspectR.Core.RequestLogger;
 
 namespace InspectR.App_Start
 {

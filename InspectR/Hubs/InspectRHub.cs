@@ -11,32 +11,59 @@ namespace InspectR.Hubs
     public class InspectRHub : Hub
     {
         private IRequestCache _requestCache;
+        private InspectRContext _dbContext;
         private IInspectRService _service;
 
         public InspectRHub()
         {
             _requestCache = new RequestCache();
-            _service = new DefaultInspectRService();
+            _dbContext = new InspectRContext();
+            _service = new InspectRService(_dbContext);
         }
+
         public void StartInspect(string inspector)
         {
-            var info = _service.GetInspectorInfoByKey(inspector);
+            var info = _dbContext.GetInspectorInfoByKey(inspector);
             if (info == null)
                 return;
+
+            if (Context.User != null)
+            {
+                var user = Context.User.Identity.Name;
+                if (!string.IsNullOrEmpty(user))
+                {
+                    _service.AddInspectorToUser(user, info);
+                }
+            }
 
             Groups.Add(Context.ConnectionId, info.UniqueKey);
         }
 
+        public InspectRUserProfile GetUserProfile()
+        {
+            if (Context.User != null)
+            {
+                var username = Context.User.Identity.Name;
+                if (!string.IsNullOrEmpty(username))
+                {
+                    // todo: map a dto
+                    return _dbContext.GetUserProfile(username);
+                }
+            }
+
+            return null;
+        }
+
         public IEnumerable<RequestInfo> GetRecentRequests(string inspector)
         {
-            InspectorInfo inspectorInfo = _service.GetInspectorInfoByKey(inspector);
+            InspectorInfo inspectorInfo = _dbContext.GetInspectorInfoByKey(inspector);
             var recentRequests = _requestCache.Get(inspectorInfo).OrderByDescending(x=>x.DateCreated).Take(20);
             return recentRequests;
         }
 
         public void ClearRecentRequests(string inspector)
         {
-            InspectorInfo inspectorInfo = _service.GetInspectorInfoByKey(inspector);
+            InspectorInfo inspectorInfo = _dbContext.GetInspectorInfoByKey(inspector);
             _requestCache.RemoveAll(inspectorInfo);
         }
 

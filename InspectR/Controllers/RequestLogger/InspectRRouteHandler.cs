@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace InspectR.Core
+namespace InspectR.Controllers.RequestLogger
 {
     public class InspectRRouteHandler : MvcRouteHandler
     {

@@ -1,7 +1,6 @@
-﻿using System.Web;
-using InspectR.Data;
+﻿using InspectR.Data;
 
-namespace InspectR.Core
+namespace InspectR.Core.RequestLogger
 {
     public interface IRequestCollector
     {

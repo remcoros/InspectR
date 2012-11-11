@@ -30,15 +30,20 @@
         var client = self.hub.client;
         var server = self.hub.server;
 
+        self.UserProfile = ko.observable();
         self.Requests = ko.observableArray([]);
         self.Inspector = ko.observable();
+        
         self.RequestList = ko.computed(function () {
             return self.Requests();
         });
-        
+
         self.start = function () {
             server.startInspect(self.inspectorKey)
                 .done(function () {
+                    server.getUserProfile()
+                        .done(self.updateUserProfile);
+                    
                     server.getRecentRequests(self.inspectorKey)
                         .done(function (result) {
                             if (result && result.length > 0) {
@@ -48,11 +53,14 @@
                 });
         };
 
+        self.updateUserProfile = function (profile) {
+            self.UserProfile(profile);
+        };
+        
         self.clearRecentRequests = function () {
             server.clearRecentRequests(self.inspectorKey);
             self.Requests.removeAll();
         };
-
 
         self.formatDate = function (datestring) {
             var d = new Date(datestring);

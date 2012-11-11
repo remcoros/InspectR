@@ -34,7 +34,19 @@
             <ul class="nav nav-list">
                 <li class="nav-header">Actions</li>
                 <li>
-                    <a href="#" data-bind="click: clearRecentRequests">Clear recent requests</a></li>
+                    <a href="#" data-bind="click: clearRecentRequests">Clear</a></li>
+                <li class="nav-header">Your bins:</li>
+                <!-- ko ifnot: UserProfile -->
+                <li>Login to add your bins</li>
+                <!-- /ko -->
+                <!-- ko if: UserProfile -->
+                <!-- ko foreach: UserProfile().Inspectors -->
+                <li>
+                    <a data-bind="text: UniqueKey, attr: { href: '@Html.Raw(Url.InspectR().Inspect("xxXXxx"))'.replace('xxXXxx', UniqueKey) }">
+                    </a>
+                </li>
+                <!-- /ko -->
+                <!-- /ko -->
             </ul>
         </div>
         <!--/.well -->

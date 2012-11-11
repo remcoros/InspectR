@@ -1,8 +1,10 @@
 ﻿using System.Web;
 using System.Web.Routing;
+using InspectR.Core;
+using InspectR.Core.RequestLogger;
 using InspectR.Data;
 
-namespace InspectR.Core
+namespace InspectR.Controllers.RequestLogger
 {
     public class InspectRHandlerHttpHandler : IHttpHandler
     {
@@ -18,20 +20,24 @@ namespace InspectR.Core
         public void ProcessRequest(HttpContext context)
         {
             var requestCache = new RequestCache();
-            var requestLogger = new RequestLogger(requestCache, new DefaultRequestCollector());
-            var inspectR = new DefaultInspectRService();
+            var requestLogger = new Core.RequestLogger.RequestLogger(requestCache, new DefaultRequestCollector());
+            var dbContext = new InspectRContext();
 
             var id = _requestContext.RouteData.Values["id"] as string;
 
-            InspectorInfo inspectorInfo = inspectR.GetInspectorInfoByKey(id);
+            InspectorInfo inspectorInfo = dbContext.GetInspectorInfoByKey(id);
+
+            // TODO: check private
+            // ..
+
+            dbContext.Dispose();
 
             if (inspectorInfo == null)
                 throw new HttpException(404, "404 - Inspector Not found");
 
-            // TODO: check private
-
             requestLogger.LogRequest(inspectorInfo);
 
+            // TODO: random response? :)
             context.Response.Write("ok");
         }
     }

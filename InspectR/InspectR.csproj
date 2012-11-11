@@ -178,29 +178,36 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Core\InspectRHandlerHttpHandler.cs" />
-    <Compile Include="Core\InspectRRouteHandler.cs" />
-    <Compile Include="Core\RequestLogger.cs" />
-    <Compile Include="Core\ContentDecoders.cs" />
-    <Compile Include="Core\DefaultInspectRService.cs" />
-    <Compile Include="Core\DefaultRequestCollector.cs" />
+    <Compile Include="Core\RequestCache.cs" />
+    <Compile Include="Controllers\RequestLogger\InspectRHandlerHttpHandler.cs" />
+    <Compile Include="Controllers\RequestLogger\InspectRRouteHandler.cs" />
+    <Compile Include="Core\InspectRService.cs" />
+    <Compile Include="Core\RequestLogger\RequestLogger.cs" />
+    <Compile Include="Core\RequestLogger\ContentDecoders.cs" />
+    <Compile Include="Data\InspectRContextQueries.cs" />
+    <Compile Include="Core\RequestLogger\DefaultRequestCollector.cs" />
     <Compile Include="Core\IInspectRService.cs" />
     <Compile Include="Core\IRequestCache.cs" />
-    <Compile Include="Core\IRequestLogger.cs" />
-    <Compile Include="Core\NameValueCollectionExtensions.cs" />
+    <Compile Include="Core\RequestLogger\IRequestLogger.cs" />
+    <Compile Include="Core\RequestLogger\NameValueCollectionExtensions.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Helpers\AnalyticsHelpers.cs" />
     <Compile Include="Helpers\InspectRUrlHelperExtensions.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Data\InspectRContext.cs" />
+    <Compile Include="Data\InspectRUserProfile.cs" />
     <Compile Include="Migrations\201211100442232_init.cs" />
     <Compile Include="Migrations\201211100442232_init.Designer.cs">
       <DependentUpon>201211100442232_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201211110328459_userprofiles.cs" />
+    <Compile Include="Migrations\201211110328459_userprofiles.Designer.cs">
+      <DependentUpon>201211110328459_userprofiles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\InspectRViewModel.cs" />
-    <Compile Include="Core\IRequestCollector.cs" />
+    <Compile Include="Core\RequestLogger\IRequestCollector.cs" />
     <Compile Include="Data\InspectorInfo.cs" />
     <Compile Include="Data\ClientRequestInfo.cs" />
     <Compile Include="Controllers\InspectRController.cs" />
@@ -530,6 +537,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201211100442232_init.resx">
       <DependentUpon>201211100442232_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201211110328459_userprofiles.resx">
+      <DependentUpon>201211110328459_userprofiles.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 
-namespace InspectR.Core
+namespace InspectR.Core.RequestLogger
 {
     public static class ContentDecoders
     {

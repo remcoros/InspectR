@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace InspectR.Core
+namespace InspectR.Core.RequestLogger
 {
     internal static class NameValueCollectionExtensions
     {

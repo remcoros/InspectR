@@ -2,7 +2,7 @@
 using System.Web;
 using InspectR.Data;
 
-namespace InspectR.Core
+namespace InspectR.Core.RequestLogger
 {
     public class DefaultRequestCollector : IRequestCollector
     {

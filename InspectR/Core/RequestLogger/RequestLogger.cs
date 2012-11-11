@@ -3,7 +3,7 @@ using InspectR.Data;
 using InspectR.Hubs;
 using Microsoft.AspNet.SignalR;
 
-namespace InspectR.Core
+namespace InspectR.Core.RequestLogger
 {
     public class RequestLogger
     {
