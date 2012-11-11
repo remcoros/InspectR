@@ -8,12 +8,24 @@
             config = $.extend({}, InspectR.defaults, config);
             
             var viewModel = new InspectRViewModel(config);
-
             ko.applyBindings(viewModel, config.rootNode);
+
+            var Router = Backbone.Router.extend({
+                routes: {
+                    "session/:id": "loadSession",
+                    "*actions": "start"
+                },
+                start: viewModel.start,
+                loadSession: viewModel.loadSession
+            });
+            
+            var router = new Router;
 
             $.connection.hub.start({
                 // transport: 'auto'
-            }, viewModel.start);
+            }, function () {
+                Backbone.history.start({});
+            });
         },
         defaults: {
             // inspectorKey: ''
@@ -26,6 +38,9 @@
 
         self.inspectorKey = config.inspector;
 
+        // router.on('route:loadSession', self.loadSession);
+        // router.on('route:start', self.start);
+        
         self.hub = $.connection.inspectRHub;
         var client = self.hub.client;
         var server = self.hub.server;
@@ -53,6 +68,10 @@
                 });
         };
 
+        self.loadSession = function () {
+
+        };
+        
         self.updateUserProfile = function (profile) {
             self.UserProfile(profile);
         };
@@ -105,7 +124,7 @@
         
         client.requestLogged = function (inspector, request) {
             // console.log('http request');
-            console.log(inspector, request);
+            // console.log(inspector, request);
             self.Requests.unshift(request);
         };
     };

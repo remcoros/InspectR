@@ -287,6 +287,8 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\backbone.js" />
+    <Content Include="Scripts\backbone.min.js" />
     <Content Include="Scripts\closure.map" />
     <Content Include="Scripts\codemirror\mode\coffeescript\LICENSE" />
     <Content Include="Scripts\codemirror\mode\pascal\LICENSE" />
@@ -484,6 +486,8 @@
     <Content Include="Scripts\syntaxhighlighter\styles\theme-balupton.min.css" />
     <Content Include="Scripts\syntaxhighlighter\styles\theme-google.css" />
     <Content Include="Scripts\syntaxhighlighter\styles\theme-google.min.css" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\ZeroClipboard.js" />
     <Content Include="Content\ZeroClipboard.swf" />
     <Content Include="Content\ZeroClipboard10.swf" />

@@ -14,6 +14,11 @@ namespace InspectR.App_Start
             bundles.Add(new StyleBundle("~/bundles/lightbox").Include(
             "~/Scripts/lightbox/css/lightbox.css"));
 
+            // backbone
+            bundles.Add(new ScriptBundle("~/bundles/backbone").Include(
+                        "~/Scripts/underscore.*",
+                        "~/Scripts/backbone.*"));
+
             // syntax
             bundles.Add(new ScriptBundle("~/bundles/syntaxhighlighter").Include(
                         "~/Scripts/syntaxhighlighter/jquery.syntaxhighlighter.*"));
