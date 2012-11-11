@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using InspectR.Core;
 using InspectR.Data;
 using InspectR.Filters;
 using InspectR.Helpers;
@@ -12,7 +13,12 @@ namespace InspectR.Controllers
     [InitializeSimpleMembership]
     public class InspectRController : Controller
     {
-        private IInspectRService _inspectR = new DefaultInspectRService(new HttpContextWrapper(System.Web.HttpContext.Current));
+        private InspectRService _service;
+        protected InspectRContext DbContext { get; set; }
+
+        public InspectRController()
+        {
+        }
 
         public ActionResult Index()
         {
@@ -21,15 +27,15 @@ namespace InspectR.Controllers
 
         public ActionResult Create(bool isprivate)
         {
-            InspectorInfo inspectorInfo = _inspectR.Create(isprivate);
 
-            return Redirect(Url.InspectR().Inspect(inspectorInfo.UniqueKey));
+            var inspector = _service.CreateInspector(isprivate);
+
+            return Redirect(Url.InspectR().Inspect(inspector.UniqueKey));
         }
 
         public ActionResult Inspect(string id)
         {
-            InspectorInfo inspectorInfo = _inspectR.GetInspectorInfoByKey(id);
-            IEnumerable<RequestInfo> recentRequests = _inspectR.GetRecentRequests(inspectorInfo.Id);
+            InspectorInfo inspectorInfo = DbContext.GetInspectorInfoByKey(id);
 
             if (inspectorInfo == null)
                 return HttpNotFound();
@@ -37,30 +43,14 @@ namespace InspectR.Controllers
             return View("Inspect", new InspectRViewModel()
                 {
                     InspectorInfo = inspectorInfo,
-                    RecentRequests = recentRequests
                 });
         }
 
-        public ActionResult Log(string id)
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (Request.QueryString.ToString().ToLowerInvariant() == "inspect")
-            {
-                return Inspect(id);
-            }
-
-            InspectorInfo inspectorInfo = _inspectR.GetInspectorInfoByKey(id);
-
-            if (inspectorInfo == null)
-                return HttpNotFound();
-
-            // TODO: check private
-
-            _inspectR.LogRequest(id);
-
-            return Json(new
-            {
-                result = "ok"
-            }, JsonRequestBehavior.AllowGet);            
+            DbContext = (InspectRContext)HttpContext.Items["InspectRContext"];
+            _service = new InspectRService(DbContext);
+            base.OnActionExecuting(filterContext);
         }
     }
 }

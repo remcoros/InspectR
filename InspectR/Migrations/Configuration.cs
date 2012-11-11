@@ -1,16 +1,18 @@
-using System.Data.Entity.Migrations;
-using InspectR.Data;
-
 namespace InspectR.Migrations
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<InspectRContext>
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
+
+    internal sealed class Configuration : DbMigrationsConfiguration<InspectR.Data.InspectRContext>
     {
-        public Configuration()            
+        public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(InspectRContext context)
+        protected override void Seed(InspectR.Data.InspectRContext context)
         {
             //  This method will be called after migrating to the latest version.
 

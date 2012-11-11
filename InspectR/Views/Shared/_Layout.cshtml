@@ -10,70 +10,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     @Styles.Render("~/Content/bootstrap")
-
+    @Styles.Render("~/bundles/lightbox")
+    @RenderSection("styles", required: false)
+    @Styles.Render("~/Content/css")
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
     <style type="text/css">
-        body
+        /* // only for responsive (navbar-fixed-top)
+            body
         {
             padding-top: 60px;
             padding-bottom: 40px;
-        }
+        }*/
     </style>
-    @Styles.Render("~/Content/css")
+
     @Scripts.Render("~/bundles/modernizr")
 </head>
-    <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="brand" href="@Url.InspectR().Index()">InspectB<small>.</small>in</a>
-                    @RenderSection("menu", false)
-                    <ul class="nav">
-                        <li>
-                            <a href="@Url.InspectR().Create()">Create New</a></li>                        
-                    </ul>
-                    <ul class="nav pull-right">
-                        @if (!Request.IsAuthenticated) {
-                            <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-                            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-                        } else {
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name<b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li>@Html.ActionLink("My Account", "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })</li>
-                                    <li>
-                                        <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
-                                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", style = "display:none"}))
-                                        {
-                                            @Html.AntiForgeryToken()
-                                        }
-                                    </li>
-                                </ul>
-                            </li>                            
-                        }
-                    </ul>
-                </div>
+<body>
+    <a href="https://github.com/remcoros/InspectR">
+        <img style="z-index: 99999; position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
+    </a>
+    <div class="navbar navbar-inverse navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="@Url.InspectR().Index()">
+                    InspectB<small>.</small>in
+                    <div class="label label-important">alpha</div>
+                </a>
+                @RenderSection("menu", false)
+                <ul class="nav">
+                    <li>
+                        <a href="@Url.InspectR().Create()">Create New</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    @if (!Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: new { ReturnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "registerLink" })</li>
+                        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: new { ReturnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })</li>
+                    }
+                    else
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("My Account", "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })</li>
+                                <li>
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", style = "display:none" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                    }
+                                </li>
+                            </ul>
+                        </li>                            
+                    }
+                </ul>
             </div>
         </div>
-        <div class="container">
+    </div>
+    <div class="container">
 
-            @RenderBody()
+        @RenderBody()
 
-            <hr>
+        <hr>
 
-            <footer>
-                <p>&copy; InspectB.in 2012</p>
-            </footer>
+        <footer class="row">
+            <p>&copy; InspectB.in 2012</p>
+        </footer>
 
-        </div>
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @Scripts.Render("~/bundles/knockout")
+    </div>
+    @Html.Analytics()
 
-        @RenderSection("scripts", required: false)
-    </body>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/lightbox")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/knockout")
+
+    @RenderSection("scripts", required: false)
+
+    @Html.Analytics()
+</body>
 </html>

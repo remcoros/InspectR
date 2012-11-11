@@ -22,7 +22,7 @@
             For more info, visit our github project wiki.
         </p>
         <p>
-            <a class="btn" href="#">Github Project &raquo;</a>
+            <a class="btn" href="https://github.com/remcoros/InspectR">Github Project &raquo;</a>
         </p>
     </div>
     <div class="span4">
@@ -32,16 +32,21 @@
             Visit the wiki at our github project page for more information.
         </p>
         <p>
-            <a class="btn" href="#">Project Wiki &raquo;</a>
+            <a class="btn" href="https://github.com/remcoros/InspectR/wiki">Project Wiki &raquo;</a>
         </p>
     </div>
     <div class="span4">
         <h2>How does it work?</h2>
         <p>
-            It's magic bro, get over it.
+            Quite simple. When you make a request to the url, you hit our InspectR Controller. It is stored in our cache with your inspector key, and collects additional data about the http request.
+            This request info is broadcasted to all SignalR Hub subscriber (?inspect url's). When you watch the ?inspect url, you will be notified almost instantly of any incomming http requests.<br />
+            On first loading of the ?inspect url, we get a list of recent requests, so not all is lost when you hit F5. That's also the reason why we cache the http requests.
         </p>
         <p>
-            <a class="btn" href="#">Discover the magic &raquo;</a>
+            For more information, check out some source:
+        </p>
+        <p>
+            <a class="btn" href="https://github.com/remcoros/InspectR/blob/master/InspectR/Scripts/inspectr.js">Discover the magic &raquo;</a>
         </p>
     </div>
 </div>

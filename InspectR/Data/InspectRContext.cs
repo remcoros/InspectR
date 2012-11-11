@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using InspectR.Hubs;
 
 namespace InspectR.Data
 {
@@ -17,6 +18,6 @@ namespace InspectR.Data
 
         public DbSet<InspectorInfo> Inspectors { get; set; }
 
-        public DbSet<RequestInfoEntry> Requests { get; set; }
+        public DbSet<InspectRUserProfile> UserProfiles { get; set; }
     }
 }

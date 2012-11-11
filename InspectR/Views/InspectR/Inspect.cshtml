@@ -1,13 +1,15 @@
-﻿@model InspectR.Models.InspectRViewModel
+﻿@using InspectR.Helpers
+@model InspectR.Models.InspectRViewModel
 @{
-    var FullUrl = Url.Action("Log", "InspectR", new {id = Model.InspectorInfo.UniqueKey}, Request.Url.Scheme);
+    var FullUrl = Url.Action("Log", "InspectR", new { id = Model.InspectorInfo.UniqueKey }, Request.Url.Scheme);
 }
 @section menu {
-    <form class="nav navbar-form">
+    <form class="nav navbar-form" action="@Url.InspectR().Log(Model.InspectorInfo.UniqueKey)">
     <div class="input-append" id="inspectorurl_container" style="position: relative">
         <input class="span4" type="text" value="@FullUrl" readonly="readonly" id="inspectorurl" style="cursor: text">
-        <button id="copyinspectorurl" class="btn" type="button">Copy</button>            
-        <a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">Visit</a>
+        <button id="copyinspectorurl" class="btn" type="button">Copy</button>
+        <a href="@Url.InspectR().Log(Model.InspectorInfo.UniqueKey)" class="btn" target="_blank">Visit</a>
+        @*<a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">POST</a>*@
     </div>
     </form>
 }
@@ -15,25 +17,49 @@
     <div class="span8">
         <h2>Incoming HTTP requests</h2>
         <p>
-            Search, filter and configure your InspectR using the controls in the sidebar.
+            Use your inspectbin url in your http client or set is as the target of your webhook. 
+            @*Click the images to show how you can easily test this using your own github repository.*@
         </p>
+        @*        <img rel="lightbox[inspectgithub]" src="~/Images/inspectgithub1.png" alt="screenshot" title="InspectBin screenshot" />
+        <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub2.png" alt="screenshot" title="InspectBin screenshot" />
+        <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub3.png" alt="screenshot" title="InspectBin Github screenshot" />*@
         <hr />
+        <div class="" data-bind="visible: !RequestList() || RequestList().length == 0">
+            No http requests inspected yet.
+        </div>
         <div class="" data-bind="template: { name:'http-request', foreach: RequestList }"></div>
     </div>
     <div class="span4">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
-                <li class="nav-header">Sidebar</li>
+                <li class="nav-header">Actions</li>
                 <li>
-                    <a href="#" data-bind="click: clearRecentRequests">Clear recent requests</a></li>
+                    <a href="#" data-bind="click: clearRecentRequests">Clear</a></li>
+                <li class="nav-header">Sessions:</li>
+                <!-- ko ifnot: UserProfile -->
+                <li>Login to record sessions</li>
+                <!-- /ko -->
+                <!-- ko if: UserProfile -->
+                <li>Not yet implemented :)</li>
+                <!-- ko foreach: null -->
                 <li>
-                    <a href="#">Link</a></li>
-                <li class="nav-header">Sidebar</li>
+                    <a data-bind="text: UniqueKey, attr: { href: '#session/7889' }">
+                    </a>
+                </li>
+                <!-- /ko -->
+                <!-- /ko -->
+                <li class="nav-header">Your bins:</li>
+                <!-- ko ifnot: UserProfile -->
+                <li>Login to add your bins</li>
+                <!-- /ko -->
+                <!-- ko if: UserProfile -->
+                <!-- ko foreach: UserProfile().Inspectors -->
                 <li>
-                    <a href="#">Link</a></li>
-                <li class="nav-header">Sidebar</li>
-                <li class="active">
-                    <a href="#">Link</a></li>
+                    <a data-bind="text: UniqueKey, attr: { href: '@Html.Raw(Url.InspectR().Inspect("xxXXxx"))'.replace('xxXXxx', UniqueKey) }">
+                    </a>
+                </li>
+                <!-- /ko -->
+                <!-- /ko -->
             </ul>
         </div>
         <!--/.well -->
@@ -48,7 +74,7 @@
                 <div class="label label-warning" data-bind="visible: ContentType && ContentType.length > 0, text:ContentType"></div>
                 <div class="label label-warning" data-bind="visible: !(ContentType && ContentType.length > 0)">No ContentType</div>
             </div>
-        </div>            
+        </div>
         <div class="httprequest-section clearfix">
             <div class="pull-left">
                 <span data-bind="text: $parent.formatDate(DateCreated)"></span>
@@ -87,9 +113,15 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" data-bind="attr: {id: 'content-' + $index()}">
-                        <textarea data-bind="text: Content" class="input-xxlarge">
-
-                        </textarea>
+                        <div data-bind="with: $root.createCodeMirror($data, 'Content')">
+                            <div class="input-append">
+                                <select data-bind="options: ko.utils.arrayMap(CodeMirror.listMIMEs(), function(m) { return m.mime; }), value: ContentCodeMirrorMode">
+                                </select>
+                                <button class="btn" data-bind="click: ContentCodeMirrorUtil.Format">Format</button>
+                            </div>
+                            <textarea class="" data-bind="text: Content, codeMirror: 'Content'" style="width: 99%">
+                            </textarea>
+                        </div>
                     </div>
                     <div class="tab-pane" data-bind="attr: {id: 'headers-' + $index()}">
                         <ul class="header-list unstyled" data-bind="foreach: Headers">
@@ -108,14 +140,27 @@
         </div>
     </div>
 </script>
+@section styles
+{
+    @Styles.Render("~/Scripts/codemirror/lib/codemirror.css")
+}
 @section scripts
 {
+    @Scripts.Render("~/Scripts/codemirror/lib/codemirror.js")
+
+    @Scripts.Render("~/Scripts/codemirror/mode/xml/xml.js")
+    @Scripts.Render("~/Scripts/codemirror/mode/htmlmixed/htmlmixed.js")
+    @Scripts.Render("~/Scripts/codemirror/mode/properties/properties.js")
+    @Scripts.Render("~/Scripts/codemirror/mode/css/css.js")
+    @Scripts.Render("~/Scripts/codemirror/mode/javascript/javascript.js")
+    @Scripts.Render("~/Scripts/codemirror/lib/util/formatting.js")
+    @Scripts.Render("~/bundles/backbone")
     @Scripts.Render("~/bundles/zeroclipboard")
     @Scripts.Render("~/bundles/signalr")
     <script src="~/signalr/hubs" type="text/javascript"></script>
-
     @Scripts.Render("~/bundles/inspectr")
     <script type="text/javascript">
+        // clipboard copy
         ZeroClipboard.setMoviePath('@Url.Content("~/Content/ZeroClipboard10.swf")');
         var clip = new ZeroClipboard.Client();
         clip.setHandCursor(true);
@@ -124,6 +169,15 @@
         clip.addEventListener('onComplete', function () {
             $('#copyinspectorurl').html('Copied!');
         });
+
+        // syntax highlighter
+@*        $.SyntaxHighlighter.init({
+            'lineNumbers': false,
+            'wrapLines': true,
+            'theme': 'balupton',
+            'baseUrl': '@Url.Content("~/Scripts/syntaxhighlighter/")'
+        });*@
+
         // document load
         $(function () {
             $.inspectR.start({
