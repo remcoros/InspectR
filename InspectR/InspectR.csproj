@@ -202,6 +202,7 @@
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Helpers\AnalyticsHelpers.cs" />
     <Compile Include="Helpers\InspectRUrlHelperExtensions.cs" />
+    <Compile Include="Helpers\RazorExtensions.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Data\InspectRContext.cs" />
     <Compile Include="Data\InspectRUserProfile.cs" />

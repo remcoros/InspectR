@@ -1,4 +1,8 @@
-﻿@using InspectR.Helpers
+﻿@using InspectR.Data
+@using InspectR.Helpers
+@{
+    var UserProfile = ViewBag.UserProfile as InspectRUserProfile;
+}
 <div class="hero-unit">
     <h1>InspectB.in http requests</h1>    
     <img class="lower" src="~/Images/screenshot1.png" alt="screenshot" title="InspectR screenshot"/>
@@ -11,7 +15,13 @@
         <a class="btn btn-primary btn-large" href="@Url.InspectR().Create()">Create a new InspectBin &raquo;</a>
     </p>
 </div>
-<!-- Example row of columns -->
+@if (UserProfile != null)
+{
+<div class="well">
+    <strong>Your bins:</strong>
+    @UserProfile.Inspectors.Select(x=>x.UniqueKey).Join(", ", @<a href="@Url.InspectR().Inspect(item)">@item</a>)
+</div>    
+}
 <div class="row">
     <div class="span4">
         <h2>Open Source</h2>
