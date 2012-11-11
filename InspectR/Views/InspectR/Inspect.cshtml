@@ -8,7 +8,7 @@
     <div class="input-append" id="inspectorurl_container" style="position: relative">
         <input class="span4" type="text" value="@FullUrl" readonly="readonly" id="inspectorurl" style="cursor: text">
         <button id="copyinspectorurl" class="btn" type="button">Copy</button>
-        <a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">Visit</a>
+        <a href="@Url.InspectR().Log(Model.InspectorInfo.UniqueKey)" class="btn" target="_blank">Visit</a>
         @*<a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">POST</a>*@
     </div>
     </form>
