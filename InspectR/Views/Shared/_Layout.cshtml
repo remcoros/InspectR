@@ -48,7 +48,7 @@
                 <ul class="nav pull-right">
                     @if (!Request.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: new { ReturnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "registerLink" })</li>
                         <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: new { ReturnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })</li>
                     }
                     else
