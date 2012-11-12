@@ -115,7 +115,7 @@
                     <div class="tab-pane active" data-bind="attr: {id: 'content-' + $index()}">
                         <div data-bind="with: $root.createCodeMirror($data, 'Content')">
                             <div class="input-append">
-                                <select data-bind="options: ko.utils.arrayMap(CodeMirror.listMIMEs(), function(m) { return m.mime; }), value: ContentCodeMirrorMode">
+                                <select data-bind="options: _.keys(CodeMirror.mimeModes), value: ContentCodeMirrorMode">
                                 </select>
                                 <button class="btn" data-bind="click: ContentCodeMirrorUtil.Format">Format</button>
                             </div>
