@@ -299,7 +299,6 @@
     <Content Include="Scripts\codemirror\mode\r\LICENSE" />
     <Content Include="Scripts\codemirror\mode\sieve\LICENSE" />
     <Content Include="Scripts\codemirror\mode\xquery\LICENSE" />
-    <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\screenshot1.png" />
     <Content Include="Scripts\bootstrap.js" />
