@@ -103,13 +103,8 @@
                 Format: function () {
                     var cm = viewmodel[property + 'CodeMirror'];
                     CodeMirror.commands["selectAll"](cm);
-
-                    function getSelectedRange() {
-                        return { from: cm.getCursor(true), to: cm.getCursor(false) };
-                    }
-
-                    var range = getSelectedRange();
-                    cm.autoFormatRange(range.from, range.to);
+                    cm.autoFormatRange(cm.getCursor(true), cm.getCursor(false));
+                    cm.setCursor(false);
                 }
             };
             return viewmodel;

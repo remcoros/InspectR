@@ -1,6 +1,7 @@
 ﻿.CodeMirror
 {
     background-color: white;
+    height: auto;
 }
 
 .CodeMirror-scroll
@@ -31,8 +32,9 @@
         height: 280px;
     }
 
-.higher {
-	margin-top: 0px;
+.higher
+{
+    margin-top: 0px;
 }
 
 .lower
@@ -48,8 +50,7 @@
 .httprequest .tab-content
 {
     max-height: 300px;
-    overflow-y: auto;
-    overflow-x: auto;
+    overflow: visible;
 }
 
 .httprequest-section
@@ -100,40 +101,48 @@
 #loginForm .well,
 #socialLoginForm .well,
 #manageForm .well,
-#externalLogins .well {
-	background-color: #FDFDFD;
-	margin-top: 20px;
+#externalLogins .well
+{
+    background-color: #FDFDFD;
+    margin-top: 20px;
 }
-#loginForm .well hr {
-	margin-top: 0px;
-}
+
+    #loginForm .well hr
+    {
+        margin-top: 0px;
+    }
 
 /* styles for validation helpers */
-.field-validation-error {
+.field-validation-error
+{
     color: #e80c4d;
     font-weight: bold;
-	display: block;
+    display: block;
 }
 
-.field-validation-valid {
+.field-validation-valid
+{
     display: none;
 }
 
-input.input-validation-error {
+input.input-validation-error
+{
     border: 1px solid #e80c4d;
 }
 
-input[type="checkbox"].input-validation-error {
+input[type="checkbox"].input-validation-error
+{
     border: 0 none;
 }
 
-.validation-summary-errors {
+.validation-summary-errors
+{
     color: #e80c4d;
     font-weight: bold;
     font-size: 1.1em;
 }
 
-.validation-summary-valid {
+.validation-summary-valid
+{
     display: none;
 }
-
