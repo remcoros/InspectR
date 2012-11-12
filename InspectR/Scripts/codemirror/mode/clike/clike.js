@@ -140,8 +140,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     },
 
     indent: function(state, textAfter) {
-      if (state.tokenize == tokenComment) return CodeMirror.Pass;
-      if (state.tokenize != tokenBase && state.tokenize != null) return 0;
+      if (state.tokenize != tokenBase && state.tokenize != null) return CodeMirror.Pass;
       var ctx = state.context, firstChar = textAfter && textAfter.charAt(0);
       if (ctx.type == "statement" && firstChar == "}") ctx = ctx.prev;
       var closing = firstChar == ctx.type;
@@ -213,7 +212,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     blockKeywords: words("catch class do else finally for if switch try while"),
     atoms: words("true false null"),
     hooks: {
-      "@": function(stream, state) {
+      "@": function(stream) {
         stream.eatWhile(/[\w\$_]/);
         return "meta";
       }
@@ -276,7 +275,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     blockKeywords: words("catch class do else finally for forSome if match switch try while"),
     atoms: words("true false null"),
     hooks: {
-      "@": function(stream, state) {
+      "@": function(stream) {
         stream.eatWhile(/[\w\$_]/);
         return "meta";
       }
