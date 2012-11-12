@@ -98,7 +98,9 @@
         }
 
 #loginForm .well,
-#socialLoginForm .well {
+#socialLoginForm .well,
+#manageForm .well,
+#externalLogins .well {
 	background-color: #FDFDFD;
 	margin-top: 20px;
 }
