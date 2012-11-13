@@ -1,7 +1,7 @@
 ﻿@using InspectR.Helpers
 @model InspectR.Models.InspectRViewModel
 @{
-    var FullUrl = Url.Action("Log", "InspectR", new { id = Model.InspectorInfo.UniqueKey }, Request.Url.Scheme);
+    var FullUrl = Url.InspectR().FullLogUrl(Model.InspectorInfo.UniqueKey);
 }
 @section menu {
     <form class="nav navbar-form" action="@Url.InspectR().Log(Model.InspectorInfo.UniqueKey)">
@@ -77,8 +77,7 @@
         </div>
         <div class="httprequest-section clearfix">
             <div class="pull-left">
-                <span data-bind="text: $parent.formatDate(DateCreated)"></span>
-                <span data-bind="text: $parent.formatTime(DateCreated)"></span>
+                <span data-bind="dateformat: { date: DateCreated, format: 'HH:mm.fff dddd, MMMM yyyy'}"></span>                
             </div>
             <div class="pull-right">
                 <ul class="property-list unstyled">
@@ -113,13 +112,13 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" data-bind="attr: {id: 'content-' + $index()}">
-                        <div data-bind="with: $root.createCodeMirror($data, 'Content')">
+                        <div>
                             <div class="input-append">
-                                <select data-bind="options: ko.utils.arrayMap(CodeMirror.listMIMEs(), function(m) { return m.mime; }), value: ContentCodeMirrorMode">
+                                <select data-bind="options: $parent.SupportedContentTypes, value: ContentType">
                                 </select>
-                                <button class="btn" data-bind="click: ContentCodeMirrorUtil.Format">Format</button>
+                                <button type="button" class="btn" data-bind="click: function(){ CodeMirror.formatCodeMirror(); }">Format</button>
                             </div>
-                            <textarea class="" data-bind="text: Content, codeMirror: 'Content'" style="width: 99%">
+                            <textarea class="" data-bind="codeMirror: { name: 'CodeMirror', text: Content, contentType: ContentType }" style="width: 99%">
                             </textarea>
                         </div>
                     </div>

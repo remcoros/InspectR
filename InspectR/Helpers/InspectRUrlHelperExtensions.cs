@@ -24,5 +24,10 @@
         {
             return url.Url.RouteUrl("log", new { id = key });
         }
+
+        public static string FullLogUrl(this UrlHelperExtensions.InspectRUrlHelper url, string key)
+        {
+            return url.Url.RouteUrl("log", new { id = key }, url.Url.RequestContext.HttpContext.Request.Url.Scheme);
+        }
     }
 }

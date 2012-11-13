@@ -27,7 +27,6 @@ namespace InspectR.Controllers
 
         public ActionResult Create(bool isprivate)
         {
-
             var inspector = _service.CreateInspector(isprivate);
 
             return Redirect(Url.InspectR().Inspect(inspector.UniqueKey));
@@ -50,6 +49,17 @@ namespace InspectR.Controllers
         {
             DbContext = (InspectRContext)HttpContext.Items["InspectRContext"];
             _service = new InspectRService(DbContext);
+
+            if (User != null)
+            {
+                var username = User.Identity.Name;
+                if (!string.IsNullOrEmpty(username))
+                {
+                    // todo: map a dto
+                    ViewBag.UserProfile = DbContext.GetUserProfile(username);
+                }
+            }
+
             base.OnActionExecuting(filterContext);
         }
     }
