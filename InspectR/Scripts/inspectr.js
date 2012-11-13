@@ -85,21 +85,6 @@
             self.Requests.removeAll();
         };
 
-        self.formatDate = function (datestring) {
-            var d = new Date(datestring);
-            return d.getFullYear() + '-'
-                + d.getMonth() + '-'
-                + d.getDate();
-        };
-
-        self.formatTime = function (datestring) {
-            var d = new Date(datestring);
-            return d.getHours() + ':'
-                + d.getMinutes() + ':'
-                + d.getSeconds() + '.'
-                + d.getMilliseconds();
-        };
-
         self.P = function (property, data) {
             if (!ko.isObservable(data[property])) {
                 data[property] = ko.observable();
