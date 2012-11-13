@@ -48,7 +48,7 @@
         self.UserProfile = ko.observable();
         self.Requests = ko.mapping.fromJS([]);
         self.Inspector = ko.observable();
-        self.SupportedContentTypes = _.keys(CodeMirror.mimeModes);
+        self.SupportedContentTypes = _.keys(CodeMirror.mimeModes).sort();
 
         self.RequestList = ko.computed(function () {
             return self.Requests();
