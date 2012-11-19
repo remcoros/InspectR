@@ -35,6 +35,8 @@
                 <div class="clearfix">
                     <h5 class="pull-left" data-bind="text: Inspector().Title">
                     </h5>
+                    <h5 class="pull-left" data-bind="visible: !Inspector().Title()">No title
+                    </h5>
                     <small class="pull-left"><a href="#" data-bind="click: function(){ NewTitle(Inspector().Title()); IsEditingTitle(true); }">edit</a></small>
                 </div>
                 <div class="input-prepend input-append" data-bind="visible: IsEditingTitle">
