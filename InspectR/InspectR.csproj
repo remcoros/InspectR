@@ -206,6 +206,10 @@
     <Compile Include="Migrations\201211110328459_userprofiles.Designer.cs">
       <DependentUpon>201211110328459_userprofiles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201211191018407_bin_title.cs" />
+    <Compile Include="Migrations\201211191018407_bin_title.Designer.cs">
+      <DependentUpon>201211191018407_bin_title.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\InspectRViewModel.cs" />
@@ -291,7 +295,6 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\backbone.min.js" />
-    <Content Include="Scripts\closure.map" />
     <Content Include="Scripts\codemirror\mode\coffeescript\LICENSE" />
     <Content Include="Scripts\codemirror\mode\pascal\LICENSE" />
     <Content Include="Scripts\codemirror\mode\perl\LICENSE" />
@@ -546,6 +549,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201211110328459_userprofiles.resx">
       <DependentUpon>201211110328459_userprofiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201211191018407_bin_title.resx">
+      <DependentUpon>201211191018407_bin_title.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

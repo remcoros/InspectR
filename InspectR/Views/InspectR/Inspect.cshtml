@@ -31,6 +31,18 @@
     </div>
     <div class="span4">
         <div class="well sidebar-nav">
+            <div data-bind="if: Inspector">
+                <div class="clearfix">
+                    <h5 class="pull-left" data-bind="text: Inspector().Title">
+                    </h5>
+                    <small class="pull-left"><a href="#" data-bind="click: function(){ NewTitle(Inspector().Title()); IsEditingTitle(true); }">edit</a></small>
+                </div>
+                <div class="input-prepend input-append" data-bind="visible: IsEditingTitle">
+                    <button class="btn" type="button" data-bind="click: function(){ IsEditingTitle(false); }">X</button>
+                    <input type="text" class="input-medium" data-bind="value: NewTitle" />
+                    <button class="btn" type="button" data-bind="click: saveTitle">save</button>
+                </div>
+            </div>
             <ul class="nav nav-list">
                 <li class="nav-header">Actions</li>
                 <li>
@@ -77,7 +89,7 @@
         </div>
         <div class="httprequest-section clearfix">
             <div class="pull-left">
-                <span data-bind="dateformat: { date: DateCreated, format: 'HH:mm.fff dddd, MMMM yyyy'}"></span>                
+                <span data-bind="dateformat: { date: DateCreated, format: 'HH:mm.fff dddd, MMMM yyyy'}"></span>
             </div>
             <div class="pull-right">
                 <ul class="property-list unstyled">
