@@ -63,8 +63,7 @@
         self.start = function () {
             self.startInspect();
 
-            server.getUserProfile()
-                .done(self.updateUserProfile);
+            self.updateUserProfile();
 
             server.getRecentRequests(self.inspectorKey)
                 .done(function (result) {
@@ -77,7 +76,7 @@
         self.startInspect = function () {
             server.startInspect(self.inspectorKey)
                 .done(function (result) {
-                    self.Inspector(ko.mapping.fromJS(result));
+                    self.Inspector(ko.mapping.fromJS(result));                    
                 });
         };
 
@@ -90,11 +89,15 @@
                 .done(function () {
                     self.IsEditingTitle(false);
                     self.Inspector().Title(self.NewTitle());
+                    self.updateUserProfile();
                 });
         };
 
-        self.updateUserProfile = function (profile) {
-            self.UserProfile(ko.mapping.fromJS(profile));
+        self.updateUserProfile = function () {
+            server.getUserProfile()
+                .done(function (result) {
+                    self.UserProfile(ko.mapping.fromJS(result));
+                });
         };
 
         self.clearRecentRequests = function () {

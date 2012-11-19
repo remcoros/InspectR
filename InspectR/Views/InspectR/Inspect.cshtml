@@ -67,8 +67,16 @@
                 <!-- ko if: UserProfile -->
                 <!-- ko foreach: UserProfile().Inspectors -->
                 <li>
-                    <a data-bind="text: UniqueKey, attr: { href: '@Html.Raw(Url.InspectR().Inspect("xxXXxx"))'.replace('xxXXxx', UniqueKey) }">
+                    <!-- ko if: UniqueKey() === Title() ||  !Title() -->
+                    <a data-bind="text: UniqueKey, attr: { href: '@Html.Raw(Url.InspectR().Inspect("xxXXxx"))'.replace('xxXXxx', UniqueKey()) }">
                     </a>
+                    <!-- /ko -->
+                    <!-- ko if: UniqueKey() !== Title() && Title() -->
+                    <a data-bind="attr: { href: '@Html.Raw(Url.InspectR().Inspect("xxXXxx"))'.replace('xxXXxx', UniqueKey()) }">
+                        <span data-bind="text: Title"></span>
+                        <small>(<!-- ko text: UniqueKey --><!-- /ko -->)</small>
+                    </a>
+                    <!-- /ko -->
                 </li>
                 <!-- /ko -->
                 <!-- /ko -->
