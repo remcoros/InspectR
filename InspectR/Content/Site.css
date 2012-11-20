@@ -166,8 +166,11 @@ input[type="checkbox"].input-validation-error
     height: 3px;
     background-image: url('images/colorbar.png');
 }
-.start {
-    border-bottom: 5px solid #ffff00;
+.start
+{
+    border-bottom: 5px solid #ffffaa;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
     border-radius: 0px;
 }
 .start h1
@@ -195,8 +198,7 @@ input[type="checkbox"].input-validation-error
 {
     border-right: 0px;
     border-top: 5px solid #7109AA;
-    border-bottom: 5px solid #7109AA;
-    border-radius: 0px;
+    border-bottom: 5px solid #7109AA;    
     padding: 10px;
 }
 
@@ -223,7 +225,6 @@ input[type="checkbox"].input-validation-error
     border-right: 0px;
     border-top: 5px solid #DC0055;
     border-bottom: 5px solid #DC0055;
-    border-radius: 0px;
     padding: 10px;
 }
 
@@ -242,15 +243,14 @@ footer p
 {
     border-left: 0px;
     border-right: 0px;
-    border-top: 5px solid #7CE700;
-    border-bottom: 5px solid #7CE700;
-    border-radius: 0px;
+    border-top: 5px solid green;
+    border-bottom: 5px solid green;    
     padding: 10px;
 }
 
     .well.green h2
     {
-    color: #7CE700;
+        color: green;
         text-align: center;
         font-size: 30px;
     }
