@@ -8,6 +8,8 @@ namespace InspectR.Data
 
         public string UniqueKey { get; protected set; }
 
+        public string Title { get; set; }
+
         public bool IsPrivate { get; set; }
 
         public DateTime DateCreated { get; protected set; }
@@ -17,6 +19,7 @@ namespace InspectR.Data
             Id = Guid.NewGuid();
             UniqueKey = Id.ToString().GetHashCode().ToString("x");
             DateCreated = DateTime.Now;
+            Title = UniqueKey;
         }
     }
 }

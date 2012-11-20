@@ -3,28 +3,29 @@
 @{
     var UserProfile = ViewBag.UserProfile as InspectRUserProfile;
 }
-<div class="hero-unit">
-    <h1>InspectB.in http requests</h1>    
-    <img class="lower" src="~/Images/screenshot1.png" alt="screenshot" title="InspectR screenshot"/>
-    <h4>Test remote http clients and webhooks. Point to your InspectBin url and start inspecting.</h4>
+<div class="hero-unit start">
+    <h1>InspectB.in</h1>
+    <img src="~/Content/images/screenshot1.png" alt="screenshot" title="InspectR screenshot" />
+    <h4>Having trouble testing remote http clients and webhooks? Point them to your InspectBin url and start inspecting. It's that easy!</h4>
     <p class="lower">
-        Based on the idea of RequestBin (requestb.in), set your http client or webhook to point to your InspectBin url.<br />
-        We will collect http requests and show it in a nice and friendly way, live!<br />
+        InspectBin is based on the idea of RequestBin (requestb.in), set your http client or webhook to point to your InspectBin url.<br />
+        We will collect http requests and show it in a nice and friendly way, <strong>live!</strong>
     </p>
-    <p class="lower">
-        <a class="btn btn-primary btn-large" href="@Url.InspectR().Create()">Create a new InspectBin &raquo;</a>
-    </p>
+    <a class="btn btn-primary btn-large" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
 </div>
 @if (UserProfile != null)
 {
-<div class="well">
-    <strong>Your bins:</strong>
-    @UserProfile.Inspectors.Select(x=>x.UniqueKey).Join(", ", @<a href="@Url.InspectR().Inspect(item)">@item</a>)
-</div>    
+    <div class="well">
+        <strong>Your bins:</strong>
+        @UserProfile.Inspectors.Select(x => x.UniqueKey).Join(", ", @<a href="@Url.InspectR().Inspect(item)">@item</a>)
+    </div>    
 }
 <div class="row">
     <div class="span4">
-        <h2>Open Source</h2>
+        <div class="well purple">
+            <img src="~/Content/images/opensource.png" />
+            <h2>Open Source</h2>
+        </div>
         <p>
             InspectB.in runs the opensource project InspectR. It is build using Asp.Net MVC, SignalR (Rrr), Bootstrap, Knockout JS and several others.<br />
         </p>
@@ -32,31 +33,34 @@
             For more info, visit our github project wiki.
         </p>
         <p>
-            <a class="btn" href="https://github.com/remcoros/InspectR">Github Project &raquo;</a>
-        </p>
-    </div>
-    <div class="span4">
-        <h2>Contribute!</h2>
-        <p>
-            We are just starting this project, any help is welcome.
-            Visit the wiki at our github project page for more information.
-        </p>
-        <p>
             <a class="btn" href="https://github.com/remcoros/InspectR/wiki">Project Wiki &raquo;</a>
         </p>
     </div>
     <div class="span4">
-        <h2>How does it work?</h2>
+        <div class="well red">
+            <img src="~/Content/images/Git.png" />
+            <h2>Contribute!</h2>
+        </div>
         <p>
-            Quite simple. When you make a request to the url, you hit our InspectR Controller. It is stored in our cache with your inspector key, and collects additional data about the http request.
-            This request info is broadcasted to all SignalR Hub subscriber (?inspect url's). When you watch the ?inspect url, you will be notified almost instantly of any incomming http requests.<br />
-            On first loading of the ?inspect url, we get a list of recent requests, so not all is lost when you hit F5. That's also the reason why we cache the http requests.
+            We are just starting this project, any help is welcome. Feel free to join in. Send us suggestions, report any issues or fork the code and send a pull requests.
         </p>
+        <p>Check out the <em>code</em> on our github page.</p>
         <p>
-            For more information, check out some source:
+            <a class="btn" href="https://github.com/remcoros/InspectR/blob/master/InspectR/">Github Project &raquo;</a>
         </p>
+    </div>
+    <div class="span4">
+        <div class="well green">
+            <img src="~/Content/images/how.png" />
+            <h2>How does it work?</h2>
+        </div>
         <p>
-            <a class="btn" href="https://github.com/remcoros/InspectR/blob/master/InspectR/Scripts/inspectr.js">Discover the magic &raquo;</a>
+            When a http request is made to your inspectbin url, it is logged with additional data about the http request.
+            The browser is immediately notified of this new incomming request and shows it to you in a nice way.
+        </p>
+        <p>Try it yourself, it's free!</p>
+        <p>
+            <a class="btn" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
         </p>
     </div>
 </div>

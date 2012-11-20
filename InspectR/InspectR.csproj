@@ -206,6 +206,10 @@
     <Compile Include="Migrations\201211110328459_userprofiles.Designer.cs">
       <DependentUpon>201211110328459_userprofiles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201211191018407_bin_title.cs" />
+    <Compile Include="Migrations\201211191018407_bin_title.Designer.cs">
+      <DependentUpon>201211191018407_bin_title.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\InspectRViewModel.cs" />
@@ -225,6 +229,7 @@
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\colorbar.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -289,9 +294,11 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Content\images\Git.png" />
+    <Content Include="Content\images\how.png" />
+    <Content Include="Content\images\opensource.png" />
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\backbone.min.js" />
-    <Content Include="Scripts\closure.map" />
     <Content Include="Scripts\codemirror\mode\coffeescript\LICENSE" />
     <Content Include="Scripts\codemirror\mode\pascal\LICENSE" />
     <Content Include="Scripts\codemirror\mode\perl\LICENSE" />
@@ -300,7 +307,7 @@
     <Content Include="Scripts\codemirror\mode\sieve\LICENSE" />
     <Content Include="Scripts\codemirror\mode\xquery\LICENSE" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
-    <Content Include="Images\screenshot1.png" />
+    <Content Include="Content\images\screenshot1.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\codemirror\lib\codemirror.css" />
@@ -504,19 +511,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Content\Site.css" />
-    <Content Include="Images\accent.png" />
-    <Content Include="Images\bullet.png" />
-    <Content Include="Images\heroAccent.png" />
-    <Content Include="Images\orderedList0.png" />
-    <Content Include="Images\orderedList1.png" />
-    <Content Include="Images\orderedList2.png" />
-    <Content Include="Images\orderedList3.png" />
-    <Content Include="Images\orderedList4.png" />
-    <Content Include="Images\orderedList5.png" />
-    <Content Include="Images\orderedList6.png" />
-    <Content Include="Images\orderedList7.png" />
-    <Content Include="Images\orderedList8.png" />
-    <Content Include="Images\orderedList9.png" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -546,6 +540,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201211110328459_userprofiles.resx">
       <DependentUpon>201211110328459_userprofiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201211191018407_bin_title.resx">
+      <DependentUpon>201211191018407_bin_title.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
