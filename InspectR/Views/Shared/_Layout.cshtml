@@ -3,9 +3,9 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>@ViewBag.Title</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <title>InspectB.in - Inspect remote http requests</title>
+    <meta name="description" content="Test webhooks and inspect http requests with InspectBin">
+    <meta name="author" content="ProSCAT &amp; NOMORE404">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -33,46 +33,46 @@
     <a href="https://github.com/remcoros/InspectR">
         <img style="z-index: 99999; position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
     </a>
-	<div class="navbar navbar-inverse navbar-static-top">
-		<div class="colorbar"></div>
-		<div class="navbar-inner">
-			<div class="container">
-				<a class="brand" href="@Url.InspectR().Index()">
-					InspectB<small>.</small>in
-					<div class="label label-important" style="position: relative; top: -2px;">alpha</div>
-				</a>
-				@RenderSection("menu", false)
-				<ul class="nav">
-					<li>
-						<a href="@Url.InspectR().Create()">Create New</a></li>
-				</ul>
-				<ul class="nav pull-right">
-					@if (!Request.IsAuthenticated)
-					{
-						<li>@Html.ActionLink("Register", "Register", "Account", routeValues: new { ReturnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "registerLink" })</li>
-						<li>@Html.ActionLink("Log in", "Login", "Account", routeValues: new { ReturnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })</li>
-					}
-					else
-					{
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name<b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li>@Html.ActionLink("My Account", "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })</li>
-								<li>
-									<a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
-									@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", style = "display:none" }))
-									{
-										@Html.AntiForgeryToken()
-									}
-								</li>
-							</ul>
-						</li>                            
-					}
-				</ul>
-			</div>
-		</div>
-		<div class="colorbar"></div>
-	</div>
+    <div class="navbar navbar-inverse navbar-static-top">
+        <div class="colorbar"></div>
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="@Url.InspectR().Index()">
+                    InspectB<small>.</small>in
+                    <div class="label label-important" style="position: relative; top: -2px;">alpha</div>
+                </a>
+                @RenderSection("menu", false)
+                <ul class="nav">
+                    <li>
+                        <a href="@Url.InspectR().Create()">Create New</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    @if (!Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: new { ReturnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "registerLink" })</li>
+                        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: new { ReturnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })</li>
+                    }
+                    else
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("My Account", "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })</li>
+                                <li>
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", style = "display:none" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                    }
+                                </li>
+                            </ul>
+                        </li>                            
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="colorbar"></div>
+    </div>
     <div class="container">
 
         @RenderBody()
@@ -84,8 +84,6 @@
         </footer>
 
     </div>
-    @Html.Analytics()
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/lightbox")
     @Scripts.Render("~/bundles/bootstrap")
