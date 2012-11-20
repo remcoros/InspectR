@@ -1,4 +1,10 @@
-﻿.CodeMirror
+﻿.sidebar-nav
+{
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.CodeMirror
 {
     background-color: white;
     height: auto;
@@ -149,75 +155,100 @@ input[type="checkbox"].input-validation-error
 
 /*Inspect Bin custom styling*/
 
-#registerLink {
-	color: #fff;
+#registerLink
+{
+    color: #fff;
 }
 
-.colorbar {
-	width: 100%;
-	height: 3px;
-	background-image: url(images/colorbar.png);
+.colorbar
+{
+    width: 100%;
+    height: 3px;
+    background-image: url(images/colorbar.png);
+}
+.start {
+	border-bottom: 5px solid #ffff00;
+	border-radius: 0px;
+}
+.start h1
+{
+    margin-bottom: 20px;
 }
 
-.start h1 {
-	margin-bottom: 20px;
+.start img
+{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.start img {
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+.start p
+{
+    line-height: 23px;
+    color: #555;
 }
 
-.start p {
-	line-height: 23px;
-	color: #555;
+.start .btn
+{
+    margin-top: 55px;
 }
 
-.start .btn {
-	margin-top: 55px;
+.well.purple
+	border-right: 0px;
+	border-top: 5px solid #7109AA;
+	border-bottom: 5px solid #7109AA;
+	border-radius: 0px;
+    padding: 10px;
 }
 
-.well.purple {
-	background-color: #7109AA;
-	background-color: rgba(130, 9, 170, 0.8);
-	border: 2px solid #7109AA;
-	border-radius: 10px;
-	padding: 10px;
+    .well.purple h2
+    {
+	color: #7109AA;
+        text-align: center;
+    }
+
+.well img
+{
+    width: 100px;
+    padding: 15px 0 13px;
 }
-.well.purple h2 {
-	color: #fff;
-	text-align: center;
+
+.well img
+{
+    display: block;
+    margin: 0px auto;
 }
-.well img {
-	width: 100px;
-	padding: 15px 0 13px;
+
+.well.red
+	border-right: 0px;
+	border-top: 5px solid #DC0055;
+	border-bottom: 5px solid #DC0055;
+	border-radius: 0px;
+    padding: 10px;
 }
-.well img {
-	display: block;
-	margin: 0px auto;
+
+    .well.red h2
+    {
+	color: #DC0055;
+        text-align: center;
+    }
+
+footer p
+{
+    margin-left: 20px;
 }
-.well.red {
-	background-color: #DC0055;
-	background-color: rgba(220, 0, 85, 0.7);
-	border: 2px solid #DC0055;
-	border-radius: 10px;
-	padding: 10px;
+
+.well.green
+{
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 5px solid #7CE700;
+	border-bottom: 5px solid #7CE700;
+	border-radius: 0px;
+    padding: 10px;
 }
-.well.red h2 {
-	color: #fff;
-	text-align: center;
-}
-footer p {
-	margin-left: 20px;
-}
-.well.green {
-	background-color: #2119B1;
-	background-color: rgba(33, 25, 177, 0.7);
-	border: 2px solid #2119B1;
-	border-radius: 10px;
-	padding: 10px;
-}
-.well.green h2 {
-	color: #fff;
-	text-align: center;
-	font-size: 30px;
-}
+
+    .well.green h2
+    {
+	color: #7CE700;
+        text-align: center;
+        font-size: 30px;
+    }
