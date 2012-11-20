@@ -158,7 +158,10 @@ input[type="checkbox"].input-validation-error
 	height: 3px;
 	background-image: url(images/colorbar.png);
 }
-
+.start {
+	border-bottom: 5px solid #ffff00;
+	border-radius: 0px;
+}
 .start h1 {
 	margin-bottom: 20px;
 }
@@ -177,14 +180,15 @@ input[type="checkbox"].input-validation-error
 }
 
 .well.purple {
-	background-color: #7109AA;
-	background-color: rgba(130, 9, 170, 0.8);
-	border: 2px solid #7109AA;
-	border-radius: 10px;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 5px solid #7109AA;
+	border-bottom: 5px solid #7109AA;
+	border-radius: 0px;
 	padding: 10px;
 }
 .well.purple h2 {
-	color: #fff;
+	color: #7109AA;
 	text-align: center;
 }
 .well img {
@@ -196,28 +200,30 @@ input[type="checkbox"].input-validation-error
 	margin: 0px auto;
 }
 .well.red {
-	background-color: #DC0055;
-	background-color: rgba(220, 0, 85, 0.7);
-	border: 2px solid #DC0055;
-	border-radius: 10px;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 5px solid #DC0055;
+	border-bottom: 5px solid #DC0055;
+	border-radius: 0px;
 	padding: 10px;
 }
 .well.red h2 {
-	color: #fff;
+	color: #DC0055;
 	text-align: center;
 }
 footer p {
 	margin-left: 20px;
 }
 .well.green {
-	background-color: #2119B1;
-	background-color: rgba(33, 25, 177, 0.7);
-	border: 2px solid #2119B1;
-	border-radius: 10px;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 5px solid #7CE700;
+	border-bottom: 5px solid #7CE700;
+	border-radius: 0px;
 	padding: 10px;
 }
 .well.green h2 {
-	color: #fff;
+	color: #7CE700;
 	text-align: center;
 	font-size: 30px;
 }
