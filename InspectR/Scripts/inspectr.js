@@ -76,7 +76,9 @@
         self.startInspect = function () {
             server.startInspect(self.inspectorKey)
                 .done(function (result) {
-                    self.Inspector(ko.mapping.fromJS(result));                    
+                    if (result) {
+                        self.Inspector(ko.mapping.fromJS(result));
+                    }
                 });
         };
 
@@ -96,7 +98,9 @@
         self.updateUserProfile = function () {
             server.getUserProfile()
                 .done(function (result) {
-                    self.UserProfile(ko.mapping.fromJS(result));
+                    if (result) {
+                        self.UserProfile(ko.mapping.fromJS(result));
+                    }
                 });
         };
 
