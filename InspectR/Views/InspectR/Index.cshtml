@@ -2,24 +2,51 @@
 @using InspectR.Helpers
 @{
     var UserProfile = ViewBag.UserProfile as InspectRUserProfile;
+    var heroSpan = UserProfile == null ? "span12" : "span8";    
 }
-<div class="hero-unit start">
-    <h1>InspectB.in</h1>
-    <img src="~/Content/images/screenshot1.png" alt="screenshot" title="InspectR screenshot" />
-    <h4>Having trouble testing remote http clients and webhooks? Point them to your InspectBin url and start inspecting. It's that easy!</h4>
-    <p class="lower">
-        InspectBin is based on the idea of RequestBin (requestb.in), set your http client or webhook to point to your InspectBin url.<br />
-        We will collect http requests and show it in a nice and friendly way, <strong>live!</strong>
-    </p>
-    <a class="btn btn-primary btn-large" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
+<div class="row">
+    <div class="@heroSpan">
+        <div class="well hero-unit start">
+            <h1>InspectB.in</h1>
+            @if (UserProfile == null)
+            {
+                <img src="~/Content/images/screenshot1.png" alt="screenshot" title="InspectR screenshot" />
+            }
+            <h4>Having trouble testing remote http clients and webhooks? Point them to your InspectBin url and start inspecting. It's that easy!</h4>
+            <p class="lower">
+                InspectBin is based on the idea of RequestBin (requestb.in), set your http client or webhook to point to your InspectBin url.<br />
+                We will collect http requests and show it in a nice and friendly way, <strong>live!</strong>
+            </p>
+            <a class="btn btn-primary btn-large" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
+        </div>
+    </div>
+    @if (UserProfile != null)
+    {
+        <div class="span4">
+            <div class="well">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Your bins:</li>
+                    @foreach (var item in UserProfile.Inspectors.Take(10))
+                    {
+                        <li>
+                            <a href="@Url.InspectR().Inspect(item.UniqueKey)">
+                                @if (item.Title != item.UniqueKey && !string.IsNullOrWhiteSpace(item.Title))
+                                {
+                                    @item.Title <small>(@item.UniqueKey)</small>
+                                }
+                                else
+                                {
+                                    @item.UniqueKey
+                                }
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>        
+    }
 </div>
-@if (UserProfile != null)
-{
-    <div class="well">
-        <strong>Your bins:</strong>
-        @UserProfile.Inspectors.Select(x => x.UniqueKey).Join(", ", @<a href="@Url.InspectR().Inspect(item)">@item</a>)
-    </div>    
-}
+
 <div class="row">
     <div class="span4">
         <div class="well purple">
