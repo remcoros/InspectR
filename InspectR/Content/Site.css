@@ -164,11 +164,11 @@ input[type="checkbox"].input-validation-error
 {
     width: 100%;
     height: 3px;
-    background-image: url(images/colorbar.png);
+    background-image: url('images/colorbar.png');
 }
 .start {
-	border-bottom: 5px solid #ffff00;
-	border-radius: 0px;
+    border-bottom: 5px solid #ffff00;
+    border-radius: 0px;
 }
 .start h1
 {
@@ -192,16 +192,17 @@ input[type="checkbox"].input-validation-error
 }
 
 .well.purple
-	border-right: 0px;
-	border-top: 5px solid #7109AA;
-	border-bottom: 5px solid #7109AA;
-	border-radius: 0px;
+{
+    border-right: 0px;
+    border-top: 5px solid #7109AA;
+    border-bottom: 5px solid #7109AA;
+    border-radius: 0px;
     padding: 10px;
 }
 
     .well.purple h2
     {
-	color: #7109AA;
+    color: #7109AA;
         text-align: center;
     }
 
@@ -218,16 +219,17 @@ input[type="checkbox"].input-validation-error
 }
 
 .well.red
-	border-right: 0px;
-	border-top: 5px solid #DC0055;
-	border-bottom: 5px solid #DC0055;
-	border-radius: 0px;
+{
+    border-right: 0px;
+    border-top: 5px solid #DC0055;
+    border-bottom: 5px solid #DC0055;
+    border-radius: 0px;
     padding: 10px;
 }
 
     .well.red h2
     {
-	color: #DC0055;
+    color: #DC0055;
         text-align: center;
     }
 
@@ -238,17 +240,17 @@ footer p
 
 .well.green
 {
-	border-left: 0px;
-	border-right: 0px;
-	border-top: 5px solid #7CE700;
-	border-bottom: 5px solid #7CE700;
-	border-radius: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 5px solid #7CE700;
+    border-bottom: 5px solid #7CE700;
+    border-radius: 0px;
     padding: 10px;
 }
 
     .well.green h2
     {
-	color: #7CE700;
+    color: #7CE700;
         text-align: center;
         font-size: 30px;
     }
