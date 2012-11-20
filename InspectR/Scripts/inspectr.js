@@ -45,6 +45,8 @@
         var client = self.hub.client;
         var server = self.hub.server;
 
+        self.NewTitle = ko.observable();
+        self.IsEditingTitle = ko.observable(false);
         self.UserProfile = ko.observable();
         self.Requests = ko.mapping.fromJS([]);
         self.Inspector = ko.observable();
@@ -59,10 +61,9 @@
         });
 
         self.start = function () {
-            server.startInspect(self.inspectorKey);
+            self.startInspect();
 
-            server.getUserProfile()
-                .done(self.updateUserProfile);
+            self.updateUserProfile();
 
             server.getRecentRequests(self.inspectorKey)
                 .done(function (result) {
@@ -72,12 +73,31 @@
                 });
         };
 
+        self.startInspect = function () {
+            server.startInspect(self.inspectorKey)
+                .done(function (result) {
+                    self.Inspector(ko.mapping.fromJS(result));                    
+                });
+        };
+
         self.loadSession = function () {
 
         };
 
-        self.updateUserProfile = function (profile) {
-            self.UserProfile(profile);
+        self.saveTitle = function () {
+            server.setTitle(self.Inspector().Id(), self.NewTitle())
+                .done(function () {
+                    self.IsEditingTitle(false);
+                    self.Inspector().Title(self.NewTitle());
+                    self.updateUserProfile();
+                });
+        };
+
+        self.updateUserProfile = function () {
+            server.getUserProfile()
+                .done(function (result) {
+                    self.UserProfile(ko.mapping.fromJS(result));
+                });
         };
 
         self.clearRecentRequests = function () {

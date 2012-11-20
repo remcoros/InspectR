@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using InspectR.Controllers;
@@ -21,11 +22,11 @@ namespace InspectR.Hubs
             _service = new InspectRService(_dbContext);
         }
 
-        public void StartInspect(string inspector)
+        public InspectorInfo StartInspect(string inspector)
         {
             var info = _dbContext.GetInspectorInfoByKey(inspector);
             if (info == null)
-                return;
+                return null;
 
             if (Context.User != null)
             {
@@ -37,6 +38,8 @@ namespace InspectR.Hubs
             }
 
             Groups.Add(Context.ConnectionId, info.UniqueKey);
+
+            return info;
         }
 
         public InspectRUserProfile GetUserProfile()
@@ -65,6 +68,18 @@ namespace InspectR.Hubs
         {
             InspectorInfo inspectorInfo = _dbContext.GetInspectorInfoByKey(inspector);
             _requestCache.RemoveAll(inspectorInfo);
+        }
+
+        public void SetTitle(Guid id, string title)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                return;
+            }
+
+            InspectorInfo inspectorInfo = _dbContext.GetInspectorInfo(id);
+            inspectorInfo.Title = title;
+            _dbContext.SaveChanges();
         }
 
         public override System.Threading.Tasks.Task OnConnected()
