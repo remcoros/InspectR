@@ -60,6 +60,18 @@ namespace InspectR.Hubs
             return null;
         }
 
+        public void RemoveInspectorFromUserProfile(Guid inspectorId)
+        {
+            if (Context.User != null)
+            {
+                var username = Context.User.Identity.Name;
+                if (!string.IsNullOrEmpty(username))
+                {
+                    _service.RemoveInspectorFromUser(username, inspectorId);                    
+                }
+            }            
+        }
+
         public IEnumerable<RequestInfo> GetRecentRequests(string inspector)
         {
             InspectorInfo inspectorInfo = _dbContext.GetInspectorInfoByKey(inspector);

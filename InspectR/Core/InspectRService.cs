@@ -42,6 +42,24 @@ namespace InspectR.Core
             _dbContext.SaveChanges();
         }
 
+        public void RemoveInspectorFromUser(string userName, Guid inspectorId)
+        {
+            var user = _dbContext.GetUserProfile(userName);
+            if (user == null)
+            {
+                // todo: throw?
+                return;
+            }
+
+            var found = user.Inspectors.FirstOrDefault(x => x.Id == inspectorId);
+            if (found != null)
+            {
+                user.Inspectors.Remove(found);
+            }
+
+            _dbContext.SaveChanges();
+        }
+
         public InspectRUserProfile CreateUserProfile(string userName)
         {
             var user = CreateUserProfileInternal(userName);

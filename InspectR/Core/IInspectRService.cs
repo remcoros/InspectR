@@ -9,5 +9,6 @@ namespace InspectR.Core
         InspectorInfo CreateInspector(bool isprivate);
 
         void AddInspectorToUser(string userName, InspectorInfo info);
+        void RemoveInspectorFromUser(string userName, Guid inspectorId);
     }
 }
