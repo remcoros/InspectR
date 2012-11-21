@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using InspectR.Controllers;
 using InspectR.Core;
 using InspectR.Data;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 
 namespace InspectR.Hubs
 {
     public class InspectRHub : Hub
     {
+        private ConcurrentDictionary<string, string[]> _groups = new ConcurrentDictionary<string, string[]>();
         private IRequestCache _requestCache;
         private InspectRContext _dbContext;
         private IInspectRService _service;
@@ -20,6 +23,27 @@ namespace InspectR.Hubs
             _requestCache = new RequestCache();
             _dbContext = new InspectRContext();
             _service = new InspectRService(_dbContext);
+        }
+
+        public override System.Threading.Tasks.Task OnReconnected()
+        {
+            string[] groups;
+            _groups.TryGetValue(Context.ConnectionId, out groups);
+            if (groups != null)
+            {
+                foreach (var key in groups)
+                {
+                    Groups.Add(Context.ConnectionId, key);                    
+                }
+            }
+            return base.OnReconnected();
+        }
+
+        public override System.Threading.Tasks.Task OnDisconnected()
+        {
+            string[] val;
+            _groups.TryRemove(Context.ConnectionId, out val);
+            return base.OnDisconnected();
         }
 
         public InspectorInfo StartInspect(string inspector)
@@ -38,7 +62,9 @@ namespace InspectR.Hubs
             }
 
             Groups.Add(Context.ConnectionId, info.UniqueKey);
-
+            _groups.AddOrUpdate(Context.ConnectionId, new[] {info.UniqueKey},
+                                (key, current) => current.Concat(new[] {info.UniqueKey}).ToArray());
+            
             return info;
         }
 
@@ -60,7 +86,7 @@ namespace InspectR.Hubs
         public IEnumerable<RequestInfo> GetRecentRequests(string inspector)
         {
             InspectorInfo inspectorInfo = _dbContext.GetInspectorInfoByKey(inspector);
-            var recentRequests = _requestCache.Get(inspectorInfo).OrderByDescending(x=>x.DateCreated).Take(20);
+            var recentRequests = _requestCache.Get(inspectorInfo).OrderByDescending(x => x.DateCreated).Take(20);
             return recentRequests;
         }
 
