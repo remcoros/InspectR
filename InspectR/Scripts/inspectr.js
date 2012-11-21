@@ -56,10 +56,6 @@
             return self.Requests();
         });
 
-        $.connection.hub.reconnected(function () {
-            server.startInspect(self.inspectorKey);
-        });
-
         self.start = function () {
             self.startInspect();
 
