@@ -40,7 +40,9 @@ namespace InspectR.App_Start
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                         "~/Scripts/knockout-{version}.js",
-                        "~/Scripts/knockout.mapping-latest.js",
+                        "~/Scripts/knockout.mapping-latest.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/knockout.extra").Include(
                         "~/Scripts/knockout.extra.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
