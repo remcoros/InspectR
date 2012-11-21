@@ -39,6 +39,15 @@ namespace InspectR.Controllers
             if (inspectorInfo == null)
                 return HttpNotFound();
 
+            if (User != null)
+            {
+                var user = User.Identity.Name;
+                if (!string.IsNullOrEmpty(user))
+                {
+                    _service.AddInspectorToUser(user, inspectorInfo);
+                }
+            }
+
             return View("Inspect", new InspectRViewModel()
                 {
                     InspectorInfo = inspectorInfo,

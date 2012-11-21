@@ -40,15 +40,6 @@ namespace InspectR.Hubs
             if (info == null)
                 return null;
 
-            if (Context.User != null)
-            {
-                var user = Context.User.Identity.Name;
-                if (!string.IsNullOrEmpty(user))
-                {
-                    _service.AddInspectorToUser(user, info);
-                }
-            }
-            
             InspectRGroupsModule.StartInspect(this, info.UniqueKey);
             
             return info;
