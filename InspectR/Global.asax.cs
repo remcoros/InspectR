@@ -7,6 +7,7 @@ using System.Web.Routing;
 using InspectR.App_Start;
 using InspectR.Data;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -55,6 +56,8 @@ namespace InspectR
                                 }
                         }
                 });
+
+            GlobalHost.HubPipeline.EnableAutoRejoiningGroups();
             GlobalHost.DependencyResolver.Register(typeof(IJsonSerializer), ()=>serializer);
         }
     }
