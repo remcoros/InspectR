@@ -299,6 +299,8 @@
     <Content Include="Content\images\opensource.png" />
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\backbone.min.js" />
+    <Content Include="Scripts\codemirror\lib\util\continuecomment.js" />
+    <Content Include="Scripts\codemirror\lib\util\matchbrackets.js" />
     <Content Include="Scripts\codemirror\mode\coffeescript\LICENSE" />
     <Content Include="Scripts\codemirror\mode\pascal\LICENSE" />
     <Content Include="Scripts\codemirror\mode\perl\LICENSE" />
@@ -306,12 +308,12 @@
     <Content Include="Scripts\codemirror\mode\r\LICENSE" />
     <Content Include="Scripts\codemirror\mode\sieve\LICENSE" />
     <Content Include="Scripts\codemirror\mode\xquery\LICENSE" />
+    <Content Include="Scripts\codemirror\lib\codemirror.js" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Content\images\screenshot1.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\codemirror\lib\codemirror.css" />
-    <Content Include="Scripts\codemirror\lib\codemirror.js" />
     <Content Include="Scripts\codemirror\lib\util\closetag.js" />
     <Content Include="Scripts\codemirror\lib\util\dialog.css" />
     <Content Include="Scripts\codemirror\lib\util\dialog.js" />
@@ -452,6 +454,9 @@
     <Content Include="Scripts\codemirror\mode\xquery\xquery.js" />
     <Content Include="Scripts\codemirror\mode\yaml\index.html" />
     <Content Include="Scripts\codemirror\mode\yaml\yaml.js" />
+    <Content Include="Scripts\codemirror\mode\z80\index.html" />
+    <Content Include="Scripts\codemirror\mode\z80\z80.js" />
+    <Content Include="Scripts\codemirror\theme\ambiance-mobile.css" />
     <Content Include="Scripts\codemirror\theme\ambiance.css" />
     <Content Include="Scripts\codemirror\theme\blackboard.css" />
     <Content Include="Scripts\codemirror\theme\cobalt.css" />
@@ -463,6 +468,8 @@
     <Content Include="Scripts\codemirror\theme\neat.css" />
     <Content Include="Scripts\codemirror\theme\night.css" />
     <Content Include="Scripts\codemirror\theme\rubyblue.css" />
+    <Content Include="Scripts\codemirror\theme\solarized.css" />
+    <Content Include="Scripts\codemirror\theme\twilight.css" />
     <Content Include="Scripts\codemirror\theme\vibrant-ink.css" />
     <Content Include="Scripts\codemirror\theme\xq-dark.css" />
     <Content Include="Scripts\inspectr.js" />

@@ -3,13 +3,6 @@
 (function ($, ko) {
     "use strict";
 
-    var formatCodeMirror = function (cm) {
-        CodeMirror.commands["selectAll"](cm);
-        cm.autoFormatRange(cm.getCursor(true), cm.getCursor(false));
-        cm.setSelection({ line: 0, ch: 0 }, { line: 0, ch: 0 });
-        // cm.setCursor(0, 0);
-    };
-
     Date.prototype.getMonthName = function (lang) {
         lang = lang && (lang in Date.locale) ? lang : 'en';
         return Date.locale[lang].month_names[this.getMonth()];
@@ -143,6 +136,19 @@
         }
     };
 
+    var formatCodeMirror = function (cm) {
+        var totalLines = cm.lineCount();
+        var totalChars = cm.getValue().length;
+        cm.autoFormatRange(
+            { line: 0, ch: 0 },
+            { line: totalLines - 1, ch: cm.getLine(totalLines - 1).length }
+        );
+        //CodeMirror.commands["selectAll"](cm);
+        //cm.autoFormatRange(cm.getCursor(true), cm.getCursor(false));
+        //cm.setSelection({ line: 0, ch: 0 }, { line: 0, ch: 0 });
+        //// cm.setCursor(0, 0);
+    };
+    
     ko.bindingHandlers['codeMirror'] = {
         init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var config = ko.utils.unwrapObservable(valueAccessor()),
@@ -151,7 +157,8 @@
             var codeMirror = CodeMirror.fromTextArea(element, {
                 // TODO: from (default) config
                 lineNumbers: false,
-                readOnly: true
+                readOnly: true,
+                pollInterval: 500
             });
             viewModel[name] = codeMirror;
             viewModel[name].formatCodeMirror = function () {

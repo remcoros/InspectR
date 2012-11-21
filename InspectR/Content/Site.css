@@ -12,11 +12,8 @@
 
 .CodeMirror-scroll
 {
-    height: auto;
     min-height: 100px;
     max-height: 260px;
-    overflow-y: hidden;
-    overflow-x: auto;
 }
 
 #inspectorurl_container
@@ -55,7 +52,6 @@
 
 .httprequest .tab-content
 {
-    max-height: 300px;
     overflow: visible;
 }
 
