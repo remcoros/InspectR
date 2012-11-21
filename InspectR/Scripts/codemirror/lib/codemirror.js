@@ -117,17 +117,20 @@ window.CodeMirror = (function() {
                          null, "position: relative; outline: none");
     // Moved around its parent to cover visible view
     d.mover = elt("div", [elt("div", [d.lineSpace], "CodeMirror-lines")], null, "position: relative");
-    d.gutters = elt("div", null, "CodeMirror-gutters");
-    d.lineGutter = null;
     // Set to the height of the text, causes scrolling
     d.sizer = elt("div", [d.mover], "CodeMirror-sizer");
     // D is needed because behavior of elts with overflow: auto and padding is inconsistent across browsers
     d.heightForcer = elt("div", "\u00a0", null, "position: absolute; height: " + scrollerCutOff + "px");
+    // Will contain the gutters, if any
+    d.gutters = elt("div", null, "CodeMirror-gutters");
+    d.lineGutter = null;
+    // Helper element to properly size the gutter backgrounds
+    var scrollerInner = elt("div", [d.sizer, d.heightForcer, d.gutters], null, "position: relative; min-height: 100%");
     // Provides scrolling
-    d.scroller = elt("div", [d.sizer, d.heightForcer], "CodeMirror-scroll");
+    d.scroller = elt("div", [scrollerInner], "CodeMirror-scroll");
     d.scroller.setAttribute("tabIndex", "-1");
     // The element in which the editor lives.
-    d.wrapper = elt("div", [d.gutters, d.inputDiv, d.scrollbarH, d.scrollbarV,
+    d.wrapper = elt("div", [d.inputDiv, d.scrollbarH, d.scrollbarV,
                             d.scrollbarFiller, d.scroller], "CodeMirror");
     // Work around IE7 z-index bug
     if (ie_lt8) { d.gutters.style.zIndex = -1; d.scroller.style.paddingRight = 0; }
@@ -163,7 +166,7 @@ window.CodeMirror = (function() {
 
     d.cachedCharWidth = d.cachedTextHeight = null;
     d.measureLineCache = [];
-    d.measureLineCache.pos = 0;
+    d.measureLineCachePos = 0;
 
     // Tracks when resetInput has punted to just putting a short
     // string instead of the (large) selection.
@@ -198,7 +201,7 @@ window.CodeMirror = (function() {
         var guess = Math.ceil(line.text.length / perLine) || 1;
         if (guess != 1) updateLineHeight(line, guess * th);
       });
-      cm.display.sizer.style.minWidth = "";
+      cm.display.mover.style.minWidth = "";
     } else {
       cm.display.wrapper.className = cm.display.wrapper.className.replace(" CodeMirror-wrap", "");
       computeMaxLength(cm.view);
@@ -326,12 +329,16 @@ window.CodeMirror = (function() {
 
   // LINE NUMBERS
 
-  function alignVertically(display) {
+  function alignHorizontally(display, targetScrollLeft) {
     if (!display.alignWidgets && !display.gutters.firstChild) return;
-    var l = compensateForHScroll(display) + "px";
+    var comp = compensateForHScroll(display);
+    if (targetScrollLeft != null)
+      comp += display.scroller.scrollLeft - targetScrollLeft;
+    var gutterW = display.gutters.offsetWidth, l = comp + "px";
     for (var n = display.lineDiv.firstChild; n; n = n.nextSibling) if (n.alignable) {
       for (var i = 0, a = n.alignable; i < a.length; ++i) a[i].style.left = l;
     }
+    display.gutters.style.left = (comp + gutterW) + "px";
   }
 
   function maybeUpdateLineNumberWidth(cm) {
@@ -419,6 +426,10 @@ window.CodeMirror = (function() {
     var to = Math.min(doc.size, visible.to + cm.options.viewportMargin);
     if (display.showingFrom < from && from - display.showingFrom < 20) from = display.showingFrom;
     if (display.showingTo > to && display.showingTo - to < 20) to = Math.min(doc.size, display.showingTo);
+    if (sawCollapsedSpans) {
+      from = lineNo(visualLine(doc, getLine(doc, from)));
+      while (to < doc.size && lineIsHidden(getLine(doc, to))) ++to;
+    }
 
     // Create a range of theoretically intact lines, and punch holes
     // in that using the change info.
@@ -449,9 +460,17 @@ window.CodeMirror = (function() {
     display.showingFrom = from; display.showingTo = to;
     startWorker(cm, 100);
 
-    for (var node = display.lineDiv.firstChild; node; node = node.nextSibling) {
-      var box = node.getBoundingClientRect();
-      var height = box.bottom - box.top, diff = node.lineObj.height - height;
+    var prevBottom = display.lineDiv.offsetTop;
+    for (var node = display.lineDiv.firstChild, height; node; node = node.nextSibling) if (node.lineObj) {
+      if (ie_lt8) {
+        var bot = node.offsetTop + node.offsetHeight;
+        height = bot - prevBottom;
+        prevBottom = bot;
+      } else {
+        var box = node.getBoundingClientRect();
+        height = box.bottom - box.top;
+      }
+      var diff = node.lineObj.height - height;
       if (height < 2) height = textHeight(display);
       if (diff > .001 || diff < -.001)
         updateLineHeight(node.lineObj, height);
@@ -501,8 +520,21 @@ window.CodeMirror = (function() {
     var display = cm.display, lineNumbers = cm.options.lineNumbers;
     // IE does bad things to nodes when .innerHTML = "" is used on a parent
     // we still need widgets and markers intact to add back to the new content later
-    if (!intact.length && !ie) removeChildren(display.lineDiv);
+    if (!intact.length && !ie && (!webkit || !cm.display.currentWheelTarget))
+      removeChildren(display.lineDiv);
     var container = display.lineDiv, cur = container.firstChild;
+
+    function rm(node) {
+      var next = node.nextSibling;
+      if (webkit && mac && cm.display.currentWheelTarget == node) {
+        node.style.display = "none";
+        node.lineObj = null;
+      } else {
+        container.removeChild(node);
+      }
+      return next;
+    }
+
     var nextIntact = intact.shift(), lineNo = from;
     cm.view.doc.iter(from, to, function(line) {
       if (nextIntact && nextIntact.to == lineNo) nextIntact = intact.shift();
@@ -511,11 +543,7 @@ window.CodeMirror = (function() {
       } else if (nextIntact && nextIntact.from <= lineNo && nextIntact.to > lineNo) {
         // This line is intact. Skip to the actual node. Update its
         // line number if needed.
-        while (cur.lineObj != line) {
-          var tmp = cur.nextSibling;
-          container.removeChild(cur);
-          cur = tmp;
-        }
+        while (cur.lineObj != line) cur = rm(cur);
         if (lineNumbers && updateNumbersFrom <= lineNo && cur.lineNumber)
           setTextContent(cur.lineNumber, lineNumberFor(cm.options, lineNo));
         cur = cur.nextSibling;
@@ -527,11 +555,7 @@ window.CodeMirror = (function() {
       }
       ++lineNo;
     });
-    while (cur) {
-      var tmp = cur.nextSibling;
-      container.removeChild(cur);
-      cur = tmp;
-    }
+    while (cur) cur = rm(cur);
   }
 
   function buildLineElement(cm, line, lineNo, dims) {
@@ -832,7 +856,7 @@ window.CodeMirror = (function() {
     // Store result in the cache
     var memo = {text: line.text, width: display.scroller.clientWidth,
                 markedSpans: line.markedSpans, measure: measure};
-    if (cache.length == 16) cache[++cache.pos % 16] = memo;
+    if (cache.length == 16) cache[++display.measureLineCachePos % 16] = memo;
     else cache.push(memo);
     return measure;
   }
@@ -866,6 +890,10 @@ window.CodeMirror = (function() {
       elt.top = vranges[vr]; elt.bottom = vranges[vr+1];
     }
     return data;
+  }
+
+  function clearMeasureLineCache(cm) {
+    cm.display.measureLineCache.length = cm.display.measureLineCachePos = 0;
   }
 
   // Context is one of "line", "div" (display.lineDiv), "local"/null (editor), or "page"
@@ -966,21 +994,9 @@ window.CodeMirror = (function() {
     }
 
     var bidi = getOrder(lineObj), dist = lineObj.text.length;
-    var from = lineLeft(lineObj), to = lineRight(lineObj), fromX = paddingLeft(cm.display), toX;
-    if (!bidi) {
-      // Guess a suitable upper bound for our search.
-      var estimated = Math.min(to, Math.ceil((x + Math.floor(innerOff / textHeight(cm.display)) *
-                                              cWidth * .9) / charWidth(cm.display)));
-      for (;;) {
-        var estX = getX(estimated);
-        if (estX <= x && estimated < to) estimated = Math.min(to, Math.ceil(estimated * 1.2));
-        else {toX = estX; to = estimated; break;}
-      }
-      // Try to guess a suitable lower bound as well.
-      estimated = Math.floor(to * 0.8); estX = getX(estimated);
-      if (estX < x) {from = estimated; fromX = estX;}
-      dist = to - from;
-    } else toX = getX(to);
+    var from = lineLeft(lineObj), to = lineRight(lineObj);
+    var fromX = paddingLeft(cm.display), toX = getX(to);
+
     if (x > toX) return {line: lineNo, ch: to, outside: wrongLine};
     // Do a binary search between these bounds.
     for (;;) {
@@ -1178,7 +1194,6 @@ window.CodeMirror = (function() {
   function registerEventHandlers(cm) {
     var d = cm.display;
     on(d.scroller, "mousedown", operation(cm, onMouseDown));
-    on(d.gutters, "mousedown", operation(cm, clickInGutter));
     on(d.scroller, "dblclick", operation(cm, e_preventDefault));
     on(d.lineSpace, "selectstart", function(e) {
       if (!mouseEventInWidget(d, e)) e_preventDefault(e);
@@ -1211,7 +1226,7 @@ window.CodeMirror = (function() {
     on(window, "resize", function resizeHandler() {
       // Might be a text scaling operation, clear size caches.
       d.cachedCharWidth = d.cachedTextHeight = null;
-      d.measureLineCache.length = d.measureLineCache.pos = 0;
+      clearMeasureLineCache(cm);
       if (d.wrapper.parentNode) updateDisplay(cm, true);
       else off(window, "resize", resizeHandler);
     });
@@ -1292,7 +1307,7 @@ window.CodeMirror = (function() {
       }
       return;
     }
-    if (clickInGutter.call(cm, e)) return;
+    if (clickInGutter(cm, e)) return;
     var start = posFromMouse(cm, e);
 
     switch (e_button(e)) {
@@ -1406,7 +1421,6 @@ window.CodeMirror = (function() {
     }
 
     var move = operation(cm, function(e) {
-      e_preventDefault(e);
       if (!ie && !e_button(e)) done(e);
       else extend(e);
     });
@@ -1451,7 +1465,7 @@ window.CodeMirror = (function() {
           var curFrom = cm.view.sel.from, curTo = cm.view.sel.to;
           setSelectionUser(cm, pos, pos);
           if (cm.view.draggingText) replaceRange(cm, "", curFrom, curTo, "paste");
-          cm.replaceSelection(text);
+          cm.replaceSelection(text, null, "paste");
           focusInput(cm);
           onFocus(cm);
         }
@@ -1460,11 +1474,11 @@ window.CodeMirror = (function() {
     }
   }
 
-  function clickInGutter(e) {
-    var cm = this, display = cm.display;
+  function clickInGutter(cm, e) {
+    var display = cm.display;
     try { var mX = e.clientX, mY = e.clientY; }
     catch(e) { return false; }
-    
+
     if (mX >= Math.floor(display.gutters.getBoundingClientRect().right)) return false;
     e_preventDefault(e);
     if (!hasHandler(cm, "gutterClick")) return true;
@@ -1507,7 +1521,7 @@ window.CodeMirror = (function() {
     cm.view.scrollLeft = val;
     if (cm.display.scroller.scrollLeft != val) cm.display.scroller.scrollLeft = val;
     if (cm.display.scrollbarH.scrollLeft != val) cm.display.scrollbarH.scrollLeft = val;
-    alignVertically(cm.display);
+    alignHorizontally(cm.display);
   }
 
   // Since the delta values reported on mouse wheel events are
@@ -1543,7 +1557,17 @@ window.CodeMirror = (function() {
       var top = cm.view.scrollTop, bot = top + cm.display.wrapper.clientHeight;
       if (pixels < 0) top = Math.max(0, top + pixels - 50);
       else bot = Math.min(cm.view.doc.height, bot + pixels + 50);
+      if (mac && webkit) for (var cur = e.target; cur != scroll; cur = cur.parentNode) {
+        if (cur.lineObj) {
+          cm.display.currentWheelTarget = cur;
+          break;
+        }
+      }
       updateDisplay(cm, [], {top: top, bottom: bot});
+    }
+    if (dx && wheelPixelsPerUnit != null) {
+      var target = Math.max(0, Math.min(scroll.scrollWidth - scroll.clientWidth, dx * wheelPixelsPerUnit + scroll.scrollLeft));
+      if (target != scroll.scrollLeft) alignHorizontally(cm.display, target);
     }
     if (wheelSamples < 20) {
       if (wheelStartX == null) {
@@ -1803,10 +1827,7 @@ window.CodeMirror = (function() {
     var nlines = to.line - from.line, firstLine = getLine(doc, from.line), lastLine = getLine(doc, to.line);
     var recomputeMaxLength = false, checkWidthStart = from.line;
     if (!cm.options.lineWrapping) {
-      for (var cur = firstLine, merged; merged = collapsedSpanAtStart(cur);) {
-        checkWidthStart = merged.find().from.line;
-        cur = getLine(doc, checkWidthStart);
-      }
+      checkWidthStart = lineNo(visualLine(doc, firstLine));
       doc.iter(checkWidthStart, to.line + 1, function(line) {
         if (lineLength(doc, line) == view.maxLineLength) {
           recomputeMaxLength = true;
@@ -1965,7 +1986,6 @@ window.CodeMirror = (function() {
     cm.curOp.updateInput = true;
     var sel = cm.view.sel, doc = cm.view.doc;
     cm.view.goalColumn = null;
-    if (!checkAtomic && posEq(sel.from, from) && posEq(sel.to, to)) return;
     if (posLess(to, from)) {var tmp = to; to = from; from = tmp;}
 
     // Skip over atomic spans.
@@ -1973,6 +1993,8 @@ window.CodeMirror = (function() {
       from = skipAtomic(cm, from, bias, checkAtomic != "push");
     if (checkAtomic || !posEq(to, sel.to))
       to = skipAtomic(cm, to, bias, checkAtomic != "push");
+
+    if (posEq(sel.from, from) && posEq(sel.to, to)) return;
 
     if (posEq(from, to)) sel.inverted = false;
     else if (posEq(from, sel.to)) sel.inverted = false;
@@ -2069,15 +2091,9 @@ window.CodeMirror = (function() {
   }
 
   function scrollIntoView(cm, x1, y1, x2, y2) {
-    var scrollPos = calculateScrollPos(cm, x1, y1, x2, y2), display = cm.display;
-    if (scrollPos.scrollLeft != null) {
-      display.scrollbarH.scrollLeft = display.scroller.scrollLeft = scrollPos.scrollLeft;
-      cm.view.scrollLeft = display.scroller.scrollLeft;
-    }
-    if (scrollPos.scrollTop != null) {
-      display.scrollbarV.scrollTop = display.scroller.scrollTop = scrollPos.scrollTop;
-      cm.view.scrollTop = display.scroller.scrollTop;
-    }
+    var scrollPos = calculateScrollPos(cm, x1, y1, x2, y2);
+    if (scrollPos.scrollTop != null) setScrollTop(cm, scrollPos.scrollTop);
+    if (scrollPos.scrollLeft != null) setScrollLeft(cm, scrollPos.scrollLeft);
   }
 
   function calculateScrollPos(cm, x1, y1, x2, y2) {
@@ -2220,9 +2236,9 @@ window.CodeMirror = (function() {
 
     getSelection: function(lineSep) { return this.getRange(this.view.sel.from, this.view.sel.to, lineSep); },
 
-    replaceSelection: operation(null, function(code, collapse) {
+    replaceSelection: operation(null, function(code, collapse, origin) {
       var sel = this.view.sel;
-      updateDoc(this, sel.from, sel.to, splitLines(code), collapse || "around");
+      updateDoc(this, sel.from, sel.to, splitLines(code), collapse || "around", origin);
     }),
 
     focus: function(){window.focus(); focusInput(this); onFocus(this); fastPoll(this);},
@@ -2295,10 +2311,24 @@ window.CodeMirror = (function() {
       hist.undone = histData.undone;
     },
 
+    // Fetch the parser token for a given character. Useful for hacks
+    // that want to inspect the mode state (say, for completion).
     getTokenAt: function(pos) {
       var doc = this.view.doc;
       pos = clipPos(doc, pos);
-      return getTokenAt(this, getLine(doc, pos.line), getStateBefore(this, pos.line), pos.ch);
+      var state = getStateBefore(this, pos.line), mode = this.view.mode;
+      var line = getLine(doc, pos.line);
+      var stream = new StringStream(line.text, this.options.tabSize);
+      while (stream.pos < pos.ch && !stream.eol()) {
+        stream.start = stream.pos;
+        var style = mode.token(stream, state);
+      }
+      return {start: stream.start,
+              end: stream.pos,
+              string: stream.current(),
+              className: style || null, // Deprecated, use 'type' instead
+              type: style || null,
+              state: state};
     },
 
     getStateAfter: function(line) {
@@ -2617,7 +2647,7 @@ window.CodeMirror = (function() {
     operation: function(f){return operation(this, f)();},
 
     refresh: function() {
-      this.display.measureLineCache.length = 0;
+      clearMeasureLineCache(this);
       updateDisplay(this, true, this.view.scrollTop);
       if (this.display.scrollbarV.scrollHeight > this.view.scrollTop)
         this.display.scrollbarV.scrollTop = this.view.scrollTop;
@@ -2652,11 +2682,16 @@ window.CodeMirror = (function() {
   option("indentUnit", 2, loadMode, true);
   option("indentWithTabs", false);
   option("smartIndent", true);
-  option("tabSize", 4, function(cm) {loadMode(cm); updateDisplay(cm, true);}, true);
+  option("tabSize", 4, function(cm) {
+    loadMode(cm);
+    clearMeasureLineCache(cm);
+    updateDisplay(cm, true);
+  }, true);
   option("electricChars", true);
   option("autoClearEmptyLines", false);
 
   option("theme", "default", function(cm) {
+    clearMeasureLineCache(cm);
     themeChanged(cm);
     guttersChanged(cm);
   }, true);
@@ -2843,10 +2878,10 @@ window.CodeMirror = (function() {
     indentAuto: function(cm) {cm.indentSelection("smart");},
     indentMore: function(cm) {cm.indentSelection("add");},
     indentLess: function(cm) {cm.indentSelection("subtract");},
-    insertTab: function(cm) {cm.replaceSelection("\t", "end");},
+    insertTab: function(cm) {cm.replaceSelection("\t", "end", "input");},
     defaultTab: function(cm) {
       if (cm.somethingSelected()) cm.indentSelection("add");
-      else cm.replaceSelection("\t", "end");
+      else cm.replaceSelection("\t", "end", "input");
     },
     transposeChars: function(cm) {
       var cur = cm.getCursor(), line = cm.getLine(cur.line);
@@ -2856,7 +2891,7 @@ window.CodeMirror = (function() {
     },
     newlineAndIndent: function(cm) {
       operation(cm, function() {
-        cm.replaceSelection("\n", "end");
+        cm.replaceSelection("\n", "end", "input");
         cm.indentLine(cm.getCursor().line, null, true);
       })();
     },
@@ -2959,15 +2994,15 @@ window.CodeMirror = (function() {
     if (textarea.form) {
       // Deplorable hack to make the submit method do the right thing.
       on(textarea.form, "submit", save);
-      if (typeof textarea.form.submit == "function") {
-        var realSubmit = textarea.form.submit;
+      var realSubmit = textarea.form.submit;
+      try {
         textarea.form.submit = function wrappedSubmit() {
           save();
           textarea.form.submit = realSubmit;
           textarea.form.submit();
           textarea.form.submit = wrappedSubmit;
         };
-      }
+      } catch(e) {}
     }
 
     textarea.style.display = "none";
@@ -3284,6 +3319,13 @@ window.CodeMirror = (function() {
   function collapsedSpanAtStart(line) { return collapsedSpanAt(line, -1); }
   function collapsedSpanAtEnd(line) { return collapsedSpanAt(line, line.text.length + 1); }
 
+  function visualLine(doc, line) {
+    var merged;
+    while (merged = collapsedSpanAtStart(line))
+      line = getLine(doc, merged.find().from.line);
+    return line;
+  }
+
   function lineIsHidden(line) {
     var sps = sawCollapsedSpans && line.markedSpans;
     if (sps) for (var sp, i = 0; i < sps.length; ++i) {
@@ -3345,7 +3387,7 @@ window.CodeMirror = (function() {
   function makeLine(text, markedSpans, height) {
     var line = {text: text, height: height};
     attachMarkedSpans(line, markedSpans);
-    if (markedSpans && collapsedSpanAtStart(line)) line.height = 0;
+    if (lineIsHidden(line)) line.height = 0;
     return line;
   }
 
@@ -3355,8 +3397,7 @@ window.CodeMirror = (function() {
     if (line.order != null) line.order = null;
     detachMarkedSpans(line);
     attachMarkedSpans(line, markedSpans);
-    var hidden = collapsedSpanAtStart(line);
-    if (hidden) line.height = 0;
+    if (lineIsHidden(line)) line.height = 0;
     else if (!line.height) line.height = textHeight(cm.display);
     signalLater(cm, line, "change");
   }
@@ -3406,22 +3447,6 @@ window.CodeMirror = (function() {
       mode.token(stream, state);
       stream.start = stream.pos;
     }
-  }
-
-  // Fetch the parser token for a given character. Useful for hacks
-  // that want to inspect the mode state (say, for completion).
-  function getTokenAt(cm, line, state, ch) {
-    var mode = cm.view.mode;
-    var txt = line.text, stream = new StringStream(txt, cm.options.tabSize);
-    while (stream.pos < ch && !stream.eol()) {
-      stream.start = stream.pos;
-      var style = mode.token(stream, state);
-    }
-    return {start: stream.start,
-            end: stream.pos,
-            string: stream.current(),
-            className: style || null,
-            state: state};
   }
 
   var styleToClassCache = {};
@@ -3780,9 +3805,7 @@ window.CodeMirror = (function() {
   }
 
   function heightAtLine(cm, lineObj) {
-    var merged;
-    while (merged = collapsedSpanAtStart(lineObj))
-      lineObj = getLine(cm.view.doc, merged.find().from.line);
+    lineObj = visualLine(cm.view.doc, lineObj);
 
     var h = 0, chunk = lineObj.parent;
     for (var i = 0; i < chunk.lines.length; ++i) {
@@ -3830,7 +3853,7 @@ window.CodeMirror = (function() {
     if (cur &&
         (history.lastOp == cm.curOp.id ||
          history.lastOrigin == origin && (origin == "input" || origin == "delete") &&
-         history.lastTime > time - 400)) {
+         history.lastTime > time - 600)) {
       // Merge this change into the last event
       var last = lst(cur.events);
       if (last.start > start + old.length || last.start + last.added < start) {
@@ -4181,13 +4204,13 @@ window.CodeMirror = (function() {
     return bidiRight(lst(order));
   }
 
-  function lineStart(cm, lineNo) {
-    var merged, line;
-    while (merged = collapsedSpanAtStart(line = getLine(cm.view.doc, lineNo)))
-      lineNo = merged.find().from.line;
-    var order = getOrder(line);
-    var ch = !order ? 0 : order[0].level % 2 ? lineRight(line) : lineLeft(line);
-    return {line: lineNo, ch: ch};
+  function lineStart(cm, lineN) {
+    var line = getLine(cm.view.doc, lineN);
+    var visual = visualLine(cm.view.doc, line);
+    if (visual != line) lineN = lineNo(visual);
+    var order = getOrder(visual);
+    var ch = !order ? 0 : order[0].level % 2 ? lineRight(visual) : lineLeft(visual);
+    return {line: lineN, ch: ch};
   }
   function lineEnd(cm, lineNo) {
     var merged, line;
@@ -4413,7 +4436,7 @@ window.CodeMirror = (function() {
 
   // THE END
 
-  CodeMirror.version = "3.0 B2";
+  CodeMirror.version = "3.0 rc1";
 
   return CodeMirror;
 })();
