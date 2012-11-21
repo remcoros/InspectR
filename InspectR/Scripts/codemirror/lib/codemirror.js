@@ -1182,7 +1182,8 @@ window.CodeMirror = (function() {
   }
 
   function focusInput(cm) {
-    if (cm.options.readOnly != "nocursor") cm.display.input.focus();
+    if (cm.options.readOnly != "nocursor" && (ie || document.activeElement != cm.display.input))
+      cm.display.input.focus();
   }
 
   function isReadOnly(cm) {
@@ -1564,10 +1565,6 @@ window.CodeMirror = (function() {
         }
       }
       updateDisplay(cm, [], {top: top, bottom: bot});
-    }
-    if (dx && wheelPixelsPerUnit != null) {
-      var target = Math.max(0, Math.min(scroll.scrollWidth - scroll.clientWidth, dx * wheelPixelsPerUnit + scroll.scrollLeft));
-      if (target != scroll.scrollLeft) alignHorizontally(cm.display, target);
     }
     if (wheelSamples < 20) {
       if (wheelStartX == null) {
@@ -2648,9 +2645,9 @@ window.CodeMirror = (function() {
 
     refresh: function() {
       clearMeasureLineCache(this);
-      updateDisplay(this, true, this.view.scrollTop);
-      if (this.display.scrollbarV.scrollHeight > this.view.scrollTop)
-        this.display.scrollbarV.scrollTop = this.view.scrollTop;
+      if (this.display.scroller.scrollHeight > this.view.scrollTop)
+        this.display.scrollbarV.scrollTop = this.display.scroller.scrollTop = this.view.scrollTop;
+      updateDisplay(this, true);
     },
 
     getInputField: function(){return this.display.input;},
