@@ -138,11 +138,12 @@
 
     var formatCodeMirror = function (cm) {
         var totalLines = cm.lineCount();
-        var totalChars = cm.getValue().length;
         cm.autoFormatRange(
             { line: 0, ch: 0 },
             { line: totalLines - 1, ch: cm.getLine(totalLines - 1).length }
         );
+        cm.setSelection({ line: 0, ch: 0 }, { line: 0, ch: 0 });
+        
         //CodeMirror.commands["selectAll"](cm);
         //cm.autoFormatRange(cm.getCursor(true), cm.getCursor(false));
         //cm.setSelection({ line: 0, ch: 0 }, { line: 0, ch: 0 });
