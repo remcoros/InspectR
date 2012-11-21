@@ -168,7 +168,6 @@ input[type="checkbox"].input-validation-error
 }
 .start
 {
-    border-bottom: 5px solid #ffffaa;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
     border-radius: 0px;
