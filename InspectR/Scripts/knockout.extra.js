@@ -160,7 +160,6 @@
             var codeMirror = CodeMirror.fromTextArea(element, {
                 lineNumbers: true,
                 readOnly: true
-                // value: content
             });
             viewModel[name] = codeMirror;
             viewModel[name].formatCodeMirror = function () {
