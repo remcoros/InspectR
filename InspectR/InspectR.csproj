@@ -198,6 +198,7 @@
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Data\InspectRContext.cs" />
     <Compile Include="Data\InspectRUserProfile.cs" />
+    <Compile Include="Hubs\InspectRGroupsModule.cs" />
     <Compile Include="Migrations\201211100442232_init.cs" />
     <Compile Include="Migrations\201211100442232_init.Designer.cs">
       <DependentUpon>201211100442232_init.cs</DependentUpon>

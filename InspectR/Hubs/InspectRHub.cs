@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using InspectR.Controllers;
 using InspectR.Core;
 using InspectR.Data;
-using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 
 namespace InspectR.Hubs
 {
     public class InspectRHub : Hub
     {
-        private ConcurrentDictionary<string, string[]> _groups = new ConcurrentDictionary<string, string[]>();
         private IRequestCache _requestCache;
         private InspectRContext _dbContext;
         private IInspectRService _service;
@@ -27,22 +24,13 @@ namespace InspectR.Hubs
 
         public override System.Threading.Tasks.Task OnReconnected()
         {
-            string[] groups;
-            _groups.TryGetValue(Context.ConnectionId, out groups);
-            if (groups != null)
-            {
-                foreach (var key in groups)
-                {
-                    Groups.Add(Context.ConnectionId, key);                    
-                }
-            }
+            InspectRGroupsModule.OnReconnected(this);
             return base.OnReconnected();
         }
 
         public override System.Threading.Tasks.Task OnDisconnected()
         {
-            string[] val;
-            _groups.TryRemove(Context.ConnectionId, out val);
+            InspectRGroupsModule.OnDisconnected(this);
             return base.OnDisconnected();
         }
 
@@ -60,10 +48,8 @@ namespace InspectR.Hubs
                     _service.AddInspectorToUser(user, info);
                 }
             }
-
-            Groups.Add(Context.ConnectionId, info.UniqueKey);
-            _groups.AddOrUpdate(Context.ConnectionId, new[] {info.UniqueKey},
-                                (key, current) => current.Concat(new[] {info.UniqueKey}).ToArray());
+            
+            InspectRGroupsModule.StartInspect(this, info.UniqueKey);
             
             return info;
         }

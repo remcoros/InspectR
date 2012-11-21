@@ -6,6 +6,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using InspectR.App_Start;
 using InspectR.Data;
+using InspectR.Hubs;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Newtonsoft.Json;
@@ -20,10 +21,10 @@ namespace InspectR
     {
         public WebApiApplication()
         {
-			BeginRequest += (sender, args) =>
-			{
+            BeginRequest += (sender, args) =>
+            {
                 HttpContext.Current.Items["InspectRContext"] = new InspectRContext();
-			};
+            };
 
             EndRequest += (o, eventArgs) =>
                 {
@@ -57,8 +58,9 @@ namespace InspectR
                         }
                 });
 
-            GlobalHost.HubPipeline.EnableAutoRejoiningGroups();
-            GlobalHost.DependencyResolver.Register(typeof(IJsonSerializer), ()=>serializer);
+            // GlobalHost.HubPipeline.EnableAutoRejoiningGroups();
+            GlobalHost.HubPipeline.AddModule(new InspectRGroupsModule());
+            GlobalHost.DependencyResolver.Register(typeof(IJsonSerializer), () => serializer);
         }
     }
 }
