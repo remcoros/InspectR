@@ -158,6 +158,7 @@
             var content = ko.utils.unwrapObservable(config.text);
             $(element).val(content);
             var codeMirror = CodeMirror.fromTextArea(element, {
+                lineWrapping: true,
                 lineNumbers: true,
                 readOnly: true
             });
