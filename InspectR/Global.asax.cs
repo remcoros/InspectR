@@ -6,6 +6,9 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using InspectR.App_Start;
 using InspectR.Data;
+using Microsoft.AspNet.SignalR;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace InspectR
 {
@@ -40,6 +43,19 @@ namespace InspectR
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+
+            // Work around IE 6-10 not parsing json date milliseconds correct.
+            var serializer = new JsonNetSerializer(new JsonSerializerSettings
+                {
+                    Converters =
+                        {
+                            new IsoDateTimeConverter
+                                {
+                                    DateTimeFormat = "yyyy-MM-dd\\THH:mm:ss.fffK"
+                                }
+                        }
+                });
+            GlobalHost.DependencyResolver.Register(typeof(IJsonSerializer), ()=>serializer);
         }
     }
 }

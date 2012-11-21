@@ -30,11 +30,11 @@
         return Date.locale[lang].day_names_short[this.getDay()];
     };
 
-    Date.prototype.format = function (datestring, format, lang) {
+    Date.prototype.format = function (format, lang) {
         format = format || 'yyyy-MM-dd HH:mm.fff';
         lang = lang || (navigator.language ? navigator.language : navigator.userLanguage);
 
-        var d = new Date(datestring);
+        var d = this;
         var date = format;
 
         // year
@@ -107,6 +107,11 @@
         }
     };
 
+    String.prototype.fromJsonDate = function () {
+        // converts microsoft json date to js Date. credits Jabbr.net
+        return eval(this.replace(/\/Date\((\d+)(\+|\-)?.*\)\//gi, "new Date($1)"));
+    };
+    
     ko.bindingHandlers['dateformat'] = {
         init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         },
@@ -115,7 +120,7 @@
                 format = 'yyyy-MM-dd HH:mm.fff',
                 lang = navigator.language ? navigator.language : navigator.userLanguage,
                 cfg, date;
-
+            
             if (ko.isObservable(value) || !value.date) {
                 date = ko.utils.unwrapObservable(value);
             } else {
@@ -124,9 +129,17 @@
                 lang = ko.utils.unwrapObservable(cfg.lang) || lang;
                 date = ko.utils.unwrapObservable(cfg.date);
             }
-
-            var dateformat = Date.prototype.format(date, format, lang);
-            ko.bindingHandlers['text'].update(element, function () { return dateformat; }, allBindingsAccessor, viewModel, bindingContext);
+            
+            if (Object.prototype.toString.call(date) !== '[object Date]') {
+                if (date.indexOf('Date') != -1) {
+                    date = date.fromJsonDate();
+                } else {
+                    date = new Date(date);
+                }
+            }
+            
+            var dateformatted = Date.prototype.format.call(date, format, lang);
+            ko.bindingHandlers['text'].update(element, function () { return dateformatted; }, allBindingsAccessor, viewModel, bindingContext);
         }
     };
 
