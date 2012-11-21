@@ -155,11 +155,12 @@
             var config = ko.utils.unwrapObservable(valueAccessor()),
                 name = ko.utils.unwrapObservable(config.name);
 
+            var content = ko.utils.unwrapObservable(config.text);
+            $(element).val(content);
             var codeMirror = CodeMirror.fromTextArea(element, {
-                // TODO: from (default) config
-                lineNumbers: false,
-                readOnly: true,
-                pollInterval: 500
+                lineNumbers: true,
+                readOnly: true
+                // value: content
             });
             viewModel[name] = codeMirror;
             viewModel[name].formatCodeMirror = function () {
@@ -171,12 +172,12 @@
                 codeMirror.setOption('mode', contentType);
             });
 
-            ko.computed(function () {
-                var content = ko.utils.unwrapObservable(config.text);
-                codeMirror.setValue(content);
-                // todo: make option to autoformat or not.
-                // formatCodeMirror(codeMirror);
-            });
+            //ko.computed(function () {
+            //    var content = ko.utils.unwrapObservable(config.text);
+            //    codeMirror.setValue(content);
+            //    // todo: make option to autoformat or not.
+            //    // formatCodeMirror(codeMirror);
+            //});
         },
         update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var config = ko.utils.unwrapObservable(valueAccessor());
