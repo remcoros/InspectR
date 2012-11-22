@@ -6,14 +6,19 @@
 @section menu {
     <form class="nav navbar-form" action="@Url.InspectR().Log(Model.InspectorInfo.UniqueKey)">
     <div class="input-append" id="inspectorurl_container" style="position: relative" data-bind="if: Inspector">
-        <input id="logurl" class="span4" type="text" data-bind="value: '@Html.Raw(FullUrl)'.replace('xXx', Inspector().UniqueKey())" value="@FullUrl" readonly="readonly" id="inspectorurl" style="cursor: text">
+        <input id="inspectorurl" class="span4" type="text" data-bind="value: '@Html.Raw(FullUrl)'.replace('xXx', Inspector().UniqueKey())" value="@FullUrl" readonly="readonly" style="cursor: text">
         <button id="copyinspectorurl" class="btn" type="button">Copy</button>
-        <a href="javascript:window.open($('#logurl').val())" class="btn" target="_blank">Visit</a>
+        <a href="javascript:window.open($('#inspectorurl').val())" class="btn" target="_blank">Visit</a>
         @*<a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">POST</a>*@
     </div>
     </form>
 }
-<div class="row">
+<div class="row" data-bind="ifnot: Inspector">
+    <div class="span8 offset2">
+        <h2>Preparing HTTP Request interface...</h2>
+    </div>
+</div>
+<div class="row" data-bind="if: Inspector">
     <div class="span8">
         <h2>Incoming HTTP requests</h2>
         <p>
@@ -68,8 +73,8 @@
                 <!-- /ko -->
                 <!-- ko if: UserProfile -->
                 <!-- ko foreach: UserProfile().Inspectors -->
-                <li data-bind="css: { active: $parent.Inspector() && Id() === $parent.Inspector().Id() }">
-                    <!-- ko if: $parent.Inspector() && Id() !== $parent.Inspector().Id() -->
+                <li data-bind="css: { active: Id() === $parent.Inspector().Id() }">
+                    <!-- ko if: Id() !== $parent.Inspector().Id() -->
                     <a href="#" class="action" data-bind="click:$parent.removeInspector"><i class="icon-remove"></i></a>
                     <!-- /ko -->                        
                     <a data-bind="attr: { href: '#' + UniqueKey() }">
