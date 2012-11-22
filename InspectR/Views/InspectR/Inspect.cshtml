@@ -8,17 +8,17 @@
     <div class="input-append" id="inspectorurl_container" style="position: relative" data-bind="if: Inspector">
         <input id="inspectorurl" class="span4" type="text" data-bind="value: '@Html.Raw(FullUrl)'.replace('xXx', Inspector().UniqueKey())" value="@FullUrl" readonly="readonly" style="cursor: text">
         <button id="copyinspectorurl" class="btn" type="button">Copy</button>
-        <a href="javascript:window.open($('#inspectorurl').val())" class="btn" target="_blank">Visit</a>
+        <a href="javascript:window.open($('#inspectorurl').val()); void(0);" class="btn">Visit</a>
         @*<a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">POST</a>*@
     </div>
     </form>
 }
-<div class="row" data-bind="ifnot: Inspector">
+<div class="row" data-bind="visible: !Inspector()">
     <div class="span8 offset2">
         <h2>Preparing HTTP Request interface...</h2>
     </div>
 </div>
-<div class="row" data-bind="if: Inspector">
+<div class="row" style="display: none" data-bind="visible: Inspector">
     <div class="span8">
         <h2>Incoming HTTP requests</h2>
         <p>
