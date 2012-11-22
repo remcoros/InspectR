@@ -61,10 +61,24 @@
                 self.inspectorKey = uniquekey;
             }
             
-            self.startInspect();
-
             self.updateUserProfile();
 
+            self.startInspect();
+        };
+
+        self.startInspect = function () {
+            self.Inspector(null);
+            self.Requests([]);
+            server.startInspect(self.inspectorKey)
+                .done(function (result) {
+                    if (result) {
+                        self.Inspector(ko.mapping.fromJS(result));
+                        self.loadRecentRequests();
+                    }
+                });
+        };
+
+        self.loadRecentRequests = function () {
             server.getRecentRequests(self.inspectorKey)
                 .done(function (result) {
                     if (result && result.length > 0) {
@@ -72,17 +86,7 @@
                     }
                 });
         };
-
-        self.startInspect = function () {
-            self.Requests([]);
-            server.startInspect(self.inspectorKey)
-                .done(function (result) {
-                    if (result) {
-                        self.Inspector(ko.mapping.fromJS(result));
-                    }
-                });
-        };
-
+        
         self.removeInspector = function (inspector) {
             if (self.Inspector().Id() == inspector.Id()) {
                 throw "Cannot remove current inspector";
