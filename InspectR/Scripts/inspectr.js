@@ -78,6 +78,21 @@
                 });
         };
 
+        self.removeInspector = function (inspector) {
+            if (self.Inspector().Id() == inspector.Id()) {
+                throw "Cannot remove current inspector";
+            }
+
+            if (!confirm('Remove inspector: ' + inspector.UniqueKey())) {
+                return;
+            }
+            
+            server.removeInspectorFromUserProfile(inspector.Id())
+                .done(function () {
+                    self.UserProfile().Inspectors.remove(inspector);
+                });
+        };
+        
         self.loadSession = function () {
 
         };

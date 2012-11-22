@@ -68,7 +68,10 @@
                 <!-- /ko -->
                 <!-- ko if: UserProfile -->
                 <!-- ko foreach: UserProfile().Inspectors -->
-                <li>
+                <li data-bind="css: { active: Id() === $parent.Inspector().Id() }">
+                    <!-- ko if: Id() !== $parent.Inspector().Id() -->
+                    <a href="#" class="pull-right" data-bind="click:$parent.removeInspector"><i class="icon-remove"></i></a>
+                    <!-- /ko -->
                     <!-- ko if: UniqueKey() === Title() ||  !Title() -->
                     <a data-bind="text: UniqueKey, attr: { href: '@Html.Raw(Url.InspectR().Inspect("xxXXxx"))'.replace('xxXXxx', UniqueKey()) }">
                     </a>
