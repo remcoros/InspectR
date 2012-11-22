@@ -3,6 +3,9 @@
     -ms-word-wrap: break-word;
     word-wrap: break-word;
 }
+.nav-list .action {
+    float: right;
+}
 
 .CodeMirror
 {

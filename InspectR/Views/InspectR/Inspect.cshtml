@@ -68,20 +68,20 @@
                 <!-- /ko -->
                 <!-- ko if: UserProfile -->
                 <!-- ko foreach: UserProfile().Inspectors -->
-                <li data-bind="css: { active: Id() === $parent.Inspector().Id() }">
-                    <!-- ko if: Id() !== $parent.Inspector().Id() -->
-                    <a href="#" class="pull-right" data-bind="click:$parent.removeInspector"><i class="icon-remove"></i></a>
-                    <!-- /ko -->
-                    <!-- ko if: UniqueKey() === Title() ||  !Title() -->
-                    <a data-bind="text: UniqueKey, attr: { href: '@Html.Raw(Url.InspectR().Inspect("xxXXxx"))'.replace('xxXXxx', UniqueKey()) }">
-                    </a>
-                    <!-- /ko -->
-                    <!-- ko if: UniqueKey() !== Title() && Title() -->
+                <li data-bind="css: { active: $parent.Inspector() && Id() === $parent.Inspector().Id() }">
+                    <!-- ko if: $parent.Inspector() && Id() !== $parent.Inspector().Id() -->
+                    <a href="#" class="action" data-bind="click:$parent.removeInspector"><i class="icon-remove"></i></a>
+                    <!-- /ko -->                        
                     <a data-bind="attr: { href: '@Html.Raw(Url.InspectR().Inspect("xxXXxx"))'.replace('xxXXxx', UniqueKey()) }">
+                        <!-- ko if: UniqueKey() === Title() ||  !Title() -->
+                        <span data-bind="text: UniqueKey">
+                        </span>
+                        <!-- /ko -->
+                        <!-- ko if: UniqueKey() !== Title() && Title() -->
                         <span data-bind="text: Title"></span>
                         <small>(<!-- ko text: UniqueKey --><!-- /ko -->)</small>
+                        <!-- /ko -->                    
                     </a>
-                    <!-- /ko -->
                 </li>
                 <!-- /ko -->
                 <!-- /ko -->
