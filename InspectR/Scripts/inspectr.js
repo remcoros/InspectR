@@ -67,7 +67,7 @@
         };
 
         self.startInspect = function () {
-            self.Inspector(null);
+            // self.Inspector(null); // disable this to not flicker the screen
             self.Requests([]);
             server.startInspect(self.inspectorKey)
                 .done(function (result) {
