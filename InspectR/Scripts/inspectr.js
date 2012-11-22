@@ -13,7 +13,7 @@
             var Router = Backbone.Router.extend({
                 routes: {
                     "session/:id": "loadSession",
-                    "*actions": "start"
+                    "*uniquekey": "start"
                 },
                 start: viewModel.start,
                 loadSession: viewModel.loadSession
@@ -56,7 +56,11 @@
             return self.Requests();
         });
 
-        self.start = function () {
+        self.start = function (uniquekey) {
+            if (uniquekey && uniquekey.length > 0) {
+                self.inspectorKey = uniquekey;
+            }
+            
             self.startInspect();
 
             self.updateUserProfile();
@@ -70,6 +74,7 @@
         };
 
         self.startInspect = function () {
+            self.Requests([]);
             server.startInspect(self.inspectorKey)
                 .done(function (result) {
                     if (result) {

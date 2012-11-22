@@ -1,14 +1,14 @@
 ﻿@using InspectR.Helpers
 @model InspectR.Models.InspectRViewModel
 @{
-    var FullUrl = Url.InspectR().FullLogUrl(Model.InspectorInfo.UniqueKey);
+    var FullUrl = Url.InspectR().FullLogUrl("xXx");
 }
 @section menu {
     <form class="nav navbar-form" action="@Url.InspectR().Log(Model.InspectorInfo.UniqueKey)">
-    <div class="input-append" id="inspectorurl_container" style="position: relative">
-        <input class="span4" type="text" value="@FullUrl" readonly="readonly" id="inspectorurl" style="cursor: text">
+    <div class="input-append" id="inspectorurl_container" style="position: relative" data-bind="if: Inspector">
+        <input id="logurl" class="span4" type="text" data-bind="value: '@Html.Raw(FullUrl)'.replace('xXx', Inspector().UniqueKey())" value="@FullUrl" readonly="readonly" id="inspectorurl" style="cursor: text">
         <button id="copyinspectorurl" class="btn" type="button">Copy</button>
-        <a href="@Url.InspectR().Log(Model.InspectorInfo.UniqueKey)" class="btn" target="_blank">Visit</a>
+        <a href="javascript:window.open($('#logurl').val())" class="btn" target="_blank">Visit</a>
         @*<a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">POST</a>*@
     </div>
     </form>
@@ -72,7 +72,7 @@
                     <!-- ko if: $parent.Inspector() && Id() !== $parent.Inspector().Id() -->
                     <a href="#" class="action" data-bind="click:$parent.removeInspector"><i class="icon-remove"></i></a>
                     <!-- /ko -->                        
-                    <a data-bind="attr: { href: '@Html.Raw(Url.InspectR().Inspect("xxXXxx"))'.replace('xxXXxx', UniqueKey()) }">
+                    <a data-bind="attr: { href: '#' + UniqueKey() }">
                         <!-- ko if: UniqueKey() === Title() ||  !Title() -->
                         <span data-bind="text: UniqueKey">
                         </span>
