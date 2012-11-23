@@ -7,10 +7,22 @@
     var InspectR = {
         start: function (config) {
             config = $.extend({}, InspectR.defaults, config);
-            InspectR.Router = new Router(config);
+            var router = InspectR.Router = new Router(config);
+
+            $.connection.hub.connectionSlow(function (data) {
+                router.connectionSlow(this, data);
+            });
+            $.connection.hub.disconnected(function (data) {
+                router.disconnected(this, data);
+            });
+            $.connection.hub.error(function (data) {
+                router.connectionError(this, data);
+            });
+
             $.connection.hub.start({
                 transport: 'longPolling'
             }, function () {
+                router.connected();
                 Backbone.history.start({});
             });
         },
@@ -19,7 +31,7 @@
             // rootNode:'#inspectr'
         }
     };
-    
+
     // Backbone Router, takes care of history
     var Router = Backbone.Router.extend({
         routes: {
@@ -35,11 +47,31 @@
             ko.applyBindings(self.viewModel, options.rootNode);
         },
         start: function () {
-            // initial route
-            this.viewModel.start(this.options.inspector);
+            this.loadInspector(this.options.inspector);
         },
         loadInspector: function (uniquekey) {
             this.viewModel.startInspect(uniquekey);
+        },
+        connected: function () {
+            // initial route
+            this.viewModel.connected();
+        },
+        connectionSlow: function (connection) {
+            this.viewModel.showAlert('', 'The connection is having some issues. Try refreshing this page.', Alert.warning);
+        },
+        disconnected: function (connection) {
+            this.viewModel.showAlert('', 'You are disconnected. Try refreshing this page.', Alert.error);
+        },
+        connectionError: function (connection, data) {
+            var self = this;
+            if (self.ignoreConnectionErrors) {
+                return;
+            }
+            self.ignoreConnectionErrors = true;
+            self.viewModel.showAlert('', 'Errors occured in the connection. Try refreshing this page.', Alert.error)
+                .closed(function () {
+                    self.ignoreConnectionErrors = false;
+                });
         }
     });
 
@@ -58,15 +90,13 @@
         self.Inspector = ko.observable();
         self.SupportedContentTypes = _.keys(CodeMirror.mimeModes).sort();
         self.Alerts = ko.observableArray([]);
-        
+
         self.RequestList = ko.computed(function () {
             return self.Requests();
         });
 
-        self.start = function (uniquekey) {
+        self.connected = function () {
             self.updateUserProfile();
-
-            self.startInspect(uniquekey);
         };
 
         self.startInspect = function (uniquekey) {
@@ -89,7 +119,7 @@
                     }
                 });
         };
-        
+
         self.removeInspector = function (inspector) {
             if (self.Inspector().Id() == inspector.Id()) {
                 throw "Cannot remove current inspector";
@@ -98,13 +128,13 @@
             if (!confirm('Remove inspector: ' + inspector.UniqueKey())) {
                 return;
             }
-            
+
             server.removeInspectorFromUserProfile(inspector.Id())
                 .done(function () {
                     self.UserProfile().Inspectors.remove(inspector);
                 });
         };
-        
+
         self.loadSession = function () {
 
         };
@@ -134,12 +164,13 @@
 
         self.showAlert = function (title, content, type) {
             var alert = new Alert(title, content, type);
-            alert.close = function () {
+            alert.closed(function () {
                 self.Alerts.remove(alert);
-            };
+            });
             self.Alerts.push(alert);
+            return alert;
         };
-        
+
         self.P = function (property, data) {
             if (!ko.isObservable(data[property])) {
                 data[property] = ko.observable();
@@ -150,21 +181,35 @@
         client.requestLogged = function (inspector, request) {
             // console.log('http request');
             // console.log(inspector, request);
-            self.Requests.unshift(request);            
+            self.Requests.unshift(request);
         };
     };
 
     // Alert model
     var Alert = function (title, content, type) {
+        var self = this;
         this.Title = ko.observable(title || '');
         this.Content = ko.observable(content || '');
         this.Type = ko.observable(type ? type : '');
 
-        this.close = function () { };
+        this.close = function () {
+            $(self).triggerHandler('close');
+        };
+
+        this.closed = function (callback) {
+            $(self).bind('close', function (e) {
+                callback.call(self);
+            });
+        };
+
+        this.hideAfter = function (timeout) {
+            setTimeout(this.close, timeout);
+        };
     };
+    Alert.warning = '';
     Alert.error = 'alert-error';
     Alert.success = 'alert-success';
     Alert.info = 'alert-info';
-    
+
     $.inspectR = InspectR;
 }(jQuery));
