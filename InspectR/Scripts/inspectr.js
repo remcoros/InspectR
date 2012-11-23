@@ -22,7 +22,7 @@
             var router = new Router;
 
             $.connection.hub.start({
-                // transport: 'auto'
+                transport: 'longPolling'
             }, function () {
                 Backbone.history.start({});
             });
