@@ -20,6 +20,13 @@
 </div>
 <div class="row" style="display: none" data-bind="if:Inspector, visible: Inspector">
     <div class="span8">
+        <div class="alerts" data-bind="foreach: Alerts">
+            <div class="alert" data-bind="css: Type">
+                <button type="button" class="close" data-bind="click: close">×</button>
+                <h4 data-bind="text: Title"></h4>
+                <!-- ko text: Content --><!-- /ko -->
+            </div>
+        </div>
         <h2>Incoming HTTP requests</h2>
         <p>
             Use your inspectbin url in your http client or set is as the target of your webhook. 
@@ -40,9 +47,11 @@
                 <div class="clearfix">
                     <h5 class="pull-left" data-bind="text: Inspector().Title">
                     </h5>
-                    <h5 class="pull-left" data-bind="visible: !Inspector().Title()">No title
+                    <h5 class="pull-left" data-bind="visible: !Inspector().Title()">
+                        No title
                     </h5>
-                    <small class="pull-left"><a href="#" data-bind="click: function(){ NewTitle(Inspector().Title()); IsEditingTitle(true); }">edit</a></small>
+                    <small class="pull-left">
+                        <a href="#" data-bind="click: function(){ NewTitle(Inspector().Title()); IsEditingTitle(true); }">edit</a></small>
                 </div>
                 <div class="input-prepend input-append" data-bind="visible: IsEditingTitle">
                     <button class="btn" type="button" data-bind="click: function(){ IsEditingTitle(false); }">X</button>
@@ -76,16 +85,15 @@
                 <li data-bind="css: { active: Id() === $parent.Inspector().Id() }">
                     <!-- ko if: Id() !== $parent.Inspector().Id() -->
                     <a href="#" class="action" data-bind="click:$parent.removeInspector"><i class="icon-remove"></i></a>
-                    <!-- /ko -->                        
+                    <!-- /ko -->
                     <a data-bind="attr: { href: '#' + UniqueKey() }">
                         <!-- ko if: UniqueKey() === Title() ||  !Title() -->
-                        <span data-bind="text: UniqueKey">
-                        </span>
+                        <span data-bind="text: UniqueKey"></span>
                         <!-- /ko -->
                         <!-- ko if: UniqueKey() !== Title() && Title() -->
                         <span data-bind="text: Title"></span>
                         <small>(<!-- ko text: UniqueKey --><!-- /ko -->)</small>
-                        <!-- /ko -->                    
+                        <!-- /ko -->
                     </a>
                 </li>
                 <!-- /ko -->

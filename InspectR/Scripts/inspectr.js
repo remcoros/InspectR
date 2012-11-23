@@ -3,24 +3,11 @@
 (function ($) {
     "use strict";
 
+    // Bootstrapper
     var InspectR = {
         start: function (config) {
             config = $.extend({}, InspectR.defaults, config);
-
-            var viewModel = new InspectRViewModel(config);
-            ko.applyBindings(viewModel, config.rootNode);
-
-            var Router = Backbone.Router.extend({
-                routes: {
-                    "session/:id": "loadSession",
-                    "*uniquekey": "start"
-                },
-                start: viewModel.start,
-                loadSession: viewModel.loadSession
-            });
-
-            var router = new Router;
-
+            InspectR.Router = new Router(config);
             $.connection.hub.start({
                 transport: 'longPolling'
             }, function () {
@@ -28,18 +15,37 @@
             });
         },
         defaults: {
-            // inspectorKey: ''
+            // inspector: ''
             // rootNode:'#inspectr'
         }
     };
+    
+    // Backbone Router, takes care of history
+    var Router = Backbone.Router.extend({
+        routes: {
+            "": "start",
+            "*uniquekey": "loadInspector"
+        },
+        viewModel: null,
+        initialize: function (options) {
+            // initialize and bind viewmodel
+            var self = this;
+            self.options = options;
+            self.viewModel = new InspectRViewModel();
+            ko.applyBindings(self.viewModel, options.rootNode);
+        },
+        start: function () {
+            // initial route
+            this.viewModel.start(this.options.inspector);
+        },
+        loadInspector: function (uniquekey) {
+            this.viewModel.startInspect(uniquekey);
+        }
+    });
 
-    var InspectRViewModel = function (config) {
+    // Main viewmodel
+    var InspectRViewModel = function () {
         var self = this;
-
-        self.inspectorKey = config.inspector;
-
-        // router.on('route:loadSession', self.loadSession);
-        // router.on('route:start', self.start);
 
         self.hub = $.connection.inspectRHub;
         var client = self.hub.client;
@@ -51,25 +57,22 @@
         self.Requests = ko.mapping.fromJS([]);
         self.Inspector = ko.observable();
         self.SupportedContentTypes = _.keys(CodeMirror.mimeModes).sort();
-
+        self.Alerts = ko.observableArray([]);
+        
         self.RequestList = ko.computed(function () {
             return self.Requests();
         });
 
         self.start = function (uniquekey) {
-            if (uniquekey && uniquekey.length > 0) {
-                self.inspectorKey = uniquekey;
-            }
-            
             self.updateUserProfile();
 
-            self.startInspect();
+            self.startInspect(uniquekey);
         };
 
-        self.startInspect = function () {
+        self.startInspect = function (uniquekey) {
             // self.Inspector(null); // disable this to not flicker the screen
             self.Requests([]);
-            server.startInspect(self.inspectorKey)
+            server.startInspect(uniquekey)
                 .done(function (result) {
                     if (result) {
                         self.Inspector(ko.mapping.fromJS(result));
@@ -79,7 +82,7 @@
         };
 
         self.loadRecentRequests = function () {
-            server.getRecentRequests(self.inspectorKey)
+            server.getRecentRequests(self.Inspector().UniqueKey)
                 .done(function (result) {
                     if (result && result.length > 0) {
                         ko.mapping.fromJS(result, self.Requests);
@@ -125,10 +128,18 @@
         };
 
         self.clearRecentRequests = function () {
-            server.clearRecentRequests(self.inspectorKey);
+            server.clearRecentRequests(self.Inspector().UniqueKey);
             self.Requests.removeAll();
         };
 
+        self.showAlert = function (title, content, type) {
+            var alert = new Alert(title, content, type);
+            alert.close = function () {
+                self.Alerts.remove(alert);
+            };
+            self.Alerts.push(alert);
+        };
+        
         self.P = function (property, data) {
             if (!ko.isObservable(data[property])) {
                 data[property] = ko.observable();
@@ -139,9 +150,21 @@
         client.requestLogged = function (inspector, request) {
             // console.log('http request');
             // console.log(inspector, request);
-            self.Requests.unshift(request);
+            self.Requests.unshift(request);            
         };
     };
 
+    // Alert model
+    var Alert = function (title, content, type) {
+        this.Title = ko.observable(title || '');
+        this.Content = ko.observable(content || '');
+        this.Type = ko.observable(type ? type : '');
+
+        this.close = function () { };
+    };
+    Alert.error = 'alert-error';
+    Alert.success = 'alert-success';
+    Alert.info = 'alert-info';
+    
     $.inspectR = InspectR;
 }(jQuery));
