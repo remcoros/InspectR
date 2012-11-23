@@ -35,18 +35,30 @@ namespace InspectR.Hubs
             
         }
 
-        public static void OnDisconnected(InspectRHub hub)
-        {
-            string[] val;
-            _groups.TryRemove(hub.Context.ConnectionId, out val);             
-        }
-
         public static void StartInspect(InspectRHub hub, string uniquekey)
         {
             var connectionId = hub.Context.ConnectionId;
             hub.Groups.Add(connectionId, uniquekey);
             _groups.AddOrUpdate(connectionId, new[] { uniquekey },
                                 (key, current) => current.Concat(new[] { uniquekey }).ToArray());
+        }
+
+        public static void StopInspect(Hub hub)
+        {
+            string[] val;
+            _groups.TryRemove(hub.Context.ConnectionId, out val);
+        }
+
+        public static void StopInspect(Hub hub, string uniqueKey)
+        {
+            var connectionId = hub.Context.ConnectionId;
+            string[] groups;
+            _groups.TryGetValue(connectionId, out groups);
+            if (groups != null && groups.Contains(uniqueKey))
+            {
+                groups = groups.Where(x => x != uniqueKey).ToArray();
+                _groups.AddOrUpdate(connectionId, groups, (key, current) => groups);
+            }
         }
     }
 }

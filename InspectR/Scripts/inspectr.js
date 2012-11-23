@@ -5,24 +5,23 @@
 
     // Bootstrapper
     var InspectR = {
+        // Static start function, called from main html/view to start all things up.
         start: function (config) {
             config = $.extend({}, InspectR.defaults, config);
-            var router = InspectR.Router = new Router(config);
 
-            $.connection.hub.connectionSlow(function (data) {
-                router.connectionSlow(this, data);
-            });
-            $.connection.hub.disconnected(function (data) {
-                router.disconnected(this, data);
-            });
-            $.connection.hub.error(function (data) {
-                router.connectionError(this, data);
-            });
+            // main router, taking care of things
+            var router = InspectR.Router = new Router(config),
+                viewModel = InspectR.ViewModel = new InspectRViewModel(router, config);
 
+            ko.applyBindings(viewModel, config.rootNode);
+
+            // start the signalr connection
+            // when the connection is successful, start the router
             $.connection.hub.start({
+                waitForPageLoad: false,
                 transport: 'longPolling'
             }, function () {
-                router.connected();
+                router.trigger('connection:start');
                 Backbone.history.start({});
             });
         },
@@ -37,71 +36,46 @@
         routes: {
             "": "start",
             "*uniquekey": "loadInspector"
-        },
-        viewModel: null,
-        initialize: function (options) {
-            // initialize and bind viewmodel
-            var self = this;
-            self.options = options;
-            self.viewModel = new InspectRViewModel();
-            ko.applyBindings(self.viewModel, options.rootNode);
-        },
-        start: function () {
-            this.loadInspector(this.options.inspector);
-        },
-        loadInspector: function (uniquekey) {
-            this.viewModel.startInspect(uniquekey);
-        },
-        connected: function () {
-            // initial route
-            this.viewModel.connected();
-        },
-        connectionSlow: function (connection) {
-            this.viewModel.showAlert('', 'The connection is having some issues. Try refreshing this page.', Alert.warning);
-        },
-        disconnected: function (connection) {
-            this.viewModel.showAlert('', 'You are disconnected. Try refreshing this page.', Alert.error);
-        },
-        connectionError: function (connection, data) {
-            var self = this;
-            if (self.ignoreConnectionErrors) {
-                return;
-            }
-            self.ignoreConnectionErrors = true;
-            self.viewModel.showAlert('', 'Errors occured in the connection. Try refreshing this page.', Alert.error)
-                .closed(function () {
-                    self.ignoreConnectionErrors = false;
-                });
         }
     });
 
     // Main viewmodel
-    var InspectRViewModel = function () {
-        var self = this;
+    var InspectRViewModel = function (router, options) {
+        var self = this,
+            hub = $.connection.inspectRHub,
+            client = hub.client,
+            server = hub.server;
 
-        self.hub = $.connection.inspectRHub;
-        var client = self.hub.client;
-        var server = self.hub.server;
+        // mixin Events
+        // _.extend(this, Backbone.Events);
+        
+        // public properties
+        this.NewTitle = ko.observable();
+        this.IsEditingTitle = ko.observable(false);
+        this.UserProfile = ko.observable();
+        this.Requests = ko.mapping.fromJS([]);
+        this.Inspector = ko.observable();
+        this.SupportedContentTypes = _.keys(CodeMirror.mimeModes).sort();
+        this.Alerts = ko.observableArray([]);
 
-        self.NewTitle = ko.observable();
-        self.IsEditingTitle = ko.observable(false);
-        self.UserProfile = ko.observable();
-        self.Requests = ko.mapping.fromJS([]);
-        self.Inspector = ko.observable();
-        self.SupportedContentTypes = _.keys(CodeMirror.mimeModes).sort();
-        self.Alerts = ko.observableArray([]);
-
-        self.RequestList = ko.computed(function () {
+        this.RequestList = ko.computed(function () {
             return self.Requests();
         });
 
-        self.connected = function () {
-            self.updateUserProfile();
-        };
+        /** Routes */
+        router.on('connection:start', function () { self.loadUserProfile(); });
+        
+        router.on('route:start', function () {
+            self.loadInspector(options.inspector);
+            // router.navigate(options.inspector, { trigger: true });
+        });
 
-        self.startInspect = function (uniquekey) {
+        this.loadInspector = function (uniquekey) {
             // self.Inspector(null); // disable this to not flicker the screen
             self.Requests([]);
+            if (self.Inspector()) {
+                server.stopInspect(self.Inspector().Id());
+            }
             server.startInspect(uniquekey)
                 .done(function (result) {
                     if (result) {
@@ -110,9 +84,11 @@
                     }
                 });
         };
-
-        self.loadRecentRequests = function () {
-            server.getRecentRequests(self.Inspector().UniqueKey)
+        router.on('route:loadInspector', this.loadInspector);
+        
+        /** Methods */
+        this.loadRecentRequests = function () {
+            server.getRecentRequests(self.Inspector().UniqueKey())
                 .done(function (result) {
                     if (result && result.length > 0) {
                         ko.mapping.fromJS(result, self.Requests);
@@ -120,7 +96,7 @@
                 });
         };
 
-        self.removeInspector = function (inspector) {
+        this.removeInspector = function (inspector) {
             if (self.Inspector().Id() == inspector.Id()) {
                 throw "Cannot remove current inspector";
             }
@@ -135,20 +111,16 @@
                 });
         };
 
-        self.loadSession = function () {
-
-        };
-
-        self.saveTitle = function () {
+        this.saveTitle = function () {
             server.setTitle(self.Inspector().Id(), self.NewTitle())
                 .done(function () {
                     self.IsEditingTitle(false);
                     self.Inspector().Title(self.NewTitle());
-                    self.updateUserProfile();
+                    self.loadUserProfile();
                 });
         };
 
-        self.updateUserProfile = function () {
+        this.loadUserProfile = function () {
             server.getUserProfile()
                 .done(function (result) {
                     if (result) {
@@ -157,12 +129,22 @@
                 });
         };
 
-        self.clearRecentRequests = function () {
-            server.clearRecentRequests(self.Inspector().UniqueKey);
+        this.clearRecentRequests = function () {
+            server.clearRecentRequests(self.Inspector().UniqueKey());
             self.Requests.removeAll();
         };
 
-        self.showAlert = function (title, content, type) {
+        /** Hub client functions */
+        client.requestLogged = function (inspector, request) {
+            if (inspector.Id != self.Inspector().Id()) {
+                console.log('received request for non current inspector');
+                return;
+            }
+            self.Requests.unshift(request);
+        };
+
+        /** Private functions */
+        this.showAlert = function (title, content, type) {
             var alert = new Alert(title, content, type);
             alert.closed(function () {
                 self.Alerts.remove(alert);
@@ -170,19 +152,30 @@
             self.Alerts.push(alert);
             return alert;
         };
+        
+        this._connectionSlow = function () {
+            self.showAlert('', 'The connection is having some issues. Try refreshing this page.', Alert.warning);
+        };
 
-        self.P = function (property, data) {
-            if (!ko.isObservable(data[property])) {
-                data[property] = ko.observable();
+        this._disconnected = function () {
+            self.showAlert('', 'You are disconnected. Try refreshing this page.', Alert.error);
+        };
+
+        this._connectionError = function (data) {
+            if (self.ignoreConnectionErrors) {
+                return;
             }
-            return data[property];
+            self.ignoreConnectionErrors = true;
+            self.showAlert('', 'Errors occured in the connection. Try refreshing this page.', Alert.error)
+                .closed(function () {
+                    self.ignoreConnectionErrors = false;
+                });
         };
 
-        client.requestLogged = function (inspector, request) {
-            // console.log('http request');
-            // console.log(inspector, request);
-            self.Requests.unshift(request);
-        };
+        // Respond to connection errors
+        $.connection.hub.connectionSlow(this._connectionSlow);
+        $.connection.hub.disconnected(this._disconnected);
+        $.connection.hub.error(this._connectionError);
     };
 
     // Alert model

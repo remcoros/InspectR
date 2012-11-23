@@ -30,8 +30,19 @@ namespace InspectR.Hubs
 
         public override System.Threading.Tasks.Task OnDisconnected()
         {
-            InspectRGroupsModule.OnDisconnected(this);
+            InspectRGroupsModule.StopInspect(this);
             return base.OnDisconnected();
+        }
+
+        public InspectorInfo StopInspect(Guid id)
+        {
+            var info = _dbContext.GetInspectorInfo(id);
+            if (info == null)
+                return null;
+
+            InspectRGroupsModule.StopInspect(this, info.UniqueKey);
+
+            return info;
         }
 
         public InspectorInfo StartInspect(string inspector)
@@ -72,9 +83,14 @@ namespace InspectR.Hubs
             }            
         }
 
-        public IEnumerable<RequestInfo> GetRecentRequests(string inspector)
+        public IEnumerable<RequestInfo> GetRecentRequests(string uniquekey)
         {
-            InspectorInfo inspectorInfo = _dbContext.GetInspectorInfoByKey(inspector);
+            InspectorInfo inspectorInfo = _dbContext.GetInspectorInfoByKey(uniquekey);
+            if (inspectorInfo == null)
+            {
+                throw new Exception("Can't find inspector");                
+            }
+
             var recentRequests = _requestCache.Get(inspectorInfo).OrderByDescending(x => x.DateCreated).Take(20);
             return recentRequests;
         }
@@ -82,6 +98,10 @@ namespace InspectR.Hubs
         public void ClearRecentRequests(string inspector)
         {
             InspectorInfo inspectorInfo = _dbContext.GetInspectorInfoByKey(inspector);
+            if (inspectorInfo == null)
+            {
+                throw new Exception("Can't find inspector");
+            }
             _requestCache.RemoveAll(inspectorInfo);
         }
 

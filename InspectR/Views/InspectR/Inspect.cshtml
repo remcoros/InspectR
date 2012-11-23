@@ -207,19 +207,8 @@
             $('#copyinspectorurl').html('Copied!');
         });
 
-        // syntax highlighter
-@*        $.SyntaxHighlighter.init({
-            'lineNumbers': false,
-            'wrapLines': true,
-            'theme': 'balupton',
-            'baseUrl': '@Url.Content("~/Scripts/syntaxhighlighter/")'
-        });*@
-
-        // document load
-        $(function () {
-            $.inspectR.start({
-                inspector: '@Model.InspectorInfo.UniqueKey'
-            });
-        });
+        $.inspectR.start({
+            inspector: '@Model.InspectorInfo.UniqueKey'
+            });            
     </script>
 }
