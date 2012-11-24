@@ -26,13 +26,10 @@
                     Backbone.history.start({});
                 });
 
-            // TODO: this is a work-around for signalr erroring the longPolling connection when the user navigates away from the page.
-            // abort the poll on page unload, so it doesn't error.
-            window.onbeforeunload = function () {
-                if ($.connection.hub.pollXhr) {
-                    viewModel.ignoreConnectionErrors = true;
-                }
-            };
+            // Don't show any errors because of page unload
+            $(window).bind('beforeunload', function () {
+                viewModel.ignoreConnectionErrors = true;
+            });
         },
         defaults: {
             // inspector: ''
@@ -163,10 +160,16 @@
         };
         
         this._connectionSlow = function () {
+            if (self.ignoreConnectionErrors) {
+                return;
+            }
             self.showAlert('', 'The connection is having some issues. Try refreshing this page.', Alert.warning);
         };
 
         this._disconnected = function () {
+            if (self.ignoreConnectionErrors) {
+                return;
+            }
             self.showAlert('', 'You are disconnected. Try refreshing this page.', Alert.error);
         };
 
