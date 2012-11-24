@@ -508,7 +508,9 @@
     <Content Include="Scripts\ZeroClipboard.js" />
     <Content Include="Content\ZeroClipboard.swf" />
     <Content Include="Content\ZeroClipboard10.swf" />
-    <Content Include="Scripts\ZeroClipboard.min.js" />
+    <Content Include="Scripts\ZeroClipboard.min.js">
+      <DependentUpon>ZeroClipboard.js</DependentUpon>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

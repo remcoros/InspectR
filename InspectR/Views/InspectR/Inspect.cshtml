@@ -201,10 +201,16 @@
         ZeroClipboard.setMoviePath('@Url.Content("~/Content/ZeroClipboard10.swf")');
         var clip = new ZeroClipboard.Client();
         clip.setHandCursor(true);
-        clip.setText($('#inspectorurl').val());
         clip.glue('copyinspectorurl', 'inspectorurl_container');
+        clip.addEventListener('mouseover', function () {
+            clip.setText($('#inspectorurl').val());
+        });
         clip.addEventListener('onComplete', function () {
+            var orig = $('#copyinspectorurl').html();
             $('#copyinspectorurl').html('Copied!');
+            setTimeout(function () {
+                $('#copyinspectorurl').html(orig);
+            }, 5000);
         });
 
         $.inspectR.start({
