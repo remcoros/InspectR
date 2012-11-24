@@ -9,14 +9,15 @@ namespace InspectR.Helpers
             return new InspectRUrlHelper(url);
         }
 
-        public class InspectRUrlHelper
-        {
-            public UrlHelper Url { get; protected set; }
+    }
 
-            public InspectRUrlHelper(UrlHelper url)
-            {
-                Url = url;
-            }
+    public class InspectRUrlHelper
+    {
+        public UrlHelper Url { get; protected set; }
+
+        public InspectRUrlHelper(UrlHelper url)
+        {
+            Url = url;
         }
     }
 }
