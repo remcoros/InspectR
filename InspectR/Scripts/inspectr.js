@@ -17,6 +17,7 @@
 
             // start the signalr connection
             // when the connection is successful, start the router
+            $.connection.hub.logging = true;
             $.connection.hub.start({
                     waitForPageLoad: false,
                     transport: 'longPolling'
@@ -29,7 +30,7 @@
             // abort the poll on page unload, so it doesn't error.
             window.onbeforeunload = function () {
                 if ($.connection.hub.pollXhr) {
-                    $.connection.hub.pollXhr.abort();
+                    viewModel.ignoreConnectionErrors = true;
                 }
             };
         },
