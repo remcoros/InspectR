@@ -18,12 +18,20 @@
             // start the signalr connection
             // when the connection is successful, start the router
             $.connection.hub.start({
-                waitForPageLoad: false,
-                transport: 'longPolling'
-            }, function () {
-                router.trigger('connection:start');
-                Backbone.history.start({});
-            });
+                    waitForPageLoad: false,
+                    transport: 'longPolling'
+                }, function () {
+                    router.trigger('connection:start');
+                    Backbone.history.start({});
+                });
+
+            // TODO: this is a work-around for signalr erroring the longPolling connection when the user navigates away from the page.
+            // abort the poll on page unload, so it doesn't error.
+            window.onbeforeunload = function () {
+                if ($.connection.hub.pollXhr) {
+                    $.connection.hub.pollXhr.abort();
+                }
+            };
         },
         defaults: {
             // inspector: ''
@@ -166,6 +174,7 @@
                 return;
             }
             self.ignoreConnectionErrors = true;
+
             self.showAlert('', 'Errors occured in the connection. Try refreshing this page.', Alert.error)
                 .closed(function () {
                     self.ignoreConnectionErrors = false;
