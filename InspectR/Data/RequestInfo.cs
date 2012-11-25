@@ -30,7 +30,13 @@ namespace InspectR.Data
 
         public string UrlReferrer { get; set; }
 
+        public string RawContent { get; set; }
+        
         public string Content { get; set; }
+
+        public string Protocol { get; set; }
+
+        public string RawRequest { get; set; }
 
         public IList<KeyValuePair<string, string>> Headers { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using System.Web;
 using InspectR.Data;
 
@@ -39,20 +40,36 @@ namespace InspectR.Core.RequestLogger
                 info.UrlReferrer = req.UrlReferrer.ToString();
             }
 
+            info.Protocol = req.ServerVariables["SERVER_PROTOCOL"];
+            
             // TODO: nicer way of getting body?
             req.InputStream.Position = 0;
             using (var rdr = new StreamReader(req.InputStream))
             {
-                info.Content = rdr.ReadToEnd();
+                info.RawContent = rdr.ReadToEnd();
+                info.Content = info.RawContent;
             }
+
             if (ContentDecoders.Decoders.ContainsKey(req.ContentType))
             {
                 var contentDecoder = ContentDecoders.Decoders[req.ContentType];
                 if (contentDecoder != null)
                 {
-                    info.Content = contentDecoder(info.Content);
+                    info.Content = contentDecoder(info.RawContent);
                 }                
             }
+
+            // build raw request 
+            var sb = new StringBuilder();
+            sb.Append(req.HttpMethod);
+            sb.Append(" ");
+            sb.Append(req.RawUrl);
+            sb.Append(" ");
+            sb.AppendLine(req.ServerVariables["SERVER_PROTOCOL"]);
+            sb.AppendLine(req.ServerVariables["SERVER_PROTOCOL"]);
+            sb.Append(info.RawContent);
+
+            info.RawRequest = sb.ToString();
         }
     }
 }
