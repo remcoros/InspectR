@@ -201,7 +201,7 @@ window.CodeMirror = (function() {
         var guess = Math.ceil(line.text.length / perLine) || 1;
         if (guess != 1) updateLineHeight(line, guess * th);
       });
-      cm.display.mover.style.minWidth = "";
+      cm.display.sizer.style.minWidth = "";
     } else {
       cm.display.wrapper.className = cm.display.wrapper.className.replace(" CodeMirror-wrap", "");
       computeMaxLength(cm.view);
@@ -210,6 +210,8 @@ window.CodeMirror = (function() {
       });
     }
     regChange(cm, 0, doc.size);
+    clearMeasureLineCache(cm);
+    setTimeout(bind(updateScrollbars, cm.display), 100);
   }
 
   function keyMapChanged(cm) {
@@ -329,11 +331,10 @@ window.CodeMirror = (function() {
 
   // LINE NUMBERS
 
-  function alignHorizontally(display, targetScrollLeft) {
+  function alignHorizontally(cm) {
+    var display = cm.display;
     if (!display.alignWidgets && !display.gutters.firstChild) return;
-    var comp = compensateForHScroll(display);
-    if (targetScrollLeft != null)
-      comp += display.scroller.scrollLeft - targetScrollLeft;
+    var comp = compensateForHScroll(display) - display.scroller.scrollLeft + cm.view.scrollLeft;
     var gutterW = display.gutters.offsetWidth, l = comp + "px";
     for (var n = display.lineDiv.firstChild; n; n = n.nextSibling) if (n.alignable) {
       for (var i = 0, a = n.alignable; i < a.length; ++i) a[i].style.left = l;
@@ -1547,9 +1548,9 @@ window.CodeMirror = (function() {
   function setScrollLeft(cm, val, isScroller) {
     if (isScroller ? val == cm.view.scrollLeft : Math.abs(cm.view.scrollLeft - val) < 2) return;
     cm.view.scrollLeft = val;
+    alignHorizontally(cm);
     if (cm.display.scroller.scrollLeft != val) cm.display.scroller.scrollLeft = val;
     if (cm.display.scrollbarH.scrollLeft != val) cm.display.scrollbarH.scrollLeft = val;
-    alignHorizontally(cm.display);
   }
 
   // Since the delta values reported on mouse wheel events are
