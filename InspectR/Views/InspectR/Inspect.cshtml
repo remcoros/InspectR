@@ -149,16 +149,22 @@
                         <a data-toggle="tab" data-bind="attr: {href: '#other-' + $index()}">Other</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active" data-bind="attr: {id: 'content-' + $index()}">
-                        <div>
-                            <div class="input-append">
+                    <div class="tab-pane active" data-bind="withCodeMirror: 'CodeMirror', attr: {id: 'content-' + $index()}">
+                        <div class="clearfix">
+                            <div class="input-append pull-left">
                                 <select data-bind="options: $parent.SupportedContentTypes, value: ContentType">
                                 </select>
-                                <button type="button" class="btn" data-bind="click: function(){ CodeMirror.formatCodeMirror(); }">Format</button>
+                                <button type="button" class="btn" data-bind="click: CodeMirror.formatCodeMirror">Format</button>
                             </div>
-                            <textarea class="" data-bind="codeMirror: { name: 'CodeMirror', text: Content, contentType: ContentType }" style="width: 99%">
-                            </textarea>
+                            <div class="pull-right">
+                                <label class="checkbox inline" style="margin-right: 10px;">
+                                    <input type="checkbox" data-bind="checked: CodeMirror.LineWrapping" />
+                                    Wrap long lines
+                                </label>
+                            </div>
                         </div>
+                        <textarea class="" data-bind="codeMirror: { name: 'CodeMirror', text: Content, contentType: ContentType }" style="width: 99%">
+                        </textarea>
                     </div>
                     <div class="tab-pane" data-bind="attr: {id: 'headers-' + $index()}">
                         <ul class="header-list unstyled" data-bind="foreach: Headers">

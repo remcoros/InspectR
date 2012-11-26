@@ -17,7 +17,7 @@
 
             // start the signalr connection
             // when the connection is successful, start the router
-            $.connection.hub.logging = true;
+            // $.connection.hub.logging = true;
             $.connection.hub.start({
                     waitForPageLoad: false,
                     transport: 'longPolling'

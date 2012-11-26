@@ -149,7 +149,31 @@
         //cm.setSelection({ line: 0, ch: 0 }, { line: 0, ch: 0 });
         //// cm.setCursor(0, 0);
     };
-    
+
+    ko.bindingHandlers['withCodeMirror'] = {
+        init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var name = ko.utils.unwrapObservable(valueAccessor());
+
+            var vm = {
+                codeMirror: null,
+                LineWrapping: ko.observable(false),
+                formatCodeMirror: function () {
+                    formatCodeMirror(vm.codeMirror);
+                }
+            };
+
+            vm.LineWrapping.subscribe(function (newval) {
+                vm.codeMirror.setOption('lineWrapping', newval);
+                vm.codeMirror.setValue(vm.codeMirror.getValue());
+            });
+            
+            bindingContext[name] = vm;
+            ko.applyBindingsToDescendants(bindingContext, element);
+
+            return { controlsDescendantBindings: true };
+        }
+    };
+
     ko.bindingHandlers['codeMirror'] = {
         init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var config = ko.utils.unwrapObservable(valueAccessor()),
@@ -158,14 +182,11 @@
             var content = ko.utils.unwrapObservable(config.text);
             $(element).val(content);
             var codeMirror = CodeMirror.fromTextArea(element, {
-                lineWrapping: true,
+                lineWrapping: false,
                 lineNumbers: true,
                 readOnly: true
             });
-            viewModel[name] = codeMirror;
-            viewModel[name].formatCodeMirror = function () {
-                formatCodeMirror(codeMirror);
-            };
+            bindingContext[name].codeMirror = codeMirror;
 
             ko.computed(function () {
                 var contentType = ko.utils.unwrapObservable(config.contentType);
