@@ -63,19 +63,6 @@
                 <li class="nav-header">Actions</li>
                 <li>
                     <a href="#" data-bind="click: clearRecentRequests">Clear</a></li>
-                <li class="nav-header">Sessions:</li>
-                <!-- ko ifnot: UserProfile -->
-                <li>Login to record sessions</li>
-                <!-- /ko -->
-                <!-- ko if: UserProfile -->
-                <li>Not yet implemented :)</li>
-                <!-- ko foreach: null -->
-                <li>
-                    <a data-bind="text: UniqueKey, attr: { href: '#session/7889' }">
-                    </a>
-                </li>
-                <!-- /ko -->
-                <!-- /ko -->
                 <li class="nav-header">Your bins:</li>
                 <!-- ko ifnot: UserProfile -->
                 <li>Login to add your bins</li>
