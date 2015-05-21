@@ -191,14 +191,8 @@
             ko.computed(function () {
                 var contentType = ko.utils.unwrapObservable(config.contentType);
                 codeMirror.setOption('mode', contentType);
+                formatCodeMirror(codeMirror);
             });
-
-            //ko.computed(function () {
-            //    var content = ko.utils.unwrapObservable(config.text);
-            //    codeMirror.setValue(content);
-            //    // todo: make option to autoformat or not.
-            //    // formatCodeMirror(codeMirror);
-            //});
         },
         update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var config = ko.utils.unwrapObservable(valueAccessor());
