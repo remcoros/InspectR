@@ -8,8 +8,8 @@ namespace InspectR.Migrations
         public override void Up()
         {
             Sql(@"
- INSERT INTO AspNetUsers(Id, UserName, PasswordHash, SecurityStamp)
- SELECT UserProfile.UserId, UserProfile.UserName, webpages_Membership.Password, webpages_Membership.PasswordSalt 
+ INSERT INTO AspNetUsers(Id, UserName, EMail, PasswordHash, SecurityStamp, EmailConfirmed, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnabled, AccessFailedCount)
+ SELECT UserProfile.UserId, UserProfile.UserName, UserProfile.UserName, webpages_Membership.Password, webpages_Membership.PasswordSalt, 0, 0, 0, 0, 0
  FROM UserProfile
  LEFT OUTER JOIN webpages_Membership ON UserProfile.UserId = webpages_Membership.UserId");
             Sql(@"
