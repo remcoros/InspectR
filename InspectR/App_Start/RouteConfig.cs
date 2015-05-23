@@ -29,10 +29,16 @@
                 defaults: new { controller = "Manage", action = "Index", id = UrlParameter.Optional }
                 );
 
+            routes.MapRoute(
+                name: "account",
+                url: "Account/{action}/{id}",
+                defaults: new { controller = "Account", action = "Login", id = UrlParameter.Optional }
+                );
+
             routes.Add(
                 "log",
                 new Route(
-                    "{id}",
+                    "{id}/{*pathInfo}",
                     new RouteValueDictionary(
                         new
                             {
