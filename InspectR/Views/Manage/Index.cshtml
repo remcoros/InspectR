@@ -8,17 +8,15 @@
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
     <h4>Change your account settings</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>Password:</dt>
         <dd>
             [
-            @if (Model.HasPassword)
-            {
+            @if (Model.HasPassword) {
                 @Html.ActionLink("Change your password", "ChangePassword")
             }
-            else
-            {
+            else {
                 @Html.ActionLink("Create", "SetPassword")
             }
             ]

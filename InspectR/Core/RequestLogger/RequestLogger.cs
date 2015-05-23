@@ -1,13 +1,16 @@
-﻿using System;
-using InspectR.Data;
-using InspectR.Hubs;
-using Microsoft.AspNet.SignalR;
-
-namespace InspectR.Core.RequestLogger
+﻿namespace InspectR.Core.RequestLogger
 {
+    using System;
+
+    using InspectR.Data;
+    using InspectR.Hubs;
+
+    using Microsoft.AspNet.SignalR;
+
     public class RequestLogger
     {
         private readonly IRequestCache _cache;
+
         private readonly IRequestCollector _collector;
 
         public RequestLogger(IRequestCache cache, IRequestCollector collector)
@@ -18,7 +21,10 @@ namespace InspectR.Core.RequestLogger
 
         public void LogRequest(InspectorInfo inspector)
         {
-            if (inspector == null) throw new ArgumentNullException("inspector");
+            if (inspector == null)
+            {
+                throw new ArgumentNullException("inspector");
+            }
 
             var request = CreateRequestInfo(inspector);
 

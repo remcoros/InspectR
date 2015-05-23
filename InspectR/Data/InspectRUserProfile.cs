@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace InspectR.Data
+﻿namespace InspectR.Data
 {
+    using System;
+    using System.Collections.Generic;
+
     public class InspectRUserProfile
     {
         public Guid Id { get; protected set; }
@@ -11,7 +11,9 @@ namespace InspectR.Data
 
         public IList<InspectorInfo> Inspectors { get; protected set; }
 
-        protected InspectRUserProfile() { }
+        protected InspectRUserProfile()
+        {
+        }
 
         public InspectRUserProfile(string userName)
         {

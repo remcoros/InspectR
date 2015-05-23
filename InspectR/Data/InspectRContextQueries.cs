@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-
-namespace InspectR.Data
+﻿namespace InspectR.Data
 {
+    using System;
+    using System.Linq;
+
     public static class InspectRContextQueries
     {
         public static InspectorInfo GetInspectorInfo(this InspectRContext context, Guid id)

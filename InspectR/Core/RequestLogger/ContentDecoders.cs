@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
-
-namespace InspectR.Core.RequestLogger
+﻿namespace InspectR.Core.RequestLogger
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web;
+
     public static class ContentDecoders
     {
         static ContentDecoders()

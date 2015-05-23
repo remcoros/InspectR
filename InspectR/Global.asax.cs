@@ -8,23 +8,20 @@
 
     using InspectR.Data;
 
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         public MvcApplication()
         {
-            BeginRequest += (sender, args) =>
-            {
-                HttpContext.Current.Items["InspectRContext"] = new InspectRContext();
-            };
+            BeginRequest += (sender, args) => { HttpContext.Current.Items["InspectRContext"] = new InspectRContext(); };
 
             EndRequest += (o, eventArgs) =>
-            {
-                var dbcontext = HttpContext.Current.Items["InspectRContext"] as IDisposable;
-                if (dbcontext != null)
                 {
-                    dbcontext.Dispose();
-                }
-            };
+                    var dbcontext = HttpContext.Current.Items["InspectRContext"] as IDisposable;
+                    if (dbcontext != null)
+                    {
+                        dbcontext.Dispose();
+                    }
+                };
         }
 
         protected void Application_Start()

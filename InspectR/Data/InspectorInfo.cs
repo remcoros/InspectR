@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace InspectR.Data
+﻿namespace InspectR.Data
 {
+    using System;
+
     public class InspectorInfo
     {
         public Guid Id { get; protected set; }

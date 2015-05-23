@@ -1,8 +1,7 @@
 namespace InspectR.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class userprofiles : DbMigration
     {
         public override void Up()
@@ -10,17 +9,17 @@ namespace InspectR.Migrations
             CreateTable(
                 "dbo.InspectRUserProfiles",
                 c => new
-                    {
-                        Id = c.Guid(nullable: false),
-                        UserName = c.String(),
-                    })
+                         {
+                             Id = c.Guid(nullable: false),
+                             UserName = c.String()
+                         })
                 .PrimaryKey(t => t.Id);
-            
+
             AddColumn("dbo.InspectorInfoes", "InspectRUserProfile_Id", c => c.Guid());
             AddForeignKey("dbo.InspectorInfoes", "InspectRUserProfile_Id", "dbo.InspectRUserProfiles", "Id");
             CreateIndex("dbo.InspectorInfoes", "InspectRUserProfile_Id");
         }
-        
+
         public override void Down()
         {
             DropIndex("dbo.InspectorInfoes", new[] { "InspectRUserProfile_Id" });

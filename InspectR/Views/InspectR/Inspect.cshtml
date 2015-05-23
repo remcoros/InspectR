@@ -37,7 +37,7 @@
         @*        <img rel="lightbox[inspectgithub]" src="~/Images/inspectgithub1.png" alt="screenshot" title="InspectBin screenshot" />
             <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub2.png" alt="screenshot" title="InspectBin screenshot" />
             <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub3.png" alt="screenshot" title="InspectBin Github screenshot" />*@
-        <hr />
+        <hr/>
         <div class="" data-bind="visible: !RequestList() || RequestList().length == 0">
             No http requests inspected yet.
         </div>
@@ -60,7 +60,7 @@
                         <button class="btn btn-sm btn-default" type="button" data-bind="click: function(){ IsEditingTitle(false); }">X</button>
 
                     </span>
-                    <input type="text" class="form-control" data-bind="value: NewTitle" />
+                    <input type="text" class="form-control" data-bind="value: NewTitle"/>
                     <span class="input-group-btn">
                         <button class="btn btn-sm btn-default" type="button" data-bind="click: saveTitle">save</button>
                     </span>
@@ -79,10 +79,12 @@
                 <!-- ko foreach: UserProfile().Inspectors -->
                 <li data-bind="css: { active: Id() === $parent.Inspector().Id() }">
                     <!-- ko if: Id() !== $parent.Inspector().Id() -->
-                    <a href="#" class="action" data-bind="click:$parent.removeInspector"><i class="icon-remove"></i></a>
+                    <a href="#" class="action" data-bind="click:$parent.removeInspector">
+                        <i class="icon-remove"></i>
+                    </a>
                     <!-- /ko -->
                     <a data-bind="attr: { href: '#' + UniqueKey() }">
-                        <!-- ko if: UniqueKey() === Title() ||  !Title() -->
+                        <!-- ko if: UniqueKey() === Title() || !Title() -->
                         <span data-bind="text: UniqueKey"></span>
                         <!-- /ko -->
                         <!-- ko if: UniqueKey() !== Title() && Title() -->
@@ -159,7 +161,7 @@
                             </div>
                             <div class="pull-right">
                                 <label class="checkbox inline" style="margin-right: 10px;">
-                                    <input type="checkbox" data-bind="checked: CodeMirror.LineWrapping" />
+                                    <input type="checkbox" data-bind="checked: CodeMirror.LineWrapping"/>
                                     Wrap long lines
                                 </label>
                             </div>

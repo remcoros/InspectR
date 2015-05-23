@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using InspectR.Data;
-using InspectR.Hubs;
-
-namespace InspectR.Core
+﻿namespace InspectR.Core
 {
+    using System;
+    using System.Linq;
+
+    using InspectR.Data;
+
     public class InspectRService
     {
         private readonly InspectRContext _dbContext;
@@ -16,9 +16,10 @@ namespace InspectR.Core
 
         public InspectorInfo CreateInspector(bool isprivate)
         {
-            var inspector = new InspectorInfo() {
-                IsPrivate = isprivate
-            };
+            var inspector = new InspectorInfo
+                                {
+                                    IsPrivate = isprivate
+                                };
 
             _dbContext.Inspectors.Add(inspector);
             _dbContext.SaveChanges();

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Configuration;
-using System.Text;
-using System.Web;
-using System.Web.Mvc;
-
-namespace InspectR.Helpers
+﻿namespace InspectR.Helpers
 {
-    public static partial class AnalyticsHelpers
+    using System;
+    using System.Configuration;
+    using System.Web;
+    using System.Web.Mvc;
+
+    public static class AnalyticsHelpers
     {
         public static HtmlString Analytics(this HtmlHelper htmlHelper, string account, string domain)
         {
@@ -24,7 +23,7 @@ namespace InspectR.Helpers
             })();
         </script>";
             return new HtmlString(code.Replace("{ACCOUNT}", account)
-                                      .Replace("{DOMAIN}", domain));
+                .Replace("{DOMAIN}", domain));
         }
 
         public static HtmlString Analytics(this HtmlHelper htmlHelper)
@@ -32,7 +31,9 @@ namespace InspectR.Helpers
             var account = ConfigurationManager.AppSettings["ga.account"];
             var domain = ConfigurationManager.AppSettings["ga.domain"];
             if (string.IsNullOrEmpty(account))
+            {
                 return new HtmlString(String.Empty);
+            }
 
             //TODO: maybe a 'ga.push' seperated by comma?
             return Analytics(htmlHelper, account, domain);

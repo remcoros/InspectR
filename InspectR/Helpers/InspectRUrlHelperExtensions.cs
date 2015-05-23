@@ -10,16 +10,16 @@
         public static string Create(this InspectRUrlHelper url, bool isprivate = false)
         {
             return url.Url.Action("Create", "InspectR", new
-                {
-                    isprivate
-                });
+                                                            {
+                                                                isprivate
+                                                            });
         }
 
         public static string Inspect(this InspectRUrlHelper url, string key)
         {
             return url.Url.RouteUrl("log", new { id = key }) + "?inspect";
         }
-        
+
         public static string Log(this InspectRUrlHelper url, string key)
         {
             return url.Url.RouteUrl("log", new { id = key });

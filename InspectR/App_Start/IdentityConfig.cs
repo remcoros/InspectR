@@ -3,6 +3,7 @@
     using System;
     using System.Configuration;
     using System.Net;
+    using System.Net.Mail;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@
         {
             var myMessage = new SendGridMessage();
             myMessage.AddTo(message.Destination);
-            myMessage.From = new System.Net.Mail.MailAddress(ConfigurationManager.AppSettings["fromEmail"], ConfigurationManager.AppSettings["fromName"]);
+            myMessage.From = new MailAddress(ConfigurationManager.AppSettings["fromEmail"], ConfigurationManager.AppSettings["fromName"]);
             myMessage.Subject = message.Subject;
             myMessage.Text = message.Body;
             myMessage.Html = message.Body;
@@ -66,19 +67,21 @@
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // Configure validation logic for usernames
-            manager.UserValidator = new UserValidator<ApplicationUser>(manager) {
-                AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
-            };
+            manager.UserValidator = new UserValidator<ApplicationUser>(manager)
+                                        {
+                                            AllowOnlyAlphanumericUserNames = false,
+                                            RequireUniqueEmail = true
+                                        };
 
             // Configure validation logic for passwords
-            manager.PasswordValidator = new PasswordValidator {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = false,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
-            };
+            manager.PasswordValidator = new PasswordValidator
+                                            {
+                                                RequiredLength = 6,
+                                                RequireNonLetterOrDigit = false,
+                                                RequireDigit = true,
+                                                RequireLowercase = true,
+                                                RequireUppercase = true
+                                            };
 
             // Configure user lockout defaults
             manager.UserLockoutEnabledByDefault = true;
@@ -91,10 +94,11 @@
             //{
             //    MessageFormat = "Your security code is {0}"
             //});
-            manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser> {
-                Subject = "Security Code",
-                BodyFormat = "Your security code is {0}"
-            });
+            manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
+                                                                {
+                                                                    Subject = "Security Code",
+                                                                    BodyFormat = "Your security code is {0}"
+                                                                });
             manager.EmailService = new EmailService();
             manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;
@@ -117,7 +121,7 @@
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {
-            return user.GenerateUserIdentityAsync((ApplicationUserManager)this.UserManager);
+            return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
         }
 
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)

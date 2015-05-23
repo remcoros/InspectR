@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.WebPages;
-
-namespace InspectR.Helpers
+﻿namespace InspectR.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.WebPages;
+
     public static class RazorExtensions
     {
         public static HelperResult Join<T>(this IEnumerable<T> items, string seperator, Func<T, HelperResult> template)

@@ -3,6 +3,7 @@
 using Microsoft.Owin;
 
 [assembly: OwinStartup(typeof(Startup))]
+
 namespace InspectR
 {
     using Owin;
@@ -11,7 +12,7 @@ namespace InspectR
     {
         public void Configuration(IAppBuilder app)
         {
-            this.ConfigureAuth(app);
+            ConfigureAuth(app);
             app.MapSignalR();
         }
     }
@@ -19,5 +20,7 @@ namespace InspectR
 
 namespace InspectR.Net45
 {
-    public static class Dummy { }
+    public static class Dummy
+    {
+    }
 }

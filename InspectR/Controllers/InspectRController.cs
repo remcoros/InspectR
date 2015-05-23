@@ -1,21 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using InspectR.Core;
-using InspectR.Data;
-using InspectR.Helpers;
-using InspectR.Models;
-
-namespace InspectR.Controllers
+﻿namespace InspectR.Controllers
 {
+    using System.Web.Mvc;
+
+    using InspectR.Core;
+    using InspectR.Data;
+    using InspectR.Helpers;
+    using InspectR.Models;
+
     public class InspectRController : Controller
     {
         private InspectRService _service;
-
-        public InspectRController()
-        {
-        }
 
         public ActionResult Index()
         {
@@ -31,10 +25,12 @@ namespace InspectR.Controllers
 
         public ActionResult Inspect(string id)
         {
-            InspectorInfo inspectorInfo = _service.GetInspectorInfoByKey(id);
+            var inspectorInfo = _service.GetInspectorInfoByKey(id);
 
             if (inspectorInfo == null)
+            {
                 return HttpNotFound();
+            }
 
             if (User != null)
             {
@@ -45,9 +41,10 @@ namespace InspectR.Controllers
                 }
             }
 
-            return View("Inspect", new InspectRViewModel() {
-                InspectorInfo = inspectorInfo,
-            });
+            return View("Inspect", new InspectRViewModel
+                                       {
+                                           InspectorInfo = inspectorInfo
+                                       });
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
