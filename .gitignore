@@ -40,4 +40,3 @@ src/packages/*
 packages/*
 InspectR/App_Data/*.mdf
 InspectR/App_Data/*.ldf
-InspectR/Web.Release.config
