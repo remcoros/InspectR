@@ -3,7 +3,7 @@
   CodeMirror.extendMode("css", {
     commentStart: "/*",
     commentEnd: "*/",
-    newlineAfterToken: function(_type, content) {
+    newlineAfterToken: function(type, content) {
       return /^[;{}]$/.test(content);
     }
   });
@@ -12,7 +12,7 @@
     commentStart: "/*",
     commentEnd: "*/",
     // FIXME semicolons inside of for
-    newlineAfterToken: function(_type, content, textAfter, state) {
+    newlineAfterToken: function(type, content, textAfter, state) {
       if (this.jsonMode) {
         return /^[\[,{]$/.test(content) || /^}/.test(textAfter);
       } else {

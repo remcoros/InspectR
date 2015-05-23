@@ -1,4 +1,4 @@
-CodeMirror.defineMode("ruby", function(config) {
+CodeMirror.defineMode("ruby", function(config, parserConfig) {
   function wordObj(words) {
     var o = {};
     for (var i = 0, e = words.length; i < e; ++i) o[words[i]] = true;

@@ -1,56 +1,40 @@
-﻿@model InspectR.Models.RegisterModel
+﻿@model InspectR.Models.RegisterViewModel
 @{
     ViewBag.Title = "Register";
 }
 
-<div class="row">
-    <hgroup class="title">
-        <h1>@ViewBag.Title</h1>
-    </hgroup>
-</div>
+<h2>@ViewBag.Title.</h2>
 
-<hr />
-
-<section id="registerForm" class="row">
-    @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary()
-    
-        <fieldset>
-            <div class="span8 offset2 well">
-                <h3>Create a new account</h3>
-                <hr />
-                <div class="control-group">
-                    @Html.LabelFor(m => m.UserName, new { @class = "control-label" })
-                    <div class="controls">
-                        @Html.TextBoxFor(m => m.UserName)
-                        @Html.ValidationMessageFor(m => m.UserName)
-                    </div>
-
-                </div>
-                <div class="control-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "control-label" })
-                    <div class="controls">
-                        @Html.PasswordFor(m => m.Password)
-                        @Html.ValidationMessageFor(m => m.Password)
-                    </div>
-
-                </div>
-                <div class="control-group">
-                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
-                    <div class="controls">
-                        @Html.PasswordFor(m => m.ConfirmPassword)
-                        @Html.ValidationMessageFor(m => m.ConfirmPassword)
-                    </div>
-
-                </div>
-
-                <input type="submit" value="Register" class="btn btn-primary pull-right" />
-            </div>
-        </fieldset>
-    }
-</section>
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Create a new account.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Register" />
+        </div>
+    </div>
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

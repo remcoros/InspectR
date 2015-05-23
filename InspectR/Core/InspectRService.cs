@@ -5,9 +5,9 @@ using InspectR.Hubs;
 
 namespace InspectR.Core
 {
-    public class InspectRService : IInspectRService
+    public class InspectRService
     {
-        private InspectRContext _dbContext;
+        private readonly InspectRContext _dbContext;
 
         public InspectRService(InspectRContext dbContext)
         {
@@ -16,10 +16,9 @@ namespace InspectR.Core
 
         public InspectorInfo CreateInspector(bool isprivate)
         {
-            var inspector = new InspectorInfo()
-                {
-                    IsPrivate = isprivate
-                };
+            var inspector = new InspectorInfo() {
+                IsPrivate = isprivate
+            };
 
             _dbContext.Inspectors.Add(inspector);
             _dbContext.SaveChanges();
@@ -37,7 +36,7 @@ namespace InspectR.Core
 
             if (user.Inspectors.All(i => i.Id != info.Id))
             {
-                user.Inspectors.Add(info);                
+                user.Inspectors.Add(info);
             }
             _dbContext.SaveChanges();
         }
@@ -72,6 +71,11 @@ namespace InspectR.Core
             var user = new InspectRUserProfile(userName);
             _dbContext.UserProfiles.Add(user);
             return user;
+        }
+
+        public InspectorInfo GetInspectorInfoByKey(string id)
+        {
+            return _dbContext.GetInspectorInfoByKey(id);
         }
     }
 }

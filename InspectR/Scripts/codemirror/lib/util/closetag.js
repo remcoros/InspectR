@@ -44,6 +44,27 @@
 		if (!cm.getOption('closeTagEnabled')) {
 			throw CodeMirror.Pass;
 		}
+		
+		/*
+		 * Relevant structure of token:
+		 *
+		 * htmlmixed
+		 * 		className
+		 * 		state
+		 * 			htmlState
+		 * 				type
+		 *				tagName
+		 * 				context
+		 * 					tagName
+		 * 			mode
+		 * 
+		 * xml
+		 * 		className
+		 * 		state
+		 * 			tagName
+		 * 			type
+		 */
+		
 		var pos = cm.getCursor();
 		var tok = cm.getTokenAt(pos);
 		var state = innerXMLState(cm, tok.state);
@@ -53,7 +74,7 @@
 			if (ch == '>') {
 				var type = state.type;
 				
-				if (tok.type == 'tag' && type == 'closeTag') {
+				if (tok.className == 'tag' && type == 'closeTag') {
 					throw CodeMirror.Pass; // Don't process the '>' at the end of an end-tag.
 				}
 			
@@ -66,7 +87,7 @@
 				if (!state) throw CodeMirror.Pass;
 				var type = state.type;
 
-				if (tok.type == 'tag' && type != 'selfcloseTag') {
+				if (tok.className == 'tag' && type != 'selfcloseTag') {
 					var tagName = state.tagName;
 					if (tagName.length > 0 && shouldClose(cm, vd, tagName)) {
 						insertEndTag(cm, indent, pos, tagName);
@@ -79,7 +100,7 @@
 				cm.replaceSelection("");
 			
 			} else if (ch == '/') {
-				if (tok.type == 'tag' && tok.string == '<') {
+				if (tok.className == 'tag' && tok.string == '<') {
 					var ctx = state.context, tagName = ctx ? ctx.tagName : '';
 					if (tagName.length > 0) {
 						completeEndTag(cm, pos, tagName);

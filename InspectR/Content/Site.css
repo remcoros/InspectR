@@ -1,95 +1,80 @@
-﻿.sidebar-nav
-{
+﻿.sidebar-nav {
     -ms-word-wrap: break-word;
     word-wrap: break-word;
 }
+
 .nav-list .action {
     float: right;
 }
 
-.CodeMirror
-{
+.CodeMirror {
     background-color: white;
     height: auto;
 }
 
-.CodeMirror-scroll
-{
+.CodeMirror-scroll {
     min-height: 100px;
     max-height: 260px;
 }
 
-#inspectorurl_container
-{
+#copyinspectorurl {
     position: relative; /*  to get ZeroClipboard working */
+    display: inline-block;
 }
 
-.hero-unit
-{
-    padding-top: 30px;
+.hero-unit {
+    margin-top: -20px;
+    font-size: 100%;
 }
 
-    .hero-unit img
-    {
-        position: relative;
-        float: right;
-        margin-left: 20px;
-        margin-right: -30px;
+    .hero-unit img {
+        margin-left: 30px;
+        margin-right: 30px;
         height: 280px;
     }
 
-.higher
-{
+.higher {
     margin-top: 0px;
 }
 
-.lower
-{
+.lower {
     margin-top: 20px;
 }
 
-.lower-more
-{
+.lower-more {
     margin-top: 40px;
 }
 
-.httprequest .tab-content
-{
+.httprequest .tab-content {
     overflow: visible;
 }
 
-.httprequest-section
-{
+.httprequest-section {
 }
 
-    .httprequest-section .nav
-    {
+    .httprequest-section .nav {
         margin-bottom: 5px;
     }
 
-.property-list li
-{
+.property-list li {
 }
 
-    .property-list li div
-    {
+    .property-list li div {
         color: gray;
         font-weight: bold;
         display: inline;
     }
 
-        .property-list li div:after
-        {
+        .property-list li div:after {
             content: ":";
         }
 
-.header-list li
-{
+.header-list li {
     margin-left: 150px;
+    list-style-type: none;
 }
 
-    .header-list li div
-    {
+    .header-list li div {
         float: left;
         width: 140px;
         margin-left: -150px;
@@ -98,157 +83,136 @@
         font-weight: bold;
     }
 
-        .header-list li div:after
-        {
+        .header-list li div:after {
             content: ":";
         }
 
 #loginForm .well,
 #socialLoginForm .well,
 #manageForm .well,
-#externalLogins .well
-{
+#externalLogins .well {
     background-color: #FDFDFD;
     margin-top: 20px;
 }
 
-    #loginForm .well hr
-    {
+    #loginForm .well hr {
         margin-top: 0px;
     }
 
 /* styles for validation helpers */
-.field-validation-error
-{
+.field-validation-error {
     color: #e80c4d;
     font-weight: bold;
     display: block;
 }
 
-.field-validation-valid
-{
+.field-validation-valid {
     display: none;
 }
 
-input.input-validation-error
-{
+input.input-validation-error {
     border: 1px solid #e80c4d;
 }
 
-input[type="checkbox"].input-validation-error
-{
+input[type="checkbox"].input-validation-error {
     border: 0 none;
 }
 
-.validation-summary-errors
-{
+.validation-summary-errors {
     color: #e80c4d;
     font-weight: bold;
     font-size: 1.1em;
 }
 
-.validation-summary-valid
-{
+.validation-summary-valid {
     display: none;
 }
 
 /*Inspect Bin custom styling*/
 
-#registerLink
-{
+#registerLink {
     color: #fff;
 }
 
-.colorbar
-{
+.colorbar {
     width: 100%;
     height: 3px;
     background-image: url('images/colorbar.png');
 }
-.start
-{
+
+.start {
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
     border-radius: 0px;
 }
-.start h1
-{
-    margin-bottom: 20px;
-}
 
-.start img
-{
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
+    .start h1 {
+        margin-bottom: 20px;
+    }
 
-.start p
-{
-    line-height: 23px;
-    color: #555;
-}
+    .start img {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
 
-.start .btn
-{
-    margin-top: 55px;
-}
+    .start p {
+        line-height: 23px;
+        color: #555;
+    }
 
-.well.purple
-{
+    .start .btn {
+        margin-top: 55px;
+    }
+
+.well.purple {
     border-right: 0px;
     border-top: 5px solid #7109AA;
-    border-bottom: 5px solid #7109AA;    
+    border-bottom: 5px solid #7109AA;
     padding: 10px;
 }
 
-    .well.purple h2
-    {
-    color: #7109AA;
+    .well.purple h2 {
+        color: #7109AA;
         text-align: center;
     }
 
-.well img
-{
+.well img.sign {
     width: 100px;
     padding: 15px 0 13px;
-}
-
-.well img
-{
     display: block;
     margin: 0px auto;
 }
 
-.well.red
-{
+.well.red {
     border-right: 0px;
     border-top: 5px solid #DC0055;
     border-bottom: 5px solid #DC0055;
     padding: 10px;
 }
 
-    .well.red h2
-    {
-    color: #DC0055;
+    .well.red h2 {
+        color: #DC0055;
         text-align: center;
     }
 
-footer p
-{
+footer p {
     margin-left: 20px;
 }
 
-.well.green
-{
+.well.green {
     border-left: 0px;
     border-right: 0px;
     border-top: 5px solid green;
-    border-bottom: 5px solid green;    
+    border-bottom: 5px solid green;
     padding: 10px;
 }
 
-    .well.green h2
-    {
+    .well.green h2 {
         color: green;
         text-align: center;
         font-size: 30px;
     }
+
+
+.gutter-top {
+    margin-top: 10px;
+}

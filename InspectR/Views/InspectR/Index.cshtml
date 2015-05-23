@@ -4,11 +4,27 @@
     var UserProfile = ViewBag.UserProfile as InspectRUserProfile;
 }
 <div class="row">
-    @if (UserProfile == null) {
-        <div class="span12">
-            <div class="hero-unit start">
+    @if (UserProfile == null)
+    {
+        <div class="col-md-12">
+            <div class="hero-unit well start">
                 <h1>InspectB.in</h1>
-                <img src="~/Content/images/screenshot1.png" alt="screenshot" title="InspectR screenshot" />
+                <img src="~/Content/images/screenshot1.png" alt="screenshot" title="InspectR screenshot" class="pull-right" />
+                <h4>Having trouble testing remote http clients and webhooks? Point them to your InspectBin url and start inspecting. It's that easy!</h4>
+                <p class="lower">
+                    InspectBin is based on the idea of RequestBin (requestb.in), set your http client or webhook to point to your InspectBin url.<br />
+                    We will collect http requests and show it in a nice and friendly way, <strong>live!</strong>
+                </p>
+                <a class="btn btn-primary btn-large" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-8">
+            <div class="hero-unit well start">
+                <h1>InspectB.in</h1>
                 <h4>Having trouble testing remote http clients and webhooks? Point them to your InspectBin url and start inspecting. It's that easy!</h4>
                 <p class="lower">
                     InspectBin is based on the idea of RequestBin (requestb.in), set your http client or webhook to point to your InspectBin url.<br />
@@ -17,19 +33,7 @@
                 <a class="btn btn-primary btn-large" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
             </div>
         </div>
-    } else {
-        <div class="span8">
-            <div class="hero-unit start">
-                <h1>InspectB.in</h1>
-                <h4>Having trouble testing remote http clients and webhooks? Point them to your InspectBin url and start inspecting. It's that easy!</h4>
-                <p class="lower">
-                    InspectBin is based on the idea of RequestBin (requestb.in), set your http client or webhook to point to your InspectBin url.<br />
-                    We will collect http requests and show it in a nice and friendly way, <strong>live!</strong>
-                </p>
-                <a class="btn btn-primary btn-large" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
-            </div>
-        </div>
-        <div class="span4">
+        <div class="col-md-4">
             <div class="well sidebar-nav">
                 <ul class="nav nav-list">
                     <li class="nav-header">Your bins:</li>
@@ -50,14 +54,14 @@
                     }
                 </ul>
             </div>
-        </div>        
+        </div>
     }
 </div>
 
 <div class="row">
-    <div class="span4">
+    <div class="col-md-4">
         <div class="well purple">
-            <img src="~/Content/images/opensource.png" />
+            <img src="~/Content/images/opensource.png" class="sign" />
             <h2>Open Source</h2>
         </div>
         <p>
@@ -67,12 +71,12 @@
             For more info, visit our github project wiki.
         </p>
         <p>
-            <a class="btn" href="https://github.com/remcoros/InspectR/wiki">Project Wiki &raquo;</a>
+            <a class="btn btn-link" href="https://github.com/remcoros/InspectR/wiki">Project Wiki &raquo;</a>
         </p>
     </div>
-    <div class="span4">
+    <div class="col-md-4">
         <div class="well red">
-            <img src="~/Content/images/Git.png" />
+            <img src="~/Content/images/Git.png" class="sign" />
             <h2>Contribute!</h2>
         </div>
         <p>
@@ -80,12 +84,12 @@
         </p>
         <p>Check out the <em>code</em> on our github page.</p>
         <p>
-            <a class="btn" href="https://github.com/remcoros/InspectR">Github Project &raquo;</a>
+            <a class="btn btn-link" href="https://github.com/remcoros/InspectR">Github Project &raquo;</a>
         </p>
     </div>
-    <div class="span4">
+    <div class="col-md-4">
         <div class="well green">
-            <img src="~/Content/images/how.png" />
+            <img src="~/Content/images/how.png" class="sign" />
             <h2>How does it work?</h2>
         </div>
         <p>
@@ -94,7 +98,7 @@
         </p>
         <p>Try it yourself, it's free!</p>
         <p>
-            <a class="btn" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
+            <a class="btn btn-link" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
         </p>
     </div>
 </div>

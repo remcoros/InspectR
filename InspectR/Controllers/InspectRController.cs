@@ -4,17 +4,14 @@ using System.Web;
 using System.Web.Mvc;
 using InspectR.Core;
 using InspectR.Data;
-using InspectR.Filters;
 using InspectR.Helpers;
 using InspectR.Models;
 
 namespace InspectR.Controllers
 {
-    [InitializeSimpleMembership]
     public class InspectRController : Controller
     {
         private InspectRService _service;
-        protected InspectRContext DbContext { get; set; }
 
         public InspectRController()
         {
@@ -34,7 +31,7 @@ namespace InspectR.Controllers
 
         public ActionResult Inspect(string id)
         {
-            InspectorInfo inspectorInfo = DbContext.GetInspectorInfoByKey(id);
+            InspectorInfo inspectorInfo = _service.GetInspectorInfoByKey(id);
 
             if (inspectorInfo == null)
                 return HttpNotFound();
@@ -48,16 +45,15 @@ namespace InspectR.Controllers
                 }
             }
 
-            return View("Inspect", new InspectRViewModel()
-                {
-                    InspectorInfo = inspectorInfo,
-                });
+            return View("Inspect", new InspectRViewModel() {
+                InspectorInfo = inspectorInfo,
+            });
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            DbContext = (InspectRContext)HttpContext.Items["InspectRContext"];
-            _service = new InspectRService(DbContext);
+            var dbContext = (InspectRContext)HttpContext.Items["InspectRContext"];
+            _service = new InspectRService(dbContext);
 
             if (User != null)
             {
@@ -65,7 +61,7 @@ namespace InspectR.Controllers
                 if (!string.IsNullOrEmpty(username))
                 {
                     // todo: map a dto
-                    ViewBag.UserProfile = DbContext.GetUserProfile(username);
+                    ViewBag.UserProfile = dbContext.GetUserProfile(username);
                 }
             }
 

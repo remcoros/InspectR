@@ -4,22 +4,24 @@
     var FullUrl = Url.InspectR().FullLogUrl("xXx");
 }
 @section menu {
-    <form class="nav navbar-form" action="@Url.InspectR().Log(Model.InspectorInfo.UniqueKey)">
-    <div class="input-append" id="inspectorurl_container" style="position: relative" data-bind="if: Inspector">
-        <input id="inspectorurl" class="span4" type="text" data-bind="value: '@Html.Raw(FullUrl)'.replace('xXx', Inspector().UniqueKey())" value="@FullUrl" readonly="readonly" style="cursor: text">
-        <button id="copyinspectorurl" class="btn" type="button">Copy</button>
-        <a href="javascript:window.open($('#inspectorurl').val()); void(0);" class="btn">Visit</a>
-        @*<a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">POST</a>*@
-    </div>
+    <form class="nav navbar-form navbar-left" action="@Url.InspectR().Log(Model.InspectorInfo.UniqueKey)">
+        <div class="input-group">
+            <input id="inspectorurl" class="form-control" type="text" data-bind="value: '@Html.Raw(FullUrl)'.replace('xXx', Inspector() ? Inspector().UniqueKey() : '')" value="@FullUrl" readonly="readonly" style="cursor: text">
+            <span class="input-group-btn">
+                <button id="copyinspectorurl" class="btn btn-default" type="button">Copy</button>
+                <a href="javascript:window.open($('#inspectorurl').val()); void(0);" class="btn btn-default">Visit</a>
+            </span>
+            @*<a href="@Url.Action("Log", new { id = Model.InspectorInfo.UniqueKey })" class="btn" target="_blank">POST</a>*@
+        </div>
     </form>
 }
 <div class="row" data-bind="visible: !Inspector()">
-    <div class="span8 offset2">
+    <div class="col-md-8 col-md-offset-2">
         <h2>Preparing HTTP Request interface...</h2>
     </div>
 </div>
 <div class="row" style="display: none" data-bind="if:Inspector, visible: Inspector">
-    <div class="span8">
+    <div class="col-md-9">
         <div class="alerts" data-bind="foreach: Alerts">
             <div class="alert" data-bind="css: Type">
                 <button type="button" class="close" data-bind="click: close">×</button>
@@ -29,40 +31,46 @@
         </div>
         <h2>Incoming HTTP requests</h2>
         <p>
-            Use your inspectbin url in your http client or set is as the target of your webhook. 
+            Use your inspectbin url in your http client or set is as the target of your webhook.
             @*Click the images to show how you can easily test this using your own github repository.*@
         </p>
         @*        <img rel="lightbox[inspectgithub]" src="~/Images/inspectgithub1.png" alt="screenshot" title="InspectBin screenshot" />
-        <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub2.png" alt="screenshot" title="InspectBin screenshot" />
-        <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub3.png" alt="screenshot" title="InspectBin Github screenshot" />*@
+            <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub2.png" alt="screenshot" title="InspectBin screenshot" />
+            <img rel="lightbox[inspectgithub]"src="~/Images/inspectgithub3.png" alt="screenshot" title="InspectBin Github screenshot" />*@
         <hr />
         <div class="" data-bind="visible: !RequestList() || RequestList().length == 0">
             No http requests inspected yet.
         </div>
         <div class="" data-bind="template: { name:'http-request', foreach: RequestList }"></div>
     </div>
-    <div class="span4">
+    <div class="col-md-3">
         <div class="well sidebar-nav">
             <div>
                 <div class="clearfix">
-                    <h5 class="pull-left" data-bind="text: Inspector().Title">
-                    </h5>
+                    <h5 class="pull-left" data-bind="text: Inspector().Title"></h5>
                     <h5 class="pull-left" data-bind="visible: !Inspector().Title()">
                         No title
                     </h5>
                     <small class="pull-left">
-                        <a href="#" data-bind="click: function(){ NewTitle(Inspector().Title()); IsEditingTitle(true); }">edit</a></small>
+                        <a href="#" data-bind="click: function(){ NewTitle(Inspector().Title()); IsEditingTitle(true); }">edit</a>
+                    </small>
                 </div>
-                <div class="input-prepend input-append" data-bind="visible: IsEditingTitle">
-                    <button class="btn" type="button" data-bind="click: function(){ IsEditingTitle(false); }">X</button>
-                    <input type="text" class="input-medium" data-bind="value: NewTitle" />
-                    <button class="btn" type="button" data-bind="click: saveTitle">save</button>
+                <div class="input-group form-group-sm" data-bind="visible: IsEditingTitle">
+                    <span class="input-group-btn">
+                        <button class="btn btn-sm btn-default" type="button" data-bind="click: function(){ IsEditingTitle(false); }">X</button>
+
+                    </span>
+                    <input type="text" class="form-control" data-bind="value: NewTitle" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-sm btn-default" type="button" data-bind="click: saveTitle">save</button>
+                    </span>
                 </div>
             </div>
-            <ul class="nav nav-list">
+            <ul class="nav nav-list nav-pills nav-stacked">
                 <li class="nav-header">Actions</li>
                 <li>
-                    <a href="#" data-bind="click: clearRecentRequests">Clear</a></li>
+                    <a href="#" data-bind="click: clearRecentRequests">Clear</a>
+                </li>
                 <li class="nav-header">Your bins:</li>
                 <!-- ko ifnot: UserProfile -->
                 <li>Login to add your bins</li>
@@ -129,19 +137,25 @@
             <div class="httprequest-section">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a data-toggle="tab" data-bind="attr: {href: '#content-' + $index()}">Content</a></li>
+                        <a data-toggle="tab" data-bind="attr: {href: '#content-' + $index()}">Content</a>
+                    </li>
                     <li>
-                        <a data-toggle="tab" data-bind="attr: {href: '#headers-' + $index()}">Headers</a></li>
+                        <a data-toggle="tab" data-bind="attr: {href: '#headers-' + $index()}">Headers</a>
+                    </li>
                     <li>
-                        <a data-toggle="tab" data-bind="attr: {href: '#other-' + $index()}">Other</a></li>
+                        <a data-toggle="tab" data-bind="attr: {href: '#other-' + $index()}">Other</a>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" data-bind="withCodeMirror: 'CodeMirror', attr: {id: 'content-' + $index()}">
-                        <div class="clearfix">
-                            <div class="input-append pull-left">
-                                <select data-bind="options: $parent.SupportedContentTypes, value: ContentType">
-                                </select>
-                                <button type="button" class="btn" data-bind="click: CodeMirror.formatCodeMirror">Format</button>
+                        <div class="form-inline clearfix">
+                            <div class="form-group pull-left">
+                                <div class="input-group">
+                                    <select data-bind="options: $parent.SupportedContentTypes, value: ContentType" class="form-control"></select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" data-bind="click: CodeMirror.formatCodeMirror">Format</button>
+                                    </span>
+                                </div>
                             </div>
                             <div class="pull-right">
                                 <label class="checkbox inline" style="margin-right: 10px;">
@@ -150,8 +164,9 @@
                                 </label>
                             </div>
                         </div>
-                        <textarea class="" data-bind="codeMirror: { name: 'CodeMirror', text: Content, contentType: ContentType }" style="width: 99%">
-                        </textarea>
+                        <div class="gutter-top">
+                            <textarea data-bind="codeMirror: { name: 'CodeMirror', text: Content, contentType: ContentType }" style="width: 99%"></textarea>
+                        </div>
                     </div>
                     <div class="tab-pane" data-bind="attr: {id: 'headers-' + $index()}">
                         <ul class="header-list unstyled" data-bind="foreach: Headers">
@@ -190,24 +205,33 @@
     <script src="~/signalr/hubs" type="text/javascript"></script>
     @Scripts.Render("~/bundles/inspectr")
     <script type="text/javascript">
-        // clipboard copy
-        ZeroClipboard.setMoviePath('@Url.Content("~/Content/ZeroClipboard10.swf")');
-        var clip = new ZeroClipboard.Client();
-        clip.setHandCursor(true);
-        clip.glue('copyinspectorurl', 'inspectorurl_container');
-        clip.addEventListener('mouseover', function () {
-            clip.setText($('#inspectorurl').val());
-        });
-        clip.addEventListener('onComplete', function () {
-            var orig = $('#copyinspectorurl').html();
-            $('#copyinspectorurl').html('Copied!');
-            setTimeout(function () {
-                $('#copyinspectorurl').html(orig);
-            }, 5000);
-        });
+        var onStart = function () {
+            ZeroClipboard.config({
+                swfPath: "@Url.Content("~/Scripts/zeroclipboard/ZeroClipboard.swf")",
+                moviePath: "@Url.Content("~/Scripts/zeroclipboard/ZeroClipboard.swf")",
+                forceHandCursor: true
+            });
+            var clip = new ZeroClipboard(document.getElementById("copyinspectorurl"));
+            clip.on("ready", function (client) {
+                clip.on("aftercopy", function (e) {
+                    // `this` is the element that was clicked
+                    var orig = $('#copyinspectorurl').html();
+                    $('#copyinspectorurl').html('Copied!');
+                    setTimeout(function () {
+                        $('#copyinspectorurl').html(orig);
+                    }, 5000);
+                });
+
+                clip.on('copy', function (e) {
+                    var clipboard = e.clipboardData;
+                    clipboard.setData("text/plain", $('#inspectorurl').val());
+                });
+            });
+        };
 
         $.inspectR.start({
-            inspector: '@Model.InspectorInfo.UniqueKey'
-            });            
+            inspector: '@Model.InspectorInfo.UniqueKey',
+            onStart: onStart
+        });
     </script>
 }

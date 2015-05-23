@@ -1,4 +1,4 @@
-CodeMirror.defineMode("haskell", function() {
+CodeMirror.defineMode("haskell", function(cmCfg, modeCfg) {
 
   function switchState(source, setState, f) {
     setState(f);

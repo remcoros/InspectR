@@ -1,15 +1,15 @@
-﻿using System.Data.Entity;
-using InspectR.Hubs;
-
-namespace InspectR.Data
+﻿namespace InspectR.Data
 {
-    public class InspectRContext : DbContext
+    using System.Data.Entity;
+    using InspectR.Models;
+
+    public class InspectRContext : ApplicationDbContext
     {
         public InspectRContext()
             : base("DefaultConnection")
         {
-            
         }
+
         public InspectRContext(string connectionStringName)
             : base(connectionStringName)
         {

@@ -14,9 +14,19 @@
 CoreVersion parameter is needed for TiddlyWiki only!
 ***/
 //{{{
-CodeMirror.defineMode("tiddlywiki", function () {
+CodeMirror.defineMode("tiddlywiki", function (config, parserConfig) {
+	var indentUnit = config.indentUnit;
+
 	// Tokenizer
-	var textwords = {};
+	var textwords = function () {
+		function kw(type) {
+			return {
+				type: type,
+				style: "text"
+			};
+		}
+		return {};
+	}();
 
 	var keywords = function () {
 		function kw(type) {
@@ -50,11 +60,23 @@ CodeMirror.defineMode("tiddlywiki", function () {
 		reCodeBlockStart = /^\{\{\{$/,			// {{{ TW text div block start
 		reCodeBlockStop = /^\}\}\}$/,			// }}} TW text stop
 
+		reCodeStart = /\{\{\{/,					// {{{ code span start
 		reUntilCodeStop = /.*?\}\}\}/;
 
 	function chain(stream, state, f) {
 		state.tokenize = f;
 		return f(stream, state);
+	}
+
+	// used for strings
+	function nextUntilUnescaped(stream, end) {
+		var escaped = false,
+			next;
+		while ((next = stream.next()) != null) {
+			if (next == end && !escaped) return false;
+			escaped = !escaped && next == "\\";
+		}
+		return escaped;
 	}
 
 	// Used as scratch variables to communicate multiple values without
@@ -68,7 +90,8 @@ CodeMirror.defineMode("tiddlywiki", function () {
 	}
 
 	function jsTokenBase(stream, state) {
-		var sol = stream.sol(), ch;
+		var sol = stream.sol(), 
+			ch, tch;
 			
 		state.block = false;	// indicates the start of a code block.
 
@@ -203,6 +226,13 @@ CodeMirror.defineMode("tiddlywiki", function () {
 
 	} // jsTokenBase()
 
+	function twTokenString(quote) {
+		return function (stream, state) {
+			if (!nextUntilUnescaped(stream, quote)) state.tokenize = jsTokenBase;
+			return ret("string", "string");
+		};
+	}
+
 	// tw invisible comment
 	function twTokenComment(stream, state) {
 		var maybeEnd = false,
@@ -284,7 +314,8 @@ CodeMirror.defineMode("tiddlywiki", function () {
 	// tw strike through text looks ugly
 	// change CSS if needed
 	function twTokenStrike(stream, state) {
-		var maybeEnd = false, ch;
+		var maybeEnd = false,
+			ch, nr;
 			
 		while (ch = stream.next()) {
 			if (ch == "-" && maybeEnd) {
@@ -298,7 +329,7 @@ CodeMirror.defineMode("tiddlywiki", function () {
 
 	// macro
 	function twTokenMacro(stream, state) {
-		var ch, word, known;
+		var ch, tmp, word, known;
 
 		if (stream.current() == '<<') {
 			return ret('brace', 'macro');
@@ -331,7 +362,7 @@ CodeMirror.defineMode("tiddlywiki", function () {
 
 	// Interface
 	return {
-		startState: function () {
+		startState: function (basecolumn) {
 			return {
 				tokenize: jsTokenBase,
 				indented: 0,

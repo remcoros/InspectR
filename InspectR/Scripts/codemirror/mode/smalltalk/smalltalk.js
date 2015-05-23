@@ -1,4 +1,4 @@
-CodeMirror.defineMode('smalltalk', function(config) {
+CodeMirror.defineMode('smalltalk', function(config, modeConfig) {
 
 	var specialChars = /[+\-/\\*~<>=@%|&?!.:;^]/;
 	var keywords = /true|false|nil|self|super|thisContext/;
@@ -86,7 +86,7 @@ CodeMirror.defineMode('smalltalk', function(config) {
 		return new Token('string', stream.eat('\'') ? context.parent : context, false);
 	};
 
-	var nextTemporaries = function(stream, context) {
+	var nextTemporaries = function(stream, context, state) {
 		var token = new Token(null, context, false);
 		var aChar = stream.next();
 

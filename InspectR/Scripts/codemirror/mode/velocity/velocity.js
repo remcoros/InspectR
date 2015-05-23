@@ -1,16 +1,18 @@
-CodeMirror.defineMode("velocity", function() {
+CodeMirror.defineMode("velocity", function(config) {
     function parseWords(str) {
         var obj = {}, words = str.split(" ");
         for (var i = 0; i < words.length; ++i) obj[words[i]] = true;
         return obj;
     }
 
+    var indentUnit = config.indentUnit;
     var keywords = parseWords("#end #else #break #stop #[[ #]] " +
                               "#{end} #{else} #{break} #{stop}");
     var functions = parseWords("#if #elseif #foreach #set #include #parse #macro #define #evaluate " +
                                "#{if} #{elseif} #{foreach} #{set} #{include} #{parse} #{macro} #{define} #{evaluate}");
     var specials = parseWords("$foreach.count $foreach.hasNext $foreach.first $foreach.last $foreach.topmost $foreach.parent $velocityCount");
     var isOperatorChar = /[+\-*&%=<>!?:\/|]/;
+    var multiLineStrings =true;
 
     function chain(stream, state, f) {
         state.tokenize = f;
@@ -126,7 +128,7 @@ CodeMirror.defineMode("velocity", function() {
     // Interface
 
     return {
-        startState: function() {
+        startState: function(basecolumn) {
             return {
                 tokenize: tokenBase,
                 beforeParams: false,

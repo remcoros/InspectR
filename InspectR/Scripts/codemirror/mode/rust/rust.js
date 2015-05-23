@@ -209,7 +209,7 @@ CodeMirror.defineMode("rust", function() {
     if (type == "(" || type == "[") return matchBrackets(type, expression);
     return pass();
   }
-  function maybeprop() {
+  function maybeprop(type) {
     if (content.match(/^\w+$/)) {cx.marked = "variable"; return cont(maybeop);}
     return pass(expression);
   }
@@ -304,7 +304,7 @@ CodeMirror.defineMode("rust", function() {
     if (type == "{") return cont(pushlex("}"), block, poplex);
     return pass();
   }
-  function typarams() {
+  function typarams(type) {
     if (content == ">") return cont();
     if (content == ",") return cont(typarams);
     if (content == ":") return cont(rtype, typarams);
@@ -324,7 +324,7 @@ CodeMirror.defineMode("rust", function() {
     if (type == "{") return cont(pushlex("{"), record_of(rtype), poplex);
     return matchBrackets(type, rtype);
   }
-  function rtypemaybeparam() {
+  function rtypemaybeparam(type) {
     if (content == "<") return cont(typarams);
     return pass();
   }

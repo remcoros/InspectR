@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using InspectR.Controllers;
-using InspectR.Core;
-using InspectR.Data;
-using Microsoft.AspNet.SignalR.Hubs;
-
-namespace InspectR.Hubs
+﻿namespace InspectR.Hubs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using InspectR.Core;
+    using InspectR.Data;
+
+    using Microsoft.AspNet.SignalR;
+
     public class InspectRHub : Hub
     {
         private IRequestCache _requestCache;
         private InspectRContext _dbContext;
-        private IInspectRService _service;
+        private InspectRService _service;
 
         public InspectRHub()
         {
@@ -22,16 +23,27 @@ namespace InspectR.Hubs
             _service = new InspectRService(_dbContext);
         }
 
-        public override System.Threading.Tasks.Task OnReconnected()
+        public override Task OnReconnected()
         {
             InspectRGroupsModule.OnReconnected(this);
             return base.OnReconnected();
         }
 
-        public override System.Threading.Tasks.Task OnDisconnected()
+        /// <summary>
+        /// Called when a connection disconnects from this hub gracefully or due to a timeout.
+        /// </summary>
+        /// <param name="stopCalled">true, if stop was called on the client closing the connection gracefully;
+        ///             false, if the connection has been lost for longer than the
+        ///             <see cref="P:Microsoft.AspNet.SignalR.Configuration.IConfigurationManager.DisconnectTimeout"/>.
+        ///             Timeouts can be caused by clients reconnecting to another SignalR server in scaleout.
+        ///             </param>
+        /// <returns>
+        /// A <see cref="T:System.Threading.Tasks.Task"/>
+        /// </returns>
+        public override Task OnDisconnected(bool stopCalled)
         {
             InspectRGroupsModule.StopInspect(this);
-            return base.OnDisconnected();
+            return base.OnDisconnected(stopCalled);
         }
 
         public InspectorInfo StopInspect(Guid id)
@@ -52,7 +64,7 @@ namespace InspectR.Hubs
                 return null;
 
             InspectRGroupsModule.StartInspect(this, info.UniqueKey);
-            
+
             return info;
         }
 
@@ -78,9 +90,9 @@ namespace InspectR.Hubs
                 var username = Context.User.Identity.Name;
                 if (!string.IsNullOrEmpty(username))
                 {
-                    _service.RemoveInspectorFromUser(username, inspectorId);                    
+                    _service.RemoveInspectorFromUser(username, inspectorId);
                 }
-            }            
+            }
         }
 
         public IEnumerable<RequestInfo> GetRecentRequests(string uniquekey)
@@ -88,7 +100,7 @@ namespace InspectR.Hubs
             InspectorInfo inspectorInfo = _dbContext.GetInspectorInfoByKey(uniquekey);
             if (inspectorInfo == null)
             {
-                throw new Exception("Can't find inspector");                
+                throw new Exception("Can't find inspector");
             }
 
             var recentRequests = _requestCache.Get(inspectorInfo).OrderByDescending(x => x.DateCreated).Take(20);
@@ -117,7 +129,7 @@ namespace InspectR.Hubs
             _dbContext.SaveChanges();
         }
 
-        public override System.Threading.Tasks.Task OnConnected()
+        public override Task OnConnected()
         {
             return base.OnConnected();
         }

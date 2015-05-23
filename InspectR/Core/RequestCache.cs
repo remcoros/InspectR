@@ -29,12 +29,6 @@ namespace InspectR.Core
             }
             requests.Add(request);
             Cache.Insert("inspectR" + inspector.Id, requests, null, Cache.NoAbsoluteExpiration, TimeSpan.FromDays(1));
-
-            //using (var context = new InspectRContext())
-            //{
-            //    context.Requests.Add(new RequestInfoEntry(inspector, request));
-            //    context.SaveChanges();
-            //}
         }
 
         private IList<RequestInfo> GetInternal(InspectorInfo inspector)

@@ -1,68 +1,61 @@
-﻿@model InspectR.Models.LoginModel
-
+﻿@using InspectR.Models
+@model InspectR.Models.LoginViewModel
 @{
     ViewBag.Title = "Log in";
 }
+
+<h2>@ViewBag.Title.</h2>
 <div class="row">
-<hgroup class="title">
-	<h1>@ViewBag.Title</h1>
-</hgroup>
+    <div class="col-md-8">
+        <section id="loginForm">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <h4>Use a local account to log in.</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Log in" class="btn btn-default" />
+                    </div>
+                </div>
+                <p>
+                    @Html.ActionLink("Register as a new user", "Register")
+                </p>
+                <p>
+                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                </p>
+            }
+        </section>
+    </div>
+    <div class="col-md-4">
+        <section id="socialLoginForm">
+            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+        </section>
+    </div>
 </div>
-<hr/>
-
-<section id="loginForm" class="row">
-	@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))
-	{
-		@Html.AntiForgeryToken()
-		@Html.ValidationSummary(true)
-
-		<fieldset>
-			<div class="span8 offset2 well">
-				<h3>Use a local account to log in.</h3>
-                <hr/>
-				<div class="control-group">
-					@Html.LabelFor(m => m.UserName, new { @class = "control-label" })
-					<div class="controls">
-						@Html.TextBoxFor(m => m.UserName)
-                        @Html.ValidationMessageFor(m => m.UserName)
-					</div>
-					
-				</div>
-				<div class="control-group">
-					@Html.LabelFor(m => m.Password, new { @class = "control-label" })
-					<div class="controls">
-						@Html.PasswordFor(m => m.Password)
-                        @Html.ValidationMessageFor(m => m.Password)
-					</div>
-					
-				</div>
-				<div class="control-group">
-					<div class="controls">
-						<label class="checkbox">
-							@Html.CheckBoxFor(m => m.RememberMe)Remember me 
-						</label>
-						<p>
-							<small>@Html.ActionLink("Register", "Register") if you don't have an account.</small>
-						</p>
-					</div>
-				</div>
-
-				<input type="submit" value="Log me in" class="btn btn-primary pull-right" />
-			</div>
-		</fieldset>
-    
-	}
-</section>
-
-<section class="social row" id="socialLoginForm">
-
-<div class="span8 offset2 well">
-	<h3>Use another service to log in.</h3>
-    <hr class="higher"/>
-	@Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
-</div>
-
-</section>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

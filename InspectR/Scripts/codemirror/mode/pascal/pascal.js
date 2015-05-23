@@ -1,4 +1,4 @@
-CodeMirror.defineMode("pascal", function() {
+CodeMirror.defineMode("pascal", function(config) {
   function words(str) {
     var obj = {}, words = str.split(" ");
     for (var i = 0; i < words.length; ++i) obj[words[i]] = true;
@@ -76,7 +76,7 @@ CodeMirror.defineMode("pascal", function() {
   // Interface
 
   return {
-    startState: function() {
+    startState: function(basecolumn) {
       return {tokenize: null};
     },
 

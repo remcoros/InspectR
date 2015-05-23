@@ -1,4 +1,4 @@
-CodeMirror.defineMode('shell', function() {
+CodeMirror.defineMode('shell', function(config) {
 
   var words = {};
   function define(style, string) {

@@ -19,12 +19,13 @@
             // when the connection is successful, start the router
             // $.connection.hub.logging = true;
             $.connection.hub.start({
-                    waitForPageLoad: false,
-                    transport: 'longPolling'
-                }, function () {
-                    router.trigger('connection:start');
-                    Backbone.history.start({});
-                });
+                waitForPageLoad: false,
+                transport: 'longPolling'
+            }, function () {
+                router.trigger('connection:start');
+                Backbone.history.start({});
+                config.onStart();
+            });
 
             // Don't show any errors because of page unload
             $(window).bind('beforeunload', function () {
@@ -33,7 +34,8 @@
         },
         defaults: {
             // inspector: ''
-            // rootNode:'#inspectr'
+            // rootNode:'#inspectr',
+            onStart: function () { }
         }
     };
 
@@ -54,7 +56,7 @@
 
         // mixin Events
         // _.extend(this, Backbone.Events);
-        
+
         // public properties
         this.NewTitle = ko.observable();
         this.IsEditingTitle = ko.observable(false);
@@ -70,7 +72,7 @@
 
         /** Routes */
         router.on('connection:start', function () { self.loadUserProfile(); });
-        
+
         router.on('route:start', function () {
             self.loadInspector(options.inspector);
             // router.navigate(options.inspector, { trigger: true });
@@ -91,7 +93,7 @@
                 });
         };
         router.on('route:loadInspector', this.loadInspector);
-        
+
         /** Methods */
         this.loadRecentRequests = function () {
             server.getRecentRequests(self.Inspector().UniqueKey())
@@ -158,7 +160,7 @@
             self.Alerts.push(alert);
             return alert;
         };
-        
+
         this._connectionSlow = function () {
             if (self.ignoreConnectionErrors) {
                 return;

@@ -325,7 +325,7 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
             return style;
         },
         
-        indent: function(state) {
+        indent: function(state, textAfter) {
             if (state.tokenize != tokenBase) {
                 return state.tokenize.isString ? CodeMirror.Pass : 0;
             }

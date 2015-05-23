@@ -1,19 +1,12 @@
-﻿using System.Web.Optimization;
-
-namespace InspectR.App_Start
+﻿namespace InspectR
 {
+    using System.Web.Optimization;
+
     public class BundleConfig
     {
-        // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
+        // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            // lightbox
-            //bundles.Add(new ScriptBundle("~/bundles/lightbox").Include(
-            //"~/Scripts/lightbox/js/lightbox.js"));
-
-            bundles.Add(new StyleBundle("~/bundles/lightbox").Include(
-            "~/Scripts/lightbox/css/lightbox.css"));
-
             // backbone
             bundles.Add(new ScriptBundle("~/bundles/backbone").Include(
                         "~/Scripts/underscore.*",
@@ -21,10 +14,10 @@ namespace InspectR.App_Start
 
             // syntax
             bundles.Add(new ScriptBundle("~/bundles/syntaxhighlighter").Include(
-                        "~/Scripts/syntaxhighlighter/jquery.syntaxhighlighter.*"));
+                        "~/Scripts/jquery-syntaxhighlighter/jquery.syntaxhighlighter.*"));
 
             bundles.Add(new ScriptBundle("~/bundles/zeroclipboard").Include(
-                        "~/Scripts/zeroclipboard.*"));
+                        "~/Scripts/zeroclipboard/zeroclipboard.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/inspectr").Include(
                         "~/Scripts/inspectr.js"));
@@ -58,7 +51,7 @@ namespace InspectR.App_Start
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
-            
+
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include("~/Content/bootstrap.css"));
             bundles.Add(new StyleBundle("~/Content/bootstrap-responsive").Include("~/Content/bootstrap-responsive.css"));
 

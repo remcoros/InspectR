@@ -16,16 +16,11 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
   var getMode = (function () {
     var i, modes = {}, mimes = {}, mime;
 
-    var list = [];
-    for (var m in CodeMirror.modes)
-      if (CodeMirror.modes.propertyIsEnumerable(m)) list.push(m);
+    var list = CodeMirror.listModes();
     for (i = 0; i < list.length; i++) {
       modes[list[i]] = list[i];
     }
-    var mimesList = [];
-    for (var m in CodeMirror.mimeModes)
-      if (CodeMirror.mimeModes.propertyIsEnumerable(m))
-        mimesList.push({mime: m, mode: CodeMirror.mimeModes[m]});
+    var mimesList = CodeMirror.listMIMEs();
     for (i = 0; i < mimesList.length; i++) {
       mime = mimesList[i].mime;
       mimes[mime] = mimesList[i].mime;
@@ -169,6 +164,17 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
     }
   }
 
+  function codeBlock(stream, state) {
+    if(stream.match(codeBlockRE, true)){
+      state.f = inlineNormal;
+      state.block = blockNormal;
+      switchInline(stream, state, state.inline);
+      return code;
+    }
+    stream.skipToEnd();
+    return code;
+  }
+
   // Inline
   function getType(state) {
     var styles = [];
@@ -246,8 +252,8 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
       return getType(state);
     }
     
-    if (ch === '!' && stream.match(/\[.*\] ?(?:\(|\[)/, false)) {
-      stream.match(/\[.*\]/);
+    if (ch === '!' && stream.match(/\[[^\]]*\] ?(?:\(|\[)/, false)) {
+      stream.match(/\[[^\]]*\]/);
       state.inline = state.f = linkHref;
       return image;
     }
@@ -273,6 +279,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
     }
     
     if (ch === '<' && stream.match(/^\w/, false)) {
+      var md_inside = false;
       if (stream.string.indexOf(">")!=-1) {
         var atts = stream.string.substring(1,stream.string.indexOf(">"));
         if (/markdown\s*=\s*('|"){0,1}1('|"){0,1}/.test(atts)) {

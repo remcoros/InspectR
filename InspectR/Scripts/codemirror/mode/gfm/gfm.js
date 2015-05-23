@@ -1,4 +1,4 @@
-CodeMirror.defineMode("gfm", function(config) {
+CodeMirror.defineMode("gfm", function(config, parserConfig) {
   var codeDepth = 0;
   function blankLine(state) {
     state.code = false;

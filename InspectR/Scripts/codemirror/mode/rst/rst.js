@@ -18,7 +18,17 @@ CodeMirror.defineMode('rst', function(config, options) {
     }
 
     function hasMode(mode) {
-        return mode && CodeMirror.modes.hasOwnProperty(mode);
+        if (mode) {
+            var modes = CodeMirror.listModes();
+
+            for (var i in modes) {
+                if (modes[i] == mode) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     function getMode(mode) {
@@ -43,6 +53,8 @@ CodeMirror.defineMode('rst', function(config, options) {
     var reVerbatimMarker = /^::\s*$/;
     var rePreInline = /^[-\s"([{</:]/;
     var rePostInline = /^[-\s`'")\]}>/:.,;!?\\_]/;
+    var reEnumeratedList = /^\s*((\d+|[A-Za-z#])[.)]|\((\d+|[A-Z-a-z#])\))\s/;
+    var reBulletedList = /^\s*[-\+\*]\s/;
     var reExamples = /^\s+(>>>|In \[\d+\]:)\s/;
 
     function normal(stream, state) {

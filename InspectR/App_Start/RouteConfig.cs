@@ -1,12 +1,10 @@
-﻿using System.Web.Mvc;
-using System.Web.Routing;
-using InspectR.Controllers;
-using InspectR.Controllers.RequestLogger;
-using InspectR.Core;
-using InspectR.Core.RequestLogger;
-
-namespace InspectR.App_Start
+﻿namespace InspectR
 {
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
+    using InspectR.Controllers.RequestLogger;
+
     public class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)
@@ -17,7 +15,7 @@ namespace InspectR.App_Start
                 name: "create",
                 url: "create",
                 defaults: new { controller = "InspectR", action = "Create", isprivate = false }
-            );
+                );
 
             //routes.MapRoute(
             //    name: "inspect",
@@ -25,12 +23,24 @@ namespace InspectR.App_Start
             //    defaults: new {controller = "InspectR", action = "Inspect"}
             //    );
 
-            routes.Add("log", new Route("{id}", new RouteValueDictionary(new
-                {
-                    // Altough this action does not exists, need these default values for nice url's
-                    controller = "InspectR",
-                    action = "Log"
-                }), new InspectRRouteHandler()));
+            routes.MapRoute(
+                name: "manage",
+                url: "Manage/{action}/{id}",
+                defaults: new { controller = "Manage", action = "Index", id = UrlParameter.Optional }
+                );
+
+            routes.Add(
+                "log",
+                new Route(
+                    "{id}",
+                    new RouteValueDictionary(
+                        new
+                            {
+                                // Altough this action does not exists, need these default values for nice url's
+                                controller = "InspectR",
+                                action = "Log"
+                            }),
+                    new InspectRRouteHandler()));
 
             //routes.MapRoute(
             //    name: "log",
