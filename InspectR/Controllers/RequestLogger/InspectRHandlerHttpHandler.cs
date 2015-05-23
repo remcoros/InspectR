@@ -1,11 +1,12 @@
-﻿using System.Web;
-using System.Web.Routing;
-using InspectR.Core;
-using InspectR.Core.RequestLogger;
-using InspectR.Data;
-
-namespace InspectR.Controllers.RequestLogger
+﻿namespace InspectR.Controllers.RequestLogger
 {
+    using System.Web;
+    using System.Web.Routing;
+
+    using InspectR.Core;
+    using InspectR.Core.RequestLogger;
+    using InspectR.Data;
+
     public class InspectRHandlerHttpHandler : IHttpHandler
     {
         private readonly RequestContext _requestContext;
@@ -15,25 +16,35 @@ namespace InspectR.Controllers.RequestLogger
             _requestContext = requestContext;
         }
 
-        public bool IsReusable { get { return false; } }
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         public void ProcessRequest(HttpContext context)
         {
             var requestCache = new RequestCache();
-            var requestLogger = new Core.RequestLogger.RequestLogger(requestCache, new DefaultRequestCollector());
-            var dbContext = new InspectRContext();
+            var requestLogger = new RequestLogger(requestCache, new DefaultRequestCollector());
 
-            var id = _requestContext.RouteData.Values["id"] as string;
+            InspectorInfo inspectorInfo;
+            using (var dbContext = new InspectRContext())
+            {
+                var service = new InspectRService(dbContext);
+                var id = _requestContext.RouteData.Values["id"] as string;
 
-            InspectorInfo inspectorInfo = dbContext.GetInspectorInfoByKey(id);
+                inspectorInfo = service.GetInspectorInfoByKey(id);
 
-            // TODO: check private
-            // ..
-
-            dbContext.Dispose();
+                // TODO: check private
+                // ..
+            }
 
             if (inspectorInfo == null)
+            {
                 throw new HttpException(404, "404 - Inspector Not found");
+            }
 
             requestLogger.LogRequest(inspectorInfo);
 
