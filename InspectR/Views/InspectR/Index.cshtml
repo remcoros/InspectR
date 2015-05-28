@@ -3,32 +3,47 @@
 @{
     var UserProfile = ViewBag.UserProfile as InspectRUserProfile;
 }
+<a href="https://github.com/remcoros/InspectR"><img style="position: absolute; top: 0; left: 0; border: 0; z-index: 9999" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
 <div class="row">
-    @if (UserProfile == null) {
-        <div class="col-md-12">
-            <div class="hero-unit well start">
+    @if (UserProfile == null)
+    {
+        <div class="jumbotron row">
+            <div class="col-md-7">
                 <h1>InspectB.in</h1>
-                <img src="~/Content/images/screenshot1.png" alt="screenshot" title="InspectR screenshot" class="pull-right"/>
-                <h4>Having trouble testing remote http clients and webhooks? Point them to your InspectBin url and start inspecting. It's that easy!</h4>
+                <h4>Inspect and debug webhooks with InspectB.in</h4>
                 <p class="lower">
-                    InspectBin is based on the idea of RequestBin (requestb.in), set your http client or webhook to point to your InspectBin url.<br/>
-                    We will collect http requests and show it in a nice and friendly way, <strong>live!</strong>
+                    Need to know the content of that GitHub webhook response? Testing out an external webservice? Point your external http client or webhook to a RequestB.in url and start inspecting.
                 </p>
-                <a class="btn btn-primary btn-large" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
-                <div class="clearfix"></div>
+                <ul class="">
+                    <li>No need to refresh your browser, requests appear on your screen as they come in.</li>
+                    <li>Includes a syntax highlighter and allows wrapping long lines.</li>
+                    <li>Name and save your bins when you sign up.</li>
+                    <li>Completely free and open-source.</li>
+                </ul>
+                <a class="btn btn-primary btn-lg" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
+            </div>
+            <div class="col-md-5">
+                <img src="~/Content/images/screenshot1.png" alt="screenshot" title="InspectR screenshot" class="" />
             </div>
         </div>
     }
-    else {
+    else
+    {
         <div class="col-md-8">
-            <div class="hero-unit well start">
+            <div class="jumbotron row">
                 <h1>InspectB.in</h1>
-                <h4>Having trouble testing remote http clients and webhooks? Point them to your InspectBin url and start inspecting. It's that easy!</h4>
+                <h4>Inspect and debug webhooks with InspectB.in</h4>
                 <p class="lower">
-                    InspectBin is based on the idea of RequestBin (requestb.in), set your http client or webhook to point to your InspectBin url.<br/>
-                    We will collect http requests and show it in a nice and friendly way, <strong>live!</strong>
+                    Need to know the content of that GitHub webhook response? Testing out an external webservice? Point your external http client or webhook to a RequestB.in url and start inspecting.
                 </p>
-                <a class="btn btn-primary btn-large" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
+                <ul class="">
+                    <li>No need to refresh your browser, requests appear on your screen as they come in.</li>
+                    <li>Includes a syntax highlighter and allows wrapping long lines.</li>
+                    <li>Name and save your bins when you sign up.</li>
+                    <li>Completely free and open-source.</li>
+                </ul>
+                <a class="btn btn-primary btn-lg" href="@Url.InspectR().Create()">Create new InspectBin &raquo;</a>
             </div>
         </div>
         <div class="col-md-4">

@@ -284,6 +284,8 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\ZeroClipboard10.swf" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -458,8 +460,6 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\underscore.js" />
-    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\zeroclipboard\ZeroClipboard.Core.js" />
     <Content Include="Scripts\zeroclipboard\ZeroClipboard.Core.min.js" />
     <Content Include="Scripts\zeroclipboard\ZeroClipboard.js" />
@@ -503,12 +503,12 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
-    <Content Include="Scripts\underscore.min.map" />
     <Content Include="Views\InspectR\Index.cshtml" />
     <Content Include="Views\InspectR\Inspect.cshtml" />
     <Content Include="Scripts\zeroclipboard\.jshintrc" />
     <Content Include="Scripts\zeroclipboard\ZeroClipboard.Core.min.map" />
     <Content Include="Scripts\zeroclipboard\ZeroClipboard.min.map" />
+    <Content Include="Scripts\underscore.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
